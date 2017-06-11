@@ -20,14 +20,30 @@ public class TestPost {
     private MockUser user1;
     private MockUser user2;
     private Date date;
+    private Comment c1;
+    private Comment c2;
+    private Comment c3;
+    private Comment c4;
+    private  ArrayList<Comment> comments;
+    private ArrayList<Comment> empty;
 
     @BeforeEach
     public void testSetUp(){
         user1 = new MockUser(1);
         user2 = new MockUser(2);
         date = new Date();
-        p1 = new Post(1, "bla1", user1, date);
-        p2 = new Post(2, "bla2", user2, date);
+        c1 = new Comment(1, "abc", user1, date);
+        c2 = new Comment(2, "abcd", user1, date);
+        c3 = new Comment(3, "abcde", user2, date);
+        c4 = new Comment(4, "abcef", user2, date);
+        comments = new ArrayList<Comment>();
+        comments.add(c1);
+        comments.add(c2);
+        comments.add(c3);
+        comments.add(c4);
+        empty = new ArrayList<Comment>();
+        p1 = new Post(1, "bla1", user1, date, comments);
+        p2 = new Post(2, "bla2", user2, date, empty);
     }
 
     @Test
@@ -69,20 +85,9 @@ public class TestPost {
 
     @Test
     public void testComments(){
-        Comment c1 = new Comment(1, "abc", user1, date);
-        Comment c2 = new Comment(2, "abcd", user1, date);
-        Comment c3 = new Comment(3, "abcde", user2, date);
-        Comment c4 = new Comment(4, "abcef", user2, date);
-        p1.addComment(c1);
-        p1.addComment(c2);
-        assertEquals(p1.getCommentsNumber(), 2);
+        assertEquals(p1.getCommentsNumber(), 4);
         assertEquals(p2.getCommentsNumber(), 0);
-        p2.addComment(c3);
-        p2.addComment(c4);
-        ArrayList<Comment> comments = new ArrayList<Comment>();
-        comments.add(c3);
-        comments.add(c4);
-        assertEquals(comments, p2.seeAllComments());
+        assertEquals(comments, p1.seeAllComments());
     }
 
 }

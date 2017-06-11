@@ -24,13 +24,13 @@ public class Post {
      * @param user author of post
      * @param time time in the moment when post was created
      */
-    public Post(int id, String text, User user, Date time) {
+    public Post(int id, String text, User user, Date time, ArrayList<Comment> comments) {
         this.id = id;
         this.text = text;
         this.user = user;
         this.time = time;
+        this.comments = comments;
         likes = 0;
-        comments = new ArrayList<Comment>();
     }
 
     /**
@@ -66,13 +66,6 @@ public class Post {
      */
     public int getLikes() {
         return likes;
-    }
-
-    /**
-     * @return adds comment to the post
-     */
-    public void addComment(Comment newComment) {
-        comments.add(newComment);
     }
 
     /**
@@ -114,5 +107,11 @@ public class Post {
         StringBuilder result = new StringBuilder();
         result.append("Comment: " + id + " Text: " + text + " Time: " + time.toString() + " Likes: " + likes);
         return result.toString();
+    }
+
+    @Override
+    public boolean equals(Object o){
+        Post other = (Post)o;
+        return this.id == other.getID();
     }
 }
