@@ -52,7 +52,7 @@ public class TestAboutModel {
     }
 
     /**
-     * test for geters of AboutModel
+     * test for getters of AboutModel
      */
     @Test
     public void testAboutModel(){
@@ -77,9 +77,9 @@ public class TestAboutModel {
         assertEquals(date2, aboutModel.getEndDate());
 
 
-        AboutModel AM2 = new AboutModel(199,"bla", "bla", new Date(), new Date(), null);
+        AboutModel AboutModel2 = new AboutModel(199,"bla", "bla", new Date(), new Date(), null);
 
-        assertEquals(AM2, aboutModel);
+        assertEquals(AboutModel2, aboutModel);
 
 
     }
