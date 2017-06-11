@@ -18,22 +18,19 @@ import java.util.HashMap;
 public class DatabaseManager {
 
     private Connection connection;
-    private static final String DRIVER = "com.mysql.jdbc.Driver";
-    private static final String USER = "";
-    private static final String DATABASE = "jdbc:mysql://localhost:3306/Hiking_Partners";
-    private static final String PASSWORD = "";
+
 
     /**
      * Constructor of DatabaseManager object
      */
     public DatabaseManager() {
         try {
-            Class.forName(DRIVER);
+            Class.forName(DatabaseManagerConfig.DRIVER);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         try {
-            connection = DriverManager.getConnection(DATABASE, USER, PASSWORD);
+            connection = DriverManager.getConnection(DatabaseManagerConfig.DATABASE, DatabaseManagerConfig.USER, DatabaseManagerConfig.PASSWORD);
         } catch (SQLException e) {
             e.printStackTrace();
         }
