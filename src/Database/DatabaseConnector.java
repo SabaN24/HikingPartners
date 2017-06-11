@@ -15,15 +15,15 @@ import java.util.HashMap;
  *
  */
 
-public class DatabaseManager {
+public class DatabaseConnector {
 
     private Connection connection;
 
 
     /**
-     * Constructor of DatabaseManager object
+     * Constructor of DatabaseConnector object
      */
-    public DatabaseManager() {
+    public DatabaseConnector() {
         try {
             Class.forName(DatabaseManagerConfig.DRIVER);
         } catch (ClassNotFoundException e) {
