@@ -8,6 +8,7 @@ import java.util.ArrayList;
  */
 public class Post {
 
+    //Private variables
     private int id;
     private String text;
     private User user;
@@ -15,7 +16,15 @@ public class Post {
     private int likes;
     private ArrayList<Comment> comments;
 
-    public Post(int id, String text, User user, Date time){
+    /**
+     * Constructor of Post class
+     *
+     * @param id   id of post
+     * @param text text of post
+     * @param user author of post
+     * @param time time in the moment when post was created
+     */
+    public Post(int id, String text, User user, Date time) {
         this.id = id;
         this.text = text;
         this.user = user;
@@ -24,48 +33,78 @@ public class Post {
         comments = new ArrayList<Comment>();
     }
 
+    /**
+     * @return id of post
+     */
     public int getID() {
         return id;
     }
 
+    /**
+     * @return text of post
+     */
     public String getText() {
         return text;
     }
 
+    /**
+     * @return user who is the author of this post
+     */
     public User getUser() {
         return user;
     }
 
+    /**
+     * @return time when comment was posted
+     */
     public Date getTime() {
         return time;
     }
 
+    /**
+     * @return number of likes on this post
+     */
     public int getLikes() {
         return likes;
     }
 
-    public void addComment(Comment newComment){
+    /**
+     * @return adds comment to the post
+     */
+    public void addComment(Comment newComment) {
         comments.add(newComment);
     }
 
-    public int getCommentsNumber(){
+    /**
+     * @return number of comments on this post
+     */
+    public int getCommentsNumber() {
         return comments.size();
     }
 
-    public ArrayList<Comment> seeAllComments(){
+    /**
+     * @return all comments on this post as an array list
+     */
+    public ArrayList<Comment> seeAllComments() {
         ArrayList<Comment> result = new ArrayList<Comment>();
-        for(int i = 0; i < comments.size(); i++){
+        for (int i = 0; i < comments.size(); i++) {
             result.add(comments.get(i));
         }
         return result;
     }
 
-    public void incrementLikes(){
+    /**
+     * Increments number of likes on post
+     */
+    public void incrementLikes() {
         likes++;
     }
 
-    public void decrementLikes(){
-        if(likes > 0){
+    /**
+     * Deccrements number of likes on post, if there are any
+     */
+    public void decrementLikes() {
+        if (likes > 0) {
             likes--;
         }
     }
