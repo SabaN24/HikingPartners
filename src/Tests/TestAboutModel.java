@@ -46,7 +46,7 @@ public class TestAboutModel {
         for(int i = 0; i < 100; i++)
             commentList.add(new Comment(i, "bla" + i,user, date1, 10));
 
-         aboutModel = new AboutModel(199, name, desc, date1, date2, commentList );
+         aboutModel = new AboutModel(199, name, desc, date1, date2,5, commentList );
 
 
     }
@@ -63,6 +63,7 @@ public class TestAboutModel {
         assertEquals(100, aboutModel.getCommets().size());
         assertEquals(5, aboutModel.getCommets().get(5).getCommentID());
         assertEquals("bla7", aboutModel.getCommets().get(7).getComment());
+        assertEquals(5, aboutModel.getMaxPeople());
 
         Date date1  = new Date();
         Date date2 = new Date();
@@ -77,7 +78,7 @@ public class TestAboutModel {
         assertEquals(date2, aboutModel.getEndDate());
 
 
-        AboutModel AboutModel2 = new AboutModel(199,"bla", "bla", new Date(), new Date(), null);
+        AboutModel AboutModel2 = new AboutModel(199,"bla", "bla", new Date(), new Date(),5, null);
 
         assertEquals(AboutModel2, aboutModel);
 

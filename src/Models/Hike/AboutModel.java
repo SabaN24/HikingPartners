@@ -18,7 +18,9 @@ public class AboutModel {
     private String description;
     private Date startDate;
     private Date endDate;
+    private int maxPeople;
     List<Comment > commets;
+
 
 
     /**
@@ -30,13 +32,14 @@ public class AboutModel {
      * @param endDate
      * @param commets
      */
-    public AboutModel(int ID, String name, String description, Date startDate, Date endDate, List<Comment> commets) {
+    public AboutModel(int ID, String name, String description, Date startDate, Date endDate,int maxPeople, List<Comment> commets) {
         this.ID = ID;
         this.name = name;
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
         this.commets = commets;
+        this.maxPeople = maxPeople;
     }
 
 
@@ -85,7 +88,18 @@ public class AboutModel {
         return commets;
     }
 
+    /**
+     * @return maximum number of users that can go the trip
+     */
+    public int getMaxPeople() {
+        return maxPeople;
+    }
 
+    /**
+     * equals compares of aboutHike with their hike id
+     * @param obj
+     * @return true if ids are same and returns false if not
+     */
     @Override
     public boolean equals(Object obj) {
         AboutModel other = (AboutModel) obj;
