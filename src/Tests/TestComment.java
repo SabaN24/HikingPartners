@@ -16,30 +16,23 @@ public class TestComment {
     public void TestComment() {
         MockUser mockUser = new MockUser(0);
         Date date = new Date();
-        Comment comment = new Comment(0, "test1", mockUser, date);
-        comment.likeDecrease();
-        comment.likeDecrease();
-        comment.likeIncrease();
-        comment.likeIncrease();
-        comment.likeIncrease();
-        comment.likeIncrease();
-        comment.likeDecrease();
+        Comment comment = new Comment(0, "test1", mockUser, date, 10);
         int ID = comment.getCommentID();
-        assertEquals(ID, 0);
+        assertEquals(0, ID);
 
         String commentText = comment.getComment();
-        assertEquals(commentText, "test1");
+        assertEquals("test1", commentText);
 
         int likeNum = comment.getLikeNUmber();
-        assertEquals(likeNum, 3);
+        assertEquals(10, likeNum);
 
         Date date1 = comment.getDate();
-        assertEquals(date1, date);
+        assertEquals(date, date1);
 
         MockUser mockUser1 = (MockUser)comment.getUser();
-        assertEquals(mockUser1, mockUser);
+        assertEquals(mockUser, mockUser1);
 
         MockUser mockUser2 = new MockUser(1);
-        assertNotEquals(mockUser2, mockUser);
+        assertNotEquals(mockUser, mockUser2);
     }
 }

@@ -18,29 +18,16 @@ public class Comment {
      * @param comment
      * @param user
      * @param date
+     * @param likeNumber
      */
-    public Comment(int commentID, String comment, User user, Date date){
+    public Comment(int commentID, String comment, User user, Date date, int likeNumber){
         this.commentID = commentID;
         this.comment = comment;
         this.user = user;
         this.date = date;
-        this.likeNumber = 0;
+        this.likeNumber = likeNumber;
     }
 
-    /**
-     * Increasing like numbers
-     */
-    public void likeIncrease(){
-        likeNumber++;
-    }
-
-    /**
-     * Decreasing like numbers
-     */
-    public void likeDecrease(){
-        if(likeNumber > 0)
-            likeNumber--;
-    }
 
     /**
      * @return Like number

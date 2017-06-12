@@ -5,7 +5,7 @@ package Database;
  */
 public interface DatabaseManagerConfig {
         public static final String DRIVER = "com.mysql.jdbc.Driver";
-        public static final String USER = "";
+        public static final String USER = "root";
         public static final String DATABASE = "jdbc:mysql://localhost:3306/Hiking_Partners";
-        public static final String PASSWORD = "";
+        public static final String PASSWORD = "vache";
 }

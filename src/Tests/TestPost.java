@@ -32,18 +32,18 @@ public class TestPost {
         user1 = new MockUser(1);
         user2 = new MockUser(2);
         date = new Date();
-        c1 = new Comment(1, "abc", user1, date);
-        c2 = new Comment(2, "abcd", user1, date);
-        c3 = new Comment(3, "abcde", user2, date);
-        c4 = new Comment(4, "abcef", user2, date);
+        c1 = new Comment(1, "abc", user1, date, 10);
+        c2 = new Comment(2, "abcd", user1, date, 10);
+        c3 = new Comment(3, "abcde", user2, date, 10);
+        c4 = new Comment(4, "abcef", user2, date, 10);
         comments = new ArrayList<Comment>();
         comments.add(c1);
         comments.add(c2);
         comments.add(c3);
         comments.add(c4);
         empty = new ArrayList<Comment>();
-        p1 = new Post(1, "bla1", user1, date, comments);
-        p2 = new Post(2, "bla2", user2, date, empty);
+        p1 = new Post(1, "bla1", user1, date, comments, 10);
+        p2 = new Post(2, "bla2", user2, date, empty, 9);
     }
 
     @Test
@@ -73,14 +73,8 @@ public class TestPost {
 
     @Test
     public void testLikes(){
-        p1.incrementLikes();
-        p1.incrementLikes();
-        p1.incrementLikes();
-        assertEquals(p1.getLikes(), 3);
-        p1.decrementLikes();
-        assertEquals(p1.getLikes(), 2);
-        p2.decrementLikes();
-        assertEquals(p2.getLikes(), 0);
+        assertEquals(p1.getLikes(), 10);
+        assertEquals(p2.getLikes(), 9);
     }
 
     @Test

@@ -44,7 +44,7 @@ public class TestAboutModel {
 
         MockUser user = new MockUser(1);
         for(int i = 0; i < 100; i++)
-            commentList.add(new Comment(i, "bla" + i,user, date1 ));
+            commentList.add(new Comment(i, "bla" + i,user, date1, 10));
 
          aboutModel = new AboutModel(199, name, desc, date1, date2, commentList );
 

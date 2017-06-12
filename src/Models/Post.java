@@ -23,14 +23,15 @@ public class Post {
      * @param text text of post
      * @param user author of post
      * @param time time in the moment when post was created
+     * @param likes like number
      */
-    public Post(int id, String text, User user, Date time, ArrayList<Comment> comments) {
+    public Post(int id, String text, User user, Date time, ArrayList<Comment> comments, int likes) {
         this.id = id;
         this.text = text;
         this.user = user;
         this.time = time;
         this.comments = comments;
-        likes = 0;
+        this.likes = likes;
     }
 
     /**
@@ -84,22 +85,6 @@ public class Post {
             result.add(comments.get(i));
         }
         return result;
-    }
-
-    /**
-     * Increments number of likes on post
-     */
-    public void incrementLikes() {
-        likes++;
-    }
-
-    /**
-     * Deccrements number of likes on post, if there are any
-     */
-    public void decrementLikes() {
-        if (likes > 0) {
-            likes--;
-        }
     }
 
     @Override
