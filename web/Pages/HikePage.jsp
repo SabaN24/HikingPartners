@@ -69,7 +69,7 @@
             <div class="description-block">
                 <div class="description-wrapper">
                     <div class="description-header">
-                        <div class="description-header__left"> Kvelaze Magari Paxode</div>
+                        <div class="description-header__left"> Kvelaze Magari Paxode აჰა მე მქვია ნოდადიიი</div>
                         <div class="description-header__right"> 15 June - 16 June</div>
                     </div>
                     <div class="description-body"> Description </div>

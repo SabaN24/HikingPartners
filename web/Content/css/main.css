@@ -12,13 +12,13 @@ html {
 }
 
 @font-face {
-    font-family: bpg_arial;
-    src: url(../fonts/bpg_arial_2009.ttf);
+    font-family: alk-rounded-mtav;
+    src: url(../fonts/alk-rounded-mtav-med-webfont.ttf);
 }
 
 @font-face {
-    font-family: alk-rounded-mtav;
-    src: url(../fonts/alk-rounded-mtav-med-webfont.ttf);
+    font-family: bpg-arial;
+    src: url(../fonts/bpg_arial_2009.ttf);
 }
 
 html, body {
@@ -29,7 +29,7 @@ html, body {
 }
 
 body {
-    font-family: bpg_arial, Arial, sans-serif;
+    font-family: myriad-regular, bpg-arial,Arial, sans-serif;
     background: #ECEDF1;
 }
 
@@ -162,6 +162,11 @@ aside {
     color: #aaa;
 }
 
+.nav-item:hover {
+    color: black;
+    border-color: black;
+}
+
 .nav-item.active {
     font-weight: bold;
     color: black;
@@ -235,7 +240,7 @@ main {
 
 .description-header__left:after {
     content: "";
-    width: 3px;
+    width: 2px;
     height: 16px;
     background: black;
     display: inline-block;
@@ -251,5 +256,5 @@ main {
 .description-body {
     display: block;
     position: relative;
-    padding: 10px 0;
+    padding: 10px 0px;
 }
