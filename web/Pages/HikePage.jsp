@@ -55,13 +55,28 @@
                 <li class="nav-item"><a href="#" class="nav-link">Hike Page</a></li>
                 <li class="nav-item"><a href="#" class="nav-link">Items</a></li>
                 <li class="nav-item"><a href="#" class="nav-link">Members</a></li>
-                <li class="nav-item active" ><a href="#" class="nav-link">Gallery</a></li>
+                <li class="nav-item active"><a href="#" class="nav-link">Gallery</a></li>
                 <li class="nav-item"><a href="#" class="nav-link">Locations</a></li>
                 <li class="nav-item"><a href="#" class="nav-link">Feed</a></li>
             </ul>
         </nav>
     </aside>
     <main>
+        <div class="main-content">
+            <div class="slider-block">
+                <div class="caption"> ქვაბისხევი/Kvabiskhevi</div>
+            </div>
+            <div class="description-block">
+                <div class="description-wrapper">
+                    <div class="description-header">
+                        <div class="description-header__left"> Kvelaze Magari Paxode</div>
+                        <div class="description-header__right"> 15 June - 16 June</div>
+                    </div>
+                    <div class="description-body"> Description </div>
+                </div>
+            </div>
+        </div>
+    </main>
     </main>
 </div>
 <footer></footer>

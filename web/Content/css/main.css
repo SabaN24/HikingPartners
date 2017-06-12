@@ -1,6 +1,19 @@
+html {
+    box-sizing: border-box;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
 @font-face {
     font-family: myriad-regular;
     src: url(../fonts/MyriadPro-Regular.otf);
+}
+
+@font-face {
+    font-family: alk-rounded-mtav;
+    src: url(../fonts/alk-rounded-mtav-med-webfont.ttf);
 }
 
 html, body {
@@ -104,11 +117,11 @@ footer {
 }
 
 aside {
-    width: 530px;
+    width: 30%;
     height: 100%;
     padding: 22px 15px;
+    float: left;
 }
-
 
 .name-block {
     display: inline-block;
@@ -155,4 +168,84 @@ aside {
     display: block;
     height: 100%;
     vertical-align: middle;
+}
+
+main {
+    width: 70%;
+    float: left;
+    padding: 22px 0px;
+}
+
+.main-content {
+    width: 70%;
+}
+
+.slider-block {
+    height: 235px;
+    width: 100%;
+    background-image: url("../img/pic1.jpg");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.caption {
+    height: 40px;
+    width: 100%;
+    background: #222;
+    opacity: 0.6;
+    color: white;
+    line-height: 40px;
+    padding: 0px 15px;
+    font-size: 14px;
+    font-family: alk-rounded-mtav;
+    position: absolute;
+    bottom: 0px;
+}
+
+.description-block {
+    padding: 5px;
+    background: white;
+}
+
+.description-wrapper {
+    border: 3px solid #cccccc;
+    width: 100%;
+    padding: 0 10px;
+}
+
+.description-header {
+    font-size: 17px;
+    font-family: alk-rounded-mtav;
+    padding: 10px 0px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #333333;
+}
+
+.description-header__left {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.description-header__left:after {
+    content: "";
+    width: 3px;
+    height: 16px;
+    background: black;
+    display: inline-block;
+    margin-bottom: -2px;
+    margin-left: 10px;
+}
+
+.description-header__right {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.description-body {
+    display: block;
+    position: relative;
+    padding: 10px 0px;
 }
