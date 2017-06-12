@@ -32,6 +32,20 @@ public class TestDatabaseConnector {
     }
 
     @Test
+    public void testExceptions() {
+        Boolean b1 = false;
+        Boolean b2 = false;
+        Boolean b3 = false;
+        db.getData("Bad Statement");
+        db.updateData("Bad Statement");
+        db.getData(selectQuery1);
+
+        assertEquals(true, b1);
+        assertEquals(true, b2);
+        assertNotEquals(true, b3);
+    }
+
+    @Test
     public void testGetUpdate1() throws SQLException{
         db.updateData(insertQuery1);
         ResultSet resultSet = db.getData(selectQuery1);
