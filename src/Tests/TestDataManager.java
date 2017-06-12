@@ -36,8 +36,8 @@ public class TestDataManager {
         assertEquals("MAGARI PAXODI!!! SHEMODIT ALL :***", aboutModel.getDescription());
         assertEquals(5, aboutModel.getMaxPeople());
 
-        assertEquals(5, aboutModel.getCommets().size());
-        assertEquals("nashoba iqneba???", aboutModel.getCommets().get(4).getComment());
+        assertEquals(5, aboutModel.getComments().size());
+        assertEquals("nashoba iqneba???", aboutModel.getComments().get(4).getComment());
 
     }
 
