@@ -30,7 +30,7 @@ public class DatabaseConnector {
             e.printStackTrace();
         }
         try {
-            connection = DriverManager.getConnection(DatabaseManagerConfig.DATABASE, DatabaseManagerConfig.USER, DatabaseManagerConfig.PASSWORD);
+            connection = DriverManager.getConnection(DatabaseManagerConfig.SERVER + DatabaseManagerConfig.NAME, DatabaseManagerConfig.USER, DatabaseManagerConfig.PASSWORD);
         } catch (SQLException e) {
             e.printStackTrace();
         }
