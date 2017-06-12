@@ -36,15 +36,9 @@ public class TestDatabaseConnector {
         Boolean b1 = false;
         Boolean b2 = false;
         Boolean b3 = false;
-        try {
-            db.getData("Bad Statement");
-        } catch (SQLException e) { b1 = true; }
-        try {
-            db.updateData("Bad Statement");
-        } catch (SQLException e) { b2 = true; }
-        try {
-            db.getData(selectQuery1);
-        } catch (SQLException e) { b3 = true; }
+        db.getData("Bad Statement");
+        db.updateData("Bad Statement");
+        db.getData(selectQuery1);
 
         assertEquals(true, b1);
         assertEquals(true, b2);

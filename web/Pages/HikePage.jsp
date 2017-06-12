@@ -52,10 +52,10 @@
         </div>
         <nav>
             <ul class="nav-list">
-                <li class="nav-item"><a href="#" class="nav-link">Hike Page</a></li>
+                <li class="nav-item active"><a href="#" class="nav-link">Hike Page</a></li>
                 <li class="nav-item"><a href="#" class="nav-link">Items</a></li>
                 <li class="nav-item"><a href="#" class="nav-link">Members</a></li>
-                <li class="nav-item active"><a href="#" class="nav-link">Gallery</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Gallery</a></li>
                 <li class="nav-item"><a href="#" class="nav-link">Locations</a></li>
                 <li class="nav-item"><a href="#" class="nav-link">Feed</a></li>
             </ul>
@@ -64,7 +64,7 @@
     <main>
         <div class="main-content">
             <div class="slider-block">
-                <div class="caption"> ქვაბისხევი/Kvabiskhevi</div>
+                <div class="caption"> ქვაბისხევი /Kvabiskhevi</div>
             </div>
             <div class="description-block">
                 <div class="description-wrapper">
@@ -77,9 +77,17 @@
             </div>
         </div>
     </main>
-    </main>
 </div>
 <footer></footer>
 
+<script src="https://unpkg.com/vue@2.3.4"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            message: 'Hello world!'
+        }
+    });
+</script>
 </body>
 </html>

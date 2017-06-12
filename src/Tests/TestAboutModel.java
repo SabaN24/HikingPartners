@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 public class TestAboutModel {
 
     private AboutModel aboutModel;
-    DateFormat format;
+    private DateFormat format;
 
     @BeforeEach
     public void testSetup(){
@@ -60,9 +60,9 @@ public class TestAboutModel {
         assertEquals(199, aboutModel.getID());
         assertEquals("This  Hike is really really good!", aboutModel.getDescription());
         assertEquals("NiceQvabisTavi", aboutModel.getName());
-        assertEquals(100, aboutModel.getCommets().size());
-        assertEquals(5, aboutModel.getCommets().get(5).getCommentID());
-        assertEquals("bla7", aboutModel.getCommets().get(7).getComment());
+        assertEquals(100, aboutModel.getComments().size());
+        assertEquals(5, aboutModel.getComments().get(5).getCommentID());
+        assertEquals("bla7", aboutModel.getComments().get(7).getComment());
         assertEquals(5, aboutModel.getMaxPeople());
 
         Date date1  = new Date();
