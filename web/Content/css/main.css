@@ -12,6 +12,11 @@ html {
 }
 
 @font-face {
+    font-family: bpg_arial;
+    src: url(../fonts/bpg_arial_2009.ttf);
+}
+
+@font-face {
     font-family: alk-rounded-mtav;
     src: url(../fonts/alk-rounded-mtav-med-webfont.ttf);
 }
@@ -24,7 +29,7 @@ html, body {
 }
 
 body {
-    font-family: myriad-regular, Arial, sans-serif;
+    font-family: bpg_arial, Arial, sans-serif;
     background: #ECEDF1;
 }
 
@@ -218,7 +223,6 @@ main {
 
 .description-header {
     font-size: 17px;
-    font-family: alk-rounded-mtav;
     padding: 10px 0px;
     padding-bottom: 15px;
     border-bottom: 1px solid #333333;
@@ -247,5 +251,5 @@ main {
 .description-body {
     display: block;
     position: relative;
-    padding: 10px 0px;
+    padding: 10px 0;
 }

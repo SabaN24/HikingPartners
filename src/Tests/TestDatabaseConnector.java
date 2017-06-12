@@ -28,7 +28,7 @@ public class TestDatabaseConnector {
         insertQuery2 = "insert into users values (12, 'Vache', 'Katsadze')";
         selectQuery1 = "select * from users";
         updateQuery1 = "update users set first_name = \"Vache1\", last_name = \"Katsadze1\" where ID = 11";
-        db = new DatabaseConnector();
+        db = DatabaseConnector.getInstance();
     }
 
     @Test

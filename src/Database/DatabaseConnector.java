@@ -17,13 +17,22 @@ import java.util.HashMap;
 
 public class DatabaseConnector {
 
+    private static DatabaseConnector connector = null;
+
     private Connection connection;
 
+
+    public static DatabaseConnector getInstance(){
+        if(connector == null){
+            connector = new DatabaseConnector();
+        }
+        return connector;
+    }
 
     /**
      * Constructor of DatabaseConnector object
      */
-    public DatabaseConnector() {
+    private DatabaseConnector() {
         try {
             Class.forName(DatabaseManagerConfig.DRIVER);
         } catch (ClassNotFoundException e) {
