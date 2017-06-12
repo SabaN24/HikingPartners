@@ -1,4 +1,6 @@
-<%--
+<%@ page import="Database.DataManager" %>
+<%@ page import="javax.xml.crypto.Data" %>
+<%@ page import="Models.Hike.AboutModel" %><%--
   Created by IntelliJ IDEA.
   User: Sandro
   Date: 12-Jun-17
@@ -64,15 +66,24 @@
     <main>
         <div class="main-content">
             <div class="slider-block">
-                <div class="caption"> ქვაბისხევი /Kvabiskhevi</div>
+                <div class="caption"> ქვაბისხევი / KVABISKHEVI</div>
             </div>
             <div class="description-block">
                 <div class="description-wrapper">
                     <div class="description-header">
-                        <div class="description-header__left"> Kvelaze Magari Paxode აჰა მე მქვია ნოდადიიი</div>
-                        <div class="description-header__right"> 15 June - 16 June</div>
+                        <%
+                            ServletContext sc = request.getServletContext();
+                            AboutModel aboutModel = ((DataManager)sc.getAttribute(DataManager.ATTR)).getAboutModel(1);
+                            out.print(" <div class=\"description-header__left\">" + aboutModel.getName() + "</div>");
+                            out.print(" <div class=\"description-header__right\">" + aboutModel.getStartDate() + " - " + aboutModel.getEndDate() + "</div>");
+                            //out.print(" <div class=\"description-header__right\">" + aboutModel.getMaxPeople() + "</div>");
+                        %>
                     </div>
-                    <div class="description-body"> Description </div>
+                    <div class="description-body">
+                        <%
+                            out.print(aboutModel.getDescription());
+                        %>
+                    </div>
                 </div>
             </div>
         </div>
