@@ -19,8 +19,9 @@ public class AboutModel {
     private Date startDate;
     private Date endDate;
     private int maxPeople;
-    List<Comment > commets;
+    List<Comment > comments;
 
+    public static final String ATTR = "AboutModel";
 
 
     /**
@@ -30,15 +31,15 @@ public class AboutModel {
      * @param description
      * @param startDate
      * @param endDate
-     * @param commets
+     * @param comments
      */
-    public AboutModel(int ID, String name, String description, Date startDate, Date endDate,int maxPeople, List<Comment> commets) {
+    public AboutModel(int ID, String name, String description, Date startDate, Date endDate,int maxPeople, List<Comment> comments) {
         this.ID = ID;
         this.name = name;
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.commets = commets;
+        this.comments = comments;
         this.maxPeople = maxPeople;
     }
 
@@ -84,9 +85,7 @@ public class AboutModel {
     /**
      * @return comments of about
      */
-    public List<Comment> getCommets() {
-        return commets;
-    }
+    public List<Comment> getComments() { return comments; }
 
     /**
      * @return maximum number of users that can go the trip

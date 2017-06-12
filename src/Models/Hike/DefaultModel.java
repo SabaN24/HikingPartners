@@ -9,6 +9,8 @@ import java.util.List;
  */
 public class DefaultModel {
 
+    public static final String ATTR = "DefaultModel";
+
     /**
      * Inner user class that is needed in hike page.
      */

@@ -49,22 +49,29 @@ public class DatabaseConnector {
      * Getting data from database
      * @param query - SQL statement
      * @return Data depending on query
-     * @throws SQLException
      */
-    public ResultSet getData(String query) throws SQLException{
-        Statement statement = connection.createStatement();
-        ResultSet result = statement.executeQuery(query);
+    public ResultSet getData(String query) {
+        ResultSet result = null;
+        try {
+            Statement statement = connection.createStatement();
+            result = statement.executeQuery(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return result;
     }
 
     /**
      * Updating database depending on query
      * @param query - SQL statement
-     * @throws SQLException
      */
-    public void updateData(String query) throws SQLException{
-        Statement statement = connection.createStatement();
-        statement.executeUpdate(query);
+    public void updateData(String query) {
+        try {
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }

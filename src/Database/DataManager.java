@@ -14,7 +14,9 @@ import java.sql.SQLException;
 public class DataManager {
 
 
-    DatabaseConnector databaseConnector;
+    private DatabaseConnector databaseConnector;
+
+    public static final String ATTR = "DatabaseManager";
 
     public DataManager() {
         databaseConnector = DatabaseConnector.getInstance();
@@ -30,7 +32,7 @@ public class DataManager {
      * @throws SQLException
      * @returns AboutModel thaat has relevant information
      */
-    public AboutModel getAboutModel(int id) throws SQLException {
+    public AboutModel getAboutModel(int id){
 
         AboutModel aboutModel = null;
 
@@ -39,16 +41,20 @@ public class DataManager {
         ResultSet hikeResultSet = databaseConnector.getData(hikeQuery);
 
 
-        if (hikeResultSet.next()) {
+        try {
+            if (hikeResultSet.next()) {
 
-            String name = hikeResultSet.getString(2);
-            Date startDate = hikeResultSet.getDate(3);
-            Date endDate = hikeResultSet.getDate(4);
-            String description = hikeResultSet.getString(5);
-            int maxPeople = hikeResultSet.getInt(6);
-            List<Comment> comments = getComments("PUBLIC", "" + id);
+                String name = hikeResultSet.getString(2);
+                Date startDate = hikeResultSet.getDate(3);
+                Date endDate = hikeResultSet.getDate(4);
+                String description = hikeResultSet.getString(5);
+                int maxPeople = hikeResultSet.getInt(6);
+                List<Comment> comments = getComments("PUBLIC", "" + id);
 
-            aboutModel = new AboutModel(id, name, description, startDate, endDate, maxPeople, comments);
+                aboutModel = new AboutModel(id, name, description, startDate, endDate, maxPeople, comments);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
 
@@ -64,7 +70,7 @@ public class DataManager {
      * @returns List of Comment classess
      * @throws SQLException
      */
-    public List<Comment> getComments(String type, String id) throws SQLException {
+    public List<Comment> getComments(String type, String id) {
 
         String commentQuery = "";
         List<Comment> comments = new ArrayList<>();
@@ -77,21 +83,25 @@ public class DataManager {
 
         ResultSet commentsResultSet = databaseConnector.getData(commentQuery);
 
-        while (commentsResultSet.next()) {
+        try {
+            while (commentsResultSet.next()) {
 
-            int commentId = commentsResultSet.getInt(1);
-            String comment = commentsResultSet.getString(2);
-            int userId = commentsResultSet.getInt(4);
+                int commentId = commentsResultSet.getInt(1);
+                String comment = commentsResultSet.getString(2);
+                int userId = commentsResultSet.getInt(4);
 
-            /*
-                user is not done yet so needs update !!!
-             */
-            User user = new User();
-            Date date = commentsResultSet.getDate(5);
-            int likeNum = commentsResultSet.getInt(6);
+                /*
+                    user is not done yet so needs update !!!
+                 */
+                User user = new User();
+                Date date = commentsResultSet.getDate(5);
+                int likeNum = commentsResultSet.getInt(6);
 
-            Comment currComment = new Comment(commentId, comment, user, date, likeNum);
-            comments.add(currComment);
+                Comment currComment = new Comment(commentId, comment, user, date, likeNum);
+                comments.add(currComment);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
         return comments;
