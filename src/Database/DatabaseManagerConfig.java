@@ -8,5 +8,5 @@ public interface DatabaseManagerConfig {
         public static final String USER = "root";
         public static final String SERVER = "jdbc:mysql://localhost:3306/";
         public static final String NAME = "Hiking_Partners";
-        public static final String PASSWORD = "maestro6";
+        public static final String PASSWORD = "vache";
 }

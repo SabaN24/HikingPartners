@@ -66,7 +66,7 @@
     <main>
         <div class="main-content">
             <div class="slider-block">
-                <div class="caption"> ქვაბისხევი /Kvabiskhevi</div>
+                <div class="caption"> ქვაბისხევი / KVABISKHEVI</div>
             </div>
             <div class="description-block">
                 <div class="description-wrapper">
@@ -77,6 +77,7 @@
                             out.print(" <div class=\"description-header__left\">" + aboutModel.getName() + "</div>");
                             out.print(" <div class=\"description-header__right\">" + aboutModel.getStartDate() + " - " + aboutModel.getEndDate() + "</div>");
                             //out.print(" <div class=\"description-header__right\">" + aboutModel.getMaxPeople() + "</div>");
+                            out.print("  !!!! TESTING !!!!");
                         %>
                     </div>
                     <div class="description-body">
