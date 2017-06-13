@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="../Content/css/main.css">
 </head>
 <body>
-<div class="wrapper">
+<div class="wrapper clearfix">
     <header>
         <div class="header-left">
             <div class="logo-block">
