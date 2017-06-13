@@ -224,6 +224,7 @@ main {
     border: 3px solid #cccccc;
     width: 100%;
     padding: 0 10px;
+    margin-bottom: 20px;
 }
 
 .description-header {
@@ -257,4 +258,58 @@ main {
     display: block;
     position: relative;
     padding: 10px 0px;
+}
+
+.comments-block {
+    padding: 0 10px;
+}
+
+.comments-block-inner {
+    border-top: 2px solid black;
+    padding: 20px 0;
+}
+
+.comment {
+    margin-bottom: 10px;
+}
+
+.comment .avatar-block {
+    background: #ccc;
+    width: 40px;
+    height: 40px;
+    margin-right: 5px;
+}
+
+.comment-info {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 15px;
+}
+
+.comment-author {
+    font-weight: bold;
+}
+
+.comment-time {
+    font-size: 11px;
+    color: #bbb;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+.like-block {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 13px;
+}
+
+.comment-text {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.fa-thumbs-up {
+    color: #5890FF;
+    margin-right: 3px;
 }

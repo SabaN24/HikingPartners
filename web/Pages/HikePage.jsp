@@ -1,6 +1,9 @@
 <%@ page import="Database.DataManager" %>
-<%@ page import="javax.xml.crypto.Data" %>
-<%@ page import="Models.Hike.AboutModel" %><%--
+<%@ page import="Models.Comment" %>
+<%@ page import="Models.Hike.AboutModel" %>
+<%@ page import="Models.User" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.Date" %><%--
   Created by IntelliJ IDEA.
   User: Sandro
   Date: 12-Jun-17
@@ -17,6 +20,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <link rel="stylesheet" href="../Content/css/normalize.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../Content/css/main.css">
 </head>
 <body>
@@ -73,16 +77,50 @@
                     <div class="description-header">
                         <%
                             ServletContext sc = request.getServletContext();
-                            AboutModel aboutModel = ((DataManager)sc.getAttribute(DataManager.ATTR)).getAboutModel(1);
+                            AboutModel aboutModel = ((DataManager) sc.getAttribute(DataManager.ATTR)).getAboutModel(1);
                             out.print(" <div class=\"description-header__left\">" + aboutModel.getName() + "</div>");
                             out.print(" <div class=\"description-header__right\">" + aboutModel.getStartDate() + " - " + aboutModel.getEndDate() + "</div>");
                             //out.print(" <div class=\"description-header__right\">" + aboutModel.getMaxPeople() + "</div>");
                         %>
                     </div>
                     <div class="description-body">
+                        <div style="margin-bottom: 10px;font-weight:bold;">Description:</div>
+
                         <%
                             out.print(aboutModel.getDescription());
                         %>
+                    </div>
+                </div>
+
+                <div class="comments-block">
+                    <div class="comments-block-inner">
+                        <ul class="comments-list">
+
+                            <%
+
+                                List<Comment> comments = aboutModel.getComments();
+                                for(Comment comment : comments){
+                                    //User user = comment.getUser();
+                                    String time = comment.getDate().toString();
+                                    out.println("<li class=\"comment\">");
+                                    out.println("<div class=\"avatar-block\"></div>");
+                                    out.println("<div class=\"comment-info\">");
+                                    out.println("<div class=\"comment-info__upper\">");
+                                    out.println("<div class=\"comment-author\">" +  "Nodari" + " " + "Sairmeli"  + "</div>");
+                                    out.println("</div>");
+                                    out.println("<div class=\"comment-info__lower\">");
+                                    out.println("<div class=\"comment-time\">" + time + "</div>");
+                                    out.println("<div class=\"like-block\">");
+                                    out.println("<i class=\"fa fa-thumbs-up\" aria-hidden=\"true\"></i>" + comment.getLikeNUmber());
+                                    out.println("</div>");
+                                    out.println("</div>");
+                                    out.println("</div>");
+                                    out.println("<div class=\"comment-text\">" + comment.getComment() + "</div>");
+                                    out.println("</li>");
+                                }
+                            %>
+
+                        </ul>
                     </div>
                 </div>
             </div>
