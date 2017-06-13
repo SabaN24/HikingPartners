@@ -98,24 +98,27 @@
                             <%
 
                                 List<Comment> comments = aboutModel.getComments();
-                                for(Comment comment : comments){
+                                for (Comment comment : comments) {
                                     //User user = comment.getUser();
                                     String time = comment.getDate().toString();
-                                    out.println("<li class=\"comment\">");
-                                    out.println("<div class=\"avatar-block\"></div>");
-                                    out.println("<div class=\"comment-info\">");
-                                    out.println("<div class=\"comment-info__upper\">");
-                                    out.println("<div class=\"comment-author\">" +  "Nodari" + " " + "Sairmeli"  + "</div>");
-                                    out.println("</div>");
-                                    out.println("<div class=\"comment-info__lower\">");
-                                    out.println("<div class=\"comment-time\">" + time + "</div>");
-                                    out.println("<div class=\"like-block\">");
-                                    out.println("<i class=\"fa fa-thumbs-up\" aria-hidden=\"true\"></i>" + comment.getLikeNUmber());
-                                    out.println("</div>");
-                                    out.println("</div>");
-                                    out.println("</div>");
-                                    out.println("<div class=\"comment-text\">" + comment.getComment() + "</div>");
-                                    out.println("</li>");
+                            %>
+                            <li class="comment">
+                                <div class="avatar-block"></div>
+                                    <div class="comment-info">
+                                        <div class="comment-info__upper">
+                                            <div class="comment-author">Nodari Sairmeli</div>
+                                        </div>
+                                        <div class="comment-info__lower">
+                                            <div class="comment-time"><%= comment.getDate().toString() %></div>
+                                            <div class="like-block">
+                                                <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                                <%= comment.getLikeNUmber() %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="comment-text"><%= comment.getComment() %></div>
+                            </li>
+                            <%
                                 }
                             %>
 
