@@ -20,11 +20,13 @@ public class HikePageServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        ServletContext sc = request.getServletContext();
-//        DataManager dataManager = (DataManager)sc.getAttribute(DataManager.ATTR);
+
+        ServletContext sc = request.getServletContext();
+        AboutModel aboutModel = ((DataManager) sc.getAttribute(DataManager.ATTR)).getAboutModel(1);
+        request.setAttribute(AboutModel.ATTR, aboutModel);
+
 //        int hikeId =  Integer.parseInt(request.getParameter("id"));
-//        AboutModel aboutModel = dataManager.getAboutModel(hikeId);
-//        request.setAttribute(AboutModel.ATTR, aboutModel);
+
         Helper.view("HikePage", request, response);
     }
 }
