@@ -104,19 +104,21 @@
                             %>
                             <li class="comment">
                                 <div class="avatar-block"></div>
-                                    <div class="comment-info">
-                                        <div class="comment-info__upper">
-                                            <div class="comment-author">Nodari Sairmeli</div>
+                                <div class="comment-info">
+                                    <div class="comment-info__upper">
+                                        <div class="comment-author">Nodari Sairmeli</div>
+                                    </div>
+                                    <div class="comment-info__lower">
+                                        <div class="comment-time"><%= comment.getDate().toString() %>
                                         </div>
-                                        <div class="comment-info__lower">
-                                            <div class="comment-time"><%= comment.getDate().toString() %></div>
-                                            <div class="like-block">
-                                                <i class="fa fa-thumbs-up" aria-hidden="true"></i>
-                                                <%= comment.getLikeNUmber() %>
-                                            </div>
+                                        <div class="like-block">
+                                            <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                            <%= comment.getLikeNUmber() %>
                                         </div>
                                     </div>
-                                    <div class="comment-text"><%= comment.getComment() %></div>
+                                </div>
+                                <div class="comment-text"><%= comment.getComment() %>
+                                </div>
                             </li>
                             <%
                                 }
