@@ -11,7 +11,8 @@ import java.io.IOException;
 * */
 public class Helper {
     public static void view(String viewName, HttpServletRequest request, HttpServletResponse response)  {
-        RequestDispatcher rd = request.getRequestDispatcher("/Pages/" + viewName + ".jsp");
+        request.setAttribute("view", viewName + ".jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/Pages/Layout.jsp");
         try {
             rd.forward(request, response);
         } catch (ServletException e) {

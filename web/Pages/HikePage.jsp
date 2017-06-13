@@ -12,45 +12,12 @@
   Time: 01:18
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<!doctype html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>
+    <setTitle>
         <%
             AboutModel aboutModel = (AboutModel) request.getAttribute(AboutModel.ATTR);
             out.print(aboutModel.getName());
         %>
-    </title>
-    <link rel="stylesheet" href="../Content/css/normalize.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="../Content/css/main.css">
-</head>
-<body>
-<div class="wrapper clearfix">
-    <header>
-        <div class="header-left">
-            <div class="logo-block">
-                <a class="logo-link" href="#">
-                    <img src="../Content/img/logo.png" alt="" class="logo-img">
-                </a>
-            </div>
-        </div>
-        <div class="header-right">
-            <div class="profile-block">
-                <a href="" class="profile-link">
-                    <div class="avatar-block">
-
-                    </div>
-                    <div class="profile-name">Sandro Jikia</div>
-                </a>
-            </div>
-        </div>
-
+    </setTitle>
 
     </header>
     <aside>
@@ -114,7 +81,7 @@
                                 <div class="avatar-block">
                                 </div>
                                 <form action="HikePageServlet" method="post">
-                                    <input type="text" name="add-comment" placeholder="write comment">
+                                    <input type="text" name="add-comment" placeholder="Write comment...">
                                 </form>
                             </div>
                         </div>
@@ -160,17 +127,3 @@
             </div>
         </div>
     </main>
-</div>
-<footer></footer>
-
-<script src="https://unpkg.com/vue@2.3.4"></script>
-<script>
-    var app = new Vue({
-        el: '#app',
-        data: {
-            message: 'Hello world!'
-        }
-    });
-</script>
-</body>
-</html>
