@@ -11,7 +11,7 @@ public class Post {
     //Private variables
     private int id;
     private String text;
-    private User user;
+    private MiniUser user;
     private Date time;
     private int likes;
     private ArrayList<Comment> comments;
@@ -25,7 +25,7 @@ public class Post {
      * @param time time in the moment when post was created
      * @param likes like number
      */
-    public Post(int id, String text, User user, Date time, ArrayList<Comment> comments, int likes) {
+    public Post(int id, String text, MiniUser user, Date time, ArrayList<Comment> comments, int likes) {
         this.id = id;
         this.text = text;
         this.user = user;
@@ -51,7 +51,7 @@ public class Post {
     /**
      * @return user who is the author of this post
      */
-    public User getUser() {
+    public MiniUser getUser() {
         return user;
     }
 

@@ -3,6 +3,7 @@
 <%@ page import="Models.Hike.AboutModel" %>
 <%@ page import="Models.Hike.DefaultModel" %>
 <%@ page import="Models.User" %>
+<%@ page import="Models.MiniUser" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Date" %><%--
   Created by IntelliJ IDEA.
@@ -61,7 +62,7 @@
                 <div class="name-text">
                     <%
                         DefaultModel defaultModel = (DefaultModel)request.getAttribute(DefaultModel.ATTR);
-                        DefaultModel.User creator = defaultModel.getCreator();
+                        MiniUser creator = defaultModel.getCreator();
                         out.print(creator.getFirstName() + " " + creator.getLastName());
                     %>
                 </div>
@@ -121,7 +122,12 @@
                                 <div class="avatar-block"></div>
                                 <div class="comment-info">
                                     <div class="comment-info__upper">
-                                        <div class="comment-author">Nodari Sairmeli</div>
+                                        <div class="comment-author">
+                                            <%
+                                                MiniUser author = comment.getUser();
+                                                out.print(author.getFirstName() + " " + author.getLastName());
+                                            %>
+                                        </div>
                                     </div>
                                     <div class="comment-info__lower">
                                         <div class="comment-time"><%= comment.getDate().toString() %>

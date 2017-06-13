@@ -3,6 +3,7 @@ package Tests;
 import java.util.*;
 
 import Models.Hike.AboutModel;
+import Models.MiniUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.text.DateFormat;
@@ -42,7 +43,7 @@ public class TestAboutModel {
 
         List<Comment > commentList = new ArrayList<>();
 
-        MockUser user = new MockUser(1);
+        MiniUser user = new MiniUser(1, "bla", "bla", "bla");
         for(int i = 0; i < 100; i++)
             commentList.add(new Comment(i, "bla" + i,user, date1, 10));
 

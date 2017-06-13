@@ -2,7 +2,7 @@ package Tests;
 
 import Models.Comment;
 import org.junit.jupiter.api.Test;
-
+import Models.MiniUser;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 public class TestComment {
     @Test
     public void TestComment() {
-        MockUser mockUser = new MockUser(0);
+        MiniUser mockUser = new MiniUser(0, "bla", "bla", "bla");
         Date date = new Date();
         Comment comment = new Comment(0, "test1", mockUser, date, 10);
         int ID = comment.getCommentID();
@@ -29,10 +29,10 @@ public class TestComment {
         Date date1 = comment.getDate();
         assertEquals(date, date1);
 
-        MockUser mockUser1 = (MockUser)comment.getUser();
+        MiniUser mockUser1 = (MiniUser)comment.getUser();
         assertEquals(mockUser, mockUser1);
 
-        MockUser mockUser2 = new MockUser(1);
+        MiniUser mockUser2 = new MiniUser(1, "bla", "bla", "bla");
         assertNotEquals(mockUser, mockUser2);
     }
 }

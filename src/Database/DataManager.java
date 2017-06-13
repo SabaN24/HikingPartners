@@ -1,12 +1,12 @@
 package Database;
 
 import java.util.*;
-
 import Models.Comment;
 import Models.User;
 import Models.Hike.AboutModel;
 import Models.Hike.DefaultModel;
 import Models.Photo;
+import Models.MiniUser;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -89,15 +89,10 @@ public class DataManager {
                 int commentId = commentsResultSet.getInt(1);
                 String comment = commentsResultSet.getString(2);
                 int userId = commentsResultSet.getInt(4);
-
-                /*
-                    user is not done yet so needs update !!!
-                 */
-                User user = new User();
+                MiniUser author = getUserById(userId);
                 Date date = commentsResultSet.getDate(5);
                 int likeNum = commentsResultSet.getInt(6);
-
-                Comment currComment = new Comment(commentId, comment, user, date, likeNum);
+                Comment currComment = new Comment(commentId, comment, author, date, likeNum);
                 comments.add(currComment);
             }
         } catch (SQLException e) {
@@ -108,12 +103,24 @@ public class DataManager {
     }
 
     /**
+     * Gets information from database about user given user's id.
+     * @param userId id of required user
+     * @return MiniUser class built on information from database
+     */
+    private MiniUser getUserById(int userId){
+        String query = constructQuery("users", "id", "" + userId);
+        ResultSet rs = databaseConnector.getData(query);
+        MiniUser user = createUserFromResultSet(rs);
+        return user;
+    }
+
+    /**
      * Returns information needed for DefaultModel class.
      * @param hikeId id of demanded hike
      * @return DefaultModel class built from information about given hike
      */
     public DefaultModel getDefaultModel(int hikeId) {
-        DefaultModel.User creator = getCreator(hikeId);
+        MiniUser creator = getCreator(hikeId);
         List<Photo> coverPhotos = getCoverPhotos(hikeId);
         DefaultModel defaultModel = new DefaultModel(creator, coverPhotos);
         return defaultModel;
@@ -125,16 +132,26 @@ public class DataManager {
      * @param hikeId id of demanded hike
      * @return DefaultMode.User class object built from information of creator of given hike
      */
-    private DefaultModel.User getCreator(int hikeId) {
+    private MiniUser getCreator(int hikeId) {
         ResultSet rs = databaseConnector.callProcedure("get_creator_info", "" + hikeId);
-        DefaultModel.User creator = null;
+        MiniUser creator = createUserFromResultSet(rs);
+        return creator;
+    }
+
+    /**
+     * Builds MiniUser object from given resultset.
+     * @param rs data which needs to be processed
+     * @return MiniUser object
+     */
+    private MiniUser createUserFromResultSet(ResultSet rs){
+        MiniUser creator = null;
         try {
             while (rs.next()) {
                 int id = rs.getInt(1);
                 String firstName = rs.getString(2);
                 String lastName = rs.getString(3);
                 String imgUrl = rs.getString(4);
-                creator = new DefaultModel.User(id, firstName, lastName, imgUrl);
+                creator = new MiniUser(id, firstName, lastName, imgUrl);
             }
         } catch (SQLException e) {
             e.printStackTrace();

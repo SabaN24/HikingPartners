@@ -8,7 +8,7 @@ import java.util.Date;
 public class Comment {
     private int commentID;
     private String comment;
-    private User user;
+    private MiniUser user;
     private Date date;
     private int likeNumber;
 
@@ -20,7 +20,7 @@ public class Comment {
      * @param date
      * @param likeNumber
      */
-    public Comment(int commentID, String comment, User user, Date date, int likeNumber){
+    public Comment(int commentID, String comment, MiniUser user, Date date, int likeNumber){
         this.commentID = commentID;
         this.comment = comment;
         this.user = user;
@@ -53,7 +53,7 @@ public class Comment {
     /**
      * @return Commenter User
      */
-    public User getUser(){
+    public MiniUser getUser(){
         return user;
     }
 

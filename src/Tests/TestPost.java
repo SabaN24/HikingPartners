@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.ArrayList;
 import Models.Post;
 import Models.Comment;
+import Models.MiniUser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -17,8 +18,8 @@ public class TestPost {
 
     private Post p1;
     private Post p2;
-    private MockUser user1;
-    private MockUser user2;
+    private MiniUser user1;
+    private MiniUser user2;
     private Date date;
     private Comment c1;
     private Comment c2;
@@ -29,8 +30,8 @@ public class TestPost {
 
     @BeforeEach
     public void testSetUp(){
-        user1 = new MockUser(1);
-        user2 = new MockUser(2);
+        user1 = new MiniUser(1, "bla", "bla", "bla");
+        user2 = new MiniUser(2, "bla", "bla", "bla");
         date = new Date();
         c1 = new Comment(1, "abc", user1, date, 10);
         c2 = new Comment(2, "abcd", user1, date, 10);

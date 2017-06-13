@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestHikeDefaultModel {
 
     private DefaultModel defaultModel;
-    private DefaultModel.User user;
+    private MiniUser user;
     private List<Photo> photos;
 
     @BeforeEach
@@ -24,7 +24,7 @@ public class TestHikeDefaultModel {
         String firstName = "Levan";
         String lastName = "Beroshvili";
         String profilePictureAddress = "pic.jpg";
-        user = new DefaultModel.User(id, firstName, lastName, profilePictureAddress);
+        user = new MiniUser(id, firstName, lastName, profilePictureAddress);
 
         //photos setup
         Photo photo1 = new Photo(1, "test", "Batumi", "aa");
