@@ -18,7 +18,12 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>
+        <%
+            AboutModel aboutModel = (AboutModel) request.getAttribute(AboutModel.ATTR);
+            out.println(aboutModel.getName());
+        %>
+    </title>
     <link rel="stylesheet" href="../Content/css/normalize.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../Content/css/main.css">
@@ -76,9 +81,8 @@
                 <div class="description-wrapper">
                     <div class="description-header">
                         <%
-                            AboutModel aboutModel = (AboutModel) request.getAttribute(AboutModel.ATTR);
                             out.print(" <div class=\"description-header__left\">" + aboutModel.getName() + "</div>");
-                            out.print(" <div class=\"description-header__right\">" + aboutModel.getStartDate() + " - " + aboutModel.getEndDate() + "</div>");
+                            out.print(" <div class=\"description-header__right\">" + "   " + aboutModel.getStartDate() + "     -      " + aboutModel.getEndDate() + "</div>");
                             //out.print(" <div class=\"description-header__right\">" + aboutModel.getMaxPeople() + "</div>");
                         %>
                     </div>
@@ -105,7 +109,7 @@
                                     out.println("<div class=\"avatar-block\"></div>");
                                     out.println("<div class=\"comment-info\">");
                                     out.println("<div class=\"comment-info__upper\">");
-                                    out.println("<div class=\"comment-author\">" +  "Nodari" + " " + "Sairmeli"  + "</div>");
+                                    out.println("<div class=\"comment-author\">" +  "ნოდო" + " " + "სანაია"  + "</div>");
                                     out.println("</div>");
                                     out.println("<div class=\"comment-info__lower\">");
                                     out.println("<div class=\"comment-time\">" + time + "</div>");
