@@ -109,6 +109,15 @@
 
                 <div class="comments-block">
                     <div class="comments-block-inner">
+                        <div class="comment">
+                            <div class="add-comment">
+                                <div class="avatar-block">
+                                </div>
+                                <form action="HikePageServlet" method="post">
+                                    <input type="text" name="add-comment" placeholder="write comment">
+                                </form>
+                            </div>
+                        </div>
                         <ul class="comments-list">
 
                             <%
