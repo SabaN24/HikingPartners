@@ -7,9 +7,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import Database.DataManager;
 import Models.Hike.AboutModel;
+import Models.Hike.DefaultModel;
 
 /**
  * Created by Saba on 12.06.2017.
@@ -22,10 +24,12 @@ public class HikePageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         ServletContext sc = request.getServletContext();
-        AboutModel aboutModel = ((DataManager) sc.getAttribute(DataManager.ATTR)).getAboutModel(1);
-        request.setAttribute(AboutModel.ATTR, aboutModel);
-
+        DataManager dataManager = (DataManager) sc.getAttribute(DataManager.ATTR);
 //        int hikeId =  Integer.parseInt(request.getParameter("id"));
+        AboutModel aboutModel = dataManager.getAboutModel(1);
+        DefaultModel defaultModel = dataManager.getDefaultModel(1);
+        request.setAttribute(AboutModel.ATTR, aboutModel);
+        request.setAttribute(DefaultModel.ATTR, defaultModel);
 
         Helper.view("HikePage", request, response);
     }

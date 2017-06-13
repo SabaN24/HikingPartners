@@ -1,6 +1,7 @@
 <%@ page import="Database.DataManager" %>
 <%@ page import="Models.Comment" %>
 <%@ page import="Models.Hike.AboutModel" %>
+<%@ page import="Models.Hike.DefaultModel" %>
 <%@ page import="Models.User" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Date" %><%--
@@ -18,7 +19,12 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>
+        <%
+            AboutModel aboutModel = (AboutModel) request.getAttribute(AboutModel.ATTR);
+            out.print(aboutModel.getName());
+        %>
+    </title>
     <link rel="stylesheet" href="../Content/css/normalize.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../Content/css/main.css">
@@ -52,7 +58,13 @@
 
             </div>
             <div class="name-block">
-                <div class="name-text">Saba Natr.</div>
+                <div class="name-text">
+                    <%
+                        DefaultModel defaultModel = (DefaultModel)request.getAttribute(DefaultModel.ATTR);
+                        DefaultModel.User creator = defaultModel.getCreator();
+                        out.print(creator.getFirstName() + " " + creator.getLastName());
+                    %>
+                </div>
                 <div class="role-block">Creator</div>
             </div>
         </div>
@@ -70,13 +82,16 @@
     <main>
         <div class="main-content">
             <div class="slider-block">
-                <div class="caption"> ქვაბისხევი / KVABISKHEVI</div>
+                <div class="caption">
+                    <%
+                        out.print(defaultModel.getCoverPhotos().get(0).getLocationName());
+                    %>
+                </div>
             </div>
             <div class="description-block">
                 <div class="description-wrapper">
                     <div class="description-header">
                         <%
-                            AboutModel aboutModel = (AboutModel) request.getAttribute(AboutModel.ATTR);
                             out.print(" <div class=\"description-header__left\">" + aboutModel.getName() + "</div>");
                             out.print(" <div class=\"description-header__right\">" + aboutModel.getStartDate() + " - " + aboutModel.getEndDate() + "</div>");
                             //out.print(" <div class=\"description-header__right\">" + aboutModel.getMaxPeople() + "</div>");

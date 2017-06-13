@@ -1,10 +1,6 @@
 package Database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -72,6 +68,23 @@ public class DatabaseConnector {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Calls given procedure in database.
+     * @param procedure name of procedure
+     * @param parameter parameter of procedure
+     * @return result of procedure
+     */
+    public ResultSet callProcedure(String procedure, String parameter){
+        ResultSet rs = null;
+        try {
+            Statement statement = connection.createStatement();
+            rs = statement.executeQuery("CALL " + procedure + "(" + parameter + ");");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rs;
     }
 
 }
