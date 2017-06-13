@@ -44,6 +44,16 @@ a:link, a:visited, a:hover, a:active {
     color: inherit;
 }
 
+.clearfix:before,
+.clearfix:after {
+    content: "";
+    display: table;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
 header {
     background: #28363C;
     height: 60px;
@@ -151,7 +161,8 @@ aside {
 
 .nav-item {
     display: block;
-    width: 240px;
+    width: 75%;
+
 
 }
 
@@ -258,6 +269,7 @@ main {
     display: block;
     position: relative;
     padding: 10px 0px;
+    word-wrap: break-word;
 }
 
 .comments-block {
@@ -282,12 +294,18 @@ main {
 
 .comment-info {
     display: inline-block;
-    vertical-align: middle;
+    vertical-align: text-top;
     margin-right: 15px;
+    max-width: 20%;
+}
+
+.comment-info__lower {
+    margin-top: -3px;
 }
 
 .comment-author {
     font-weight: bold;
+    word-wrap: break-word;
 }
 
 .comment-time {
@@ -306,7 +324,9 @@ main {
 
 .comment-text {
     display: inline-block;
-    vertical-align: middle;
+    vertical-align: text-top;
+    max-width: 60%;
+    word-wrap: break-word;
 }
 
 .fa-thumbs-up {
