@@ -76,8 +76,7 @@
                 <div class="description-wrapper">
                     <div class="description-header">
                         <%
-                            ServletContext sc = request.getServletContext();
-                            AboutModel aboutModel = ((DataManager) sc.getAttribute(DataManager.ATTR)).getAboutModel(1);
+                            AboutModel aboutModel = (AboutModel) request.getAttribute(AboutModel.ATTR);
                             out.print(" <div class=\"description-header__left\">" + aboutModel.getName() + "</div>");
                             out.print(" <div class=\"description-header__right\">" + aboutModel.getStartDate() + " - " + aboutModel.getEndDate() + "</div>");
                             //out.print(" <div class=\"description-header__right\">" + aboutModel.getMaxPeople() + "</div>");
