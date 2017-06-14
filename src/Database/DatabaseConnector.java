@@ -3,6 +3,7 @@ package Database;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * DBConnection class which communicates with database
@@ -73,14 +74,20 @@ public class DatabaseConnector {
     /**
      * Calls given procedure in database.
      * @param procedure name of procedure
-     * @param parameter parameter of procedure
+     * @param parameters list of parameters
+     *
      * @return result of procedure
      */
-    public ResultSet callProcedure(String procedure, String parameter){
+    public ResultSet callProcedure(String procedure, List<String> parameters){
         ResultSet rs = null;
         try {
             Statement statement = connection.createStatement();
-            rs = statement.executeQuery("CALL " + procedure + "(" + parameter + ");");
+            StringBuilder query = new StringBuilder("CALL " + procedure + "(");
+            for(int i = 0; i < parameters.size() - 1; i++){
+                query.append(parameters.get(i) + ", ");
+            }
+            query.append(parameters.get(parameters.size() - 1) + ");");
+            rs = statement.executeQuery(query.toString());
         } catch (SQLException e) {
             e.printStackTrace();
         }

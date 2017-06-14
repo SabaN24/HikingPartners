@@ -32,73 +32,59 @@ public class DataManager {
      * @returns AboutModel thaat has relevant information
      */
     public AboutModel getAboutModel(int id) {
-
         AboutModel aboutModel = null;
-
         String hikeQuery = constructQuery("hikes", "ID", "" + id);
-
         ResultSet hikeResultSet = databaseConnector.getData(hikeQuery);
-
-
         try {
             while (hikeResultSet.next()) {
-
                 String name = hikeResultSet.getString(2);
                 Date startDate = hikeResultSet.getDate(3);
                 Date endDate = hikeResultSet.getDate(4);
                 String description = hikeResultSet.getString(5);
                 int maxPeople = hikeResultSet.getInt(6);
-                List<Comment> comments = getComments("PUBLIC", "" + id);
-
+                List<Comment> comments = getComments("", "" + id, 1);
                 aboutModel = new AboutModel(id, name, description, startDate, endDate, maxPeople, comments);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
         return aboutModel;
     }
 
 
     /**
-     * method gets comments with identififed type and ID
-     *
-     * @param type (means PUBLIC or PRIVATE comments) if equals public than given parameter  ID means hike_id
-     *             else given id menas post_ID;
-     * @param id   for filering
-     * @throws SQLException
-     * @returns List of Comment classess
+     * Gets comments of given post.
+     * @param postID id of required post
+     * @param hikeID id of hike, on which this post is written
+     * @param commentType type of comment (private or public)
+     * @return comments on given post as ArrayList
      */
-    public List<Comment> getComments(String type, String id) {
-
-        String commentQuery = "";
+    public List<Comment> getComments(String postID, String hikeID, int commentType) {
         List<Comment> comments = new ArrayList<>();
-
-        if (type.equals("PUBLIC")) {
-            commentQuery = constructQuery("public_comments", "hike_ID", id);
+        ResultSet commentsResultSet;
+        if (commentType == 1) {
+            commentsResultSet = databaseConnector.callProcedure("get_public_comments", Arrays.asList(hikeID));
         } else {
-            commentQuery = constructQuery("private_comments", "post_ID", id);
+            commentsResultSet = databaseConnector.callProcedure("get_private_comments", Arrays.asList(postID));
         }
-
-        ResultSet commentsResultSet = databaseConnector.getData(commentQuery);
-
         try {
             while (commentsResultSet.next()) {
-
                 int commentId = commentsResultSet.getInt(1);
                 String comment = commentsResultSet.getString(2);
-                int userId = commentsResultSet.getInt(4);
+                int userId = commentsResultSet.getInt(3);
                 MiniUser author = getUserById(userId);
-                Date date = commentsResultSet.getDate(5);
-                int likeNum = commentsResultSet.getInt(6);
+                Date date = commentsResultSet.getDate(4);
+                ResultSet likeResultSet = databaseConnector.callProcedure("get_comment_likes", Arrays.asList("" + commentId));
+                int likeNum = 0;
+                if(likeResultSet.next()){
+                    likeNum = likeResultSet.getInt(1);
+                }
                 Comment currComment = new Comment(commentId, comment, author, date, likeNum);
                 comments.add(currComment);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return comments;
     }
 
@@ -133,7 +119,7 @@ public class DataManager {
      * @return DefaultMode.User class object built from information of creator of given hike
      */
     private MiniUser getCreator(int hikeId) {
-        ResultSet rs = databaseConnector.callProcedure("get_creator_info", "" + hikeId);
+        ResultSet rs = databaseConnector.callProcedure("get_creator_info", Arrays.asList("" + hikeId));
         MiniUser creator = createUserFromResultSet(rs);
         return creator;
     }
@@ -166,7 +152,7 @@ public class DataManager {
      * @return List<Photo> object built from cover photos of given hike
      */
     private List<Photo> getCoverPhotos(int hikeId){
-        ResultSet rs = databaseConnector.callProcedure("get_cover_photos", "" + hikeId);
+        ResultSet rs = databaseConnector.callProcedure("get_cover_photos", Arrays.asList("" + hikeId));
         List<Photo> coverPhotos = new ArrayList<>();
         try {
             while(rs.next()){
