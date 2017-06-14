@@ -41,10 +41,9 @@
                 <div class="logout-block"><a href="#">Log out</a></div>
             </div>
         </div>
-        <%--<jsp:include page='<%=request.getAttribute("view")%>' />--%>
 
     </header>
-    <jsp:include page='HikePage.jsp' />
+    <jsp:include page='<%=(String)request.getAttribute("view")%>' />
 </div>
 <footer></footer>
 <script>
