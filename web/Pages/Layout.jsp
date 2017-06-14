@@ -5,7 +5,7 @@
   Time: 13:39
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!doctype html>
 <html>
 <head>
@@ -30,12 +30,15 @@
         </div>
         <div class="header-right">
             <div class="profile-block">
-                <a href="" class="profile-link">
+                <a href="#" class="profile-link">
                     <div class="avatar-block">
 
                     </div>
-                    <div class="profile-name">Sandro Jikia</div>
+                    <div class="profile-name">
+                        Sandro Jikia
+                    </div>
                 </a>
+                <div class="logout-block"><a href="#">Log out</a></div>
             </div>
         </div>
         <%--<jsp:include page='<%=request.getAttribute("view")%>' />--%>
