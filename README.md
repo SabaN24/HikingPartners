@@ -5,7 +5,7 @@ Users: nodo24, levani132, fkavache, sanddro, SabaN24.
 # Full description:
 Hiking Partners is a web application, which will be used by people who want to go hiking, but can not find proper partners around themselves (among their friends, relatives, co-workers, etc.). Application is developed using Java as Server-Side language and HTML, JavaScript, CSS as Client-Side language. Java codes are developed and executed using IntelliJ Idea IDE. Database is administrated using MySQL workbench. This repository is used as Version Control tool. All changes applied to code can be seen in this repository.
 
-Java codes are written using Google Java Style. (See example here: https://google.github.io/styleguide/javaguide.html#s5.1-identifier-names).
+Java codes are written using Google Java Style. (See example here: https://google.github.io/styleguide/javaguide.html).
 
 # Main features
 ## Sign Up/Log in
