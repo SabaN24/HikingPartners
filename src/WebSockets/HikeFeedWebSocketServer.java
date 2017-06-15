@@ -3,7 +3,8 @@ package WebSockets;
 /**
  * Created by Levani on 14.06.2017.
  */
-import javax.json.*;
+import com.google.gson.Gson;
+
 import javax.websocket.*;
 import javax.websocket.server.*;
 import java.io.*;
@@ -11,6 +12,18 @@ import java.util.*;
 
 @ServerEndpoint("/HikeFeedSocket/{hikeId}")
 public class HikeFeedWebSocketServer {
+
+    public class Response{
+        private String action;
+        private Map<String, String> data;
+        public String getAction(){
+            return action;
+        }
+
+        public String getDataElement(String key){
+            return data.get(key);
+        }
+    }
 
     private Map<Integer, Map<String, Session>> connectedSessions = new HashMap<>();
 
@@ -33,42 +46,41 @@ public class HikeFeedWebSocketServer {
 
     @OnMessage
     public void handleMessage(String message, Session session, @PathParam("hikeId") int hikeId) {
-        try (JsonReader reader = Json.createReader(new StringReader(message))) {
-            JsonObject jsonMessage = reader.readObject();
+        Gson gson = new Gson();
+        Response response = gson.fromJson(message, Response.class);
+        if ("getComment".equals(response.getAction())) {
+            //bazashi komentaris chagdeba
+            //komentaris gagzavna yvela am hikeze miertebul sesiastan
+        }
 
-            if ("getComment".equals(jsonMessage.getString("action"))) {
-                //bazashi komentaris chagdeba
-                //komentaris gagzavna yvela am hikeze miertebul sesiastan
-            }
+        if ("getCommentLike".equals(response.getAction())) {
+            //avsaxot bazashi like;
+            //am likeze informaciis gagzavna yvela am hikeze miertebul sesiastan
+        }
 
-            if ("getCommentLike".equals(jsonMessage.getString("action"))) {
-                //avsaxot bazashi like;
-                //am likeze informaciis gagzavna yvela am hikeze miertebul sesiastan
-            }
+        if ("getPost".equals(response.getAction())) {
+            //komentaris analogiurad
+        }
 
-            if ("getPost".equals(jsonMessage.getString("action"))) {
-                //komentaris analogiurad
-            }
-
-            if("getPostLike".equals(jsonMessage.getString("action"))){
-                //komentaris analogiurad
-            }
+        if("getPostLike".equals(response.getAction())){
+            //komentaris analogiurad
         }
     }
 
-    private void sendToAllConnectedSessions(JsonObject message, int hikeId, Session curSession) {
+    private void sendToAllConnectedSessions(Response message, int hikeId, Session curSession) {
         Map<String, Session> currentSessions = connectedSessions.get(hikeId);
+        Gson gson = new Gson();
         for (Session session : currentSessions.values()) {
             try {
                 if(!session.getId().equals(curSession.getId()))
-                    sendToSession(session, message);
+                    sendToSession(session, gson.toJson(message));
             }catch(IOException e){
                 connectedSessions.remove(hikeId).remove(session.getId());
             }
         }
     }
 
-    private void sendToSession(Session session, JsonObject message) throws IOException{
-        session.getBasicRemote().sendText(message.toString());
+    private void sendToSession(Session session, String message) throws IOException{
+        session.getBasicRemote().sendText(message);
     }
 }
