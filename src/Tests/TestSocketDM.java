@@ -78,6 +78,7 @@ public class TestSocketDM {
         dbConnector.updateData("delete from comments where ID = " + returnedID);
 
         //-------------------------------------------------------------------
+        //-------------------------------------------------------------------
 
         int returnedID2 = socketDM.writePost(1, 1, "Test");
         int returnedID1 = socketDM.addComment(userID, returnedID2, hikeID, comment+"1", privacyType + 1);

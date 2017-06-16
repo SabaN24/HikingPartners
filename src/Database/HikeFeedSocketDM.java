@@ -100,6 +100,7 @@ public class HikeFeedSocketDM {
         return -1;
     }
 
+
     /**
      * Adding comment like in database
      * @param userID
