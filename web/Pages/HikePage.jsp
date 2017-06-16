@@ -37,12 +37,12 @@
     </div>
     <nav>
         <ul class="nav-list">
-            <li class="nav-item active"><a href="#" class="nav-link"><i class="fa fa-bicycle"></i> Hike Page</a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fa fa-bicycle"></i> Items</a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fa fa-bicycle"></i> Members</a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fa fa-bicycle"></i> Gallery</a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fa fa-bicycle"></i> Locations</a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fa fa-bicycle"></i> Feed</a></li>
+            <li class="nav-item active"><a href="#" class="nav-link"><i class="fa fa-home"></i> Hike Page </a></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="fa fa-list-ul"></i> Items </a></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="fa fa-users"></i> Members </a></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="fa fa-picture-o"></i> Gallery </a></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="fa fa-map-marker"></i> Locations </a></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="fa fa-rss-square"></i> Feed </a></li>
         </ul>
     </nav>
 </aside>
