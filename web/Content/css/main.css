@@ -401,6 +401,11 @@ main {
 }
 
 .fa-thumbs-up {
-    color: #5890FF;
+    cursor:pointer;
+    color: #ccc;
     margin-right: 3px;
+}
+
+.liked{
+    color: rgb(88, 144, 255);
 }
