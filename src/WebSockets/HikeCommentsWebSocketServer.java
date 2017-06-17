@@ -5,6 +5,7 @@ package WebSockets;
  */
 import Database.HikeFeedSocketDM;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import javax.websocket.*;
 import javax.websocket.server.*;
@@ -34,7 +35,7 @@ public class HikeCommentsWebSocketServer {
     @OnMessage
     public void handleMessage(String message, Session session, @PathParam("hikeId") int hikeId) {
         //JsonObject jsonMessage = reader.readObject();
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setDateFormat("MMM, d, yyyy HH:mm:ss").create();
 
         Map<String, Object> jsonMessage = gson.fromJson(message, Map.class);
         if ("getComment".equals(jsonMessage.get("action"))) {

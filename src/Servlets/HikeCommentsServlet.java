@@ -3,6 +3,8 @@ package Servlets;
 import Database.DataManager;
 import Models.Hike.AboutModel;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,7 +25,7 @@ public class HikeCommentsServlet extends HttpServlet {
         DataManager dataManager = (DataManager) sc.getAttribute(DataManager.ATTR);
         int hikeId = Integer.parseInt(request.getParameter("hikeId"));
         AboutModel aboutModel = dataManager.getAboutModel(hikeId);
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setDateFormat("MMM, d, yyyy HH:mm:ss").create();
         String jsonAboutModel = gson.toJson(aboutModel);
         Map<String, Object> modelToSent = gson.fromJson(jsonAboutModel, Map.class);
         for(Object o : ((List)modelToSent.get("comments"))){

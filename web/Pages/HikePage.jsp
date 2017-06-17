@@ -133,6 +133,24 @@
         },
         //These are stored methods that vue will be able to use.
         methods: {
+            formatDate: function(date){
+                var months = [
+                    "Jan", "Feb", "Mar",
+                    "Apr", "May", "Jun", "Jul",
+                    "Aug", "Sep", "Oct",
+                    "Nov", "Dec"
+                ];
+
+                var day = date.getDate();
+                var month = date.getMonth();
+                var year = date.getFullYear();
+                var hours = date.getHours();
+                var minutes = date.getMinutes();
+                var seconds = date.getSeconds();
+
+                return months[month] + ', ' + day + ", " + year + " " + hours + ":" + minutes + ":" + seconds;
+            },
+
             fetchData: function () {
                 var xhr = new XMLHttpRequest();
                 var self = this;
@@ -161,7 +179,7 @@
                     data: {
                         comment: document.getElementsByClassName("comment-input")[0].value,
                         commentID: "" + 0,
-                        date: Date.now(),
+                        date: this.formatDate(new Date()),
                         likeNumber: "" + 0,
                         isLiked: false,
                         userID: "" + 1,

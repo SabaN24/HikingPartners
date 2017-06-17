@@ -17,7 +17,7 @@ public class HikeFeedSocketDM {
     public HikeFeedSocketDM() {
         databaseConnector = DatabaseConnector.getInstance();
         format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         calendar = Calendar.getInstance();
     }
 
@@ -33,6 +33,7 @@ public class HikeFeedSocketDM {
         query.append("\"" + post + "\",");
         query.append(hikeID + ", ");
         query.append(userID + ", ");
+        String a = dateFormat.format(calendar.getTime());
         query.append("'" + dateFormat.format(calendar.getTime()) + "')");
         databaseConnector.updateData(query.toString());
         ResultSet resultSet = databaseConnector.getData("select ID from posts order by ID desc limit 1");
@@ -58,6 +59,7 @@ public class HikeFeedSocketDM {
     public int addComment(int userID, int postID, int hikeID, String comment, int privacyType){
         StringBuilder query = new StringBuilder("insert into comments");
         query.append("(comment_text, hike_ID, user_ID, comment_time, privacy_type, post_ID)");
+        String a = dateFormat.format(calendar.getTime());
         query.append("values ( '" + comment + "', " + hikeID + ", " + userID + ", '" + dateFormat.format(calendar.getTime()) + "'," + privacyType + ", ");
         if(privacyType == 1) {
             query.append("null)");
