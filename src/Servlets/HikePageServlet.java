@@ -26,9 +26,7 @@ public class HikePageServlet extends HttpServlet {
         ServletContext sc = request.getServletContext();
         DataManager dataManager = (DataManager) sc.getAttribute(DataManager.ATTR);
 //        int hikeId =  Integer.parseInt(request.getParameter("id"));
-        AboutModel aboutModel = dataManager.getAboutModel(1);
         DefaultModel defaultModel = dataManager.getDefaultModel(1);
-        request.setAttribute(AboutModel.ATTR, aboutModel);
         request.setAttribute(DefaultModel.ATTR, defaultModel);
 
         Helper.view("HikePage", request, response);
