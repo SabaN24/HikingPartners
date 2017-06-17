@@ -35,12 +35,12 @@
     </div>
     <nav>
         <ul class="nav-list">
-            <li class="nav-item active"><a href="#" class="nav-link"><i class="fa fa-bicycle"></i> Hike Page</a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fa fa-bicycle"></i> Items</a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fa fa-bicycle"></i> Members</a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fa fa-bicycle"></i> Gallery</a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fa fa-bicycle"></i> Locations</a></li>
-            <li class="nav-item"><a href="#" class="nav-link"><i class="fa fa-bicycle"></i> Feed</a></li>
+            <li class="nav-item active"><a href="#" class="nav-link"><i class="fa fa-home fa-pages"></i> Hike Page</a></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="fa fa-list-ul fa-pages"></i> Items</a></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="fa fa-users fa-pages"></i> Members</a></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="fa fa-picture-o fa-pages"></i> Gallery</a></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="fa fa-map-marker fa-pages"></i> Locations</a></li>
+            <li class="nav-item"><a href="#" class="nav-link"><i class="fa fa-rss-square fa-pages"></i> Feed</a></li>
         </ul>
     </nav>
 </aside>
@@ -71,15 +71,6 @@
             <div class="comments-count">{{aboutModel.comments.length}} comments.</div>
             <div class="comments-block">
                 <div class="comments-block-inner">
-                    <div class="comment">
-                        <div class="add-comment">
-                            <div class="avatar-block">
-                            </div>
-                            <form action="HikePageServlet" v-on:submit.prevent="sendComment" method="post">
-                                <input class="comment-input" type="text" name="add-comment" placeholder="Write a comment...">
-                            </form>
-                        </div>
-                    </div>
                     <ul class="comments-list" v-for="(comment, index) in aboutModel.comments">
                         <li class="comment">
                             <div class="avatar-block"></div>
@@ -102,6 +93,15 @@
                             </div>
                         </li>
                     </ul>
+                    <div class="comment">
+                        <div class="add-comment">
+                            <div class="avatar-block">
+                            </div>
+                            <form action="HikePageServlet" v-on:submit.prevent="sendComment" method="post">
+                                <input class="comment-input" type="text" name="add-comment" placeholder="Write a comment...">
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -150,7 +150,7 @@
                 var action = jsonData.action;
                 var comment = jsonData.data;
                 if(action == "getComment") {
-                    this.aboutModel.comments.splice(0, 0, comment);
+                    this.aboutModel.comments.push(comment);
                 }
             },
 
@@ -160,10 +160,11 @@
                     action: "getComment",
                     data: {
                         comment: document.getElementsByClassName("comment-input")[0].value,
-                        commentID: 0,
+                        commentID: "" + 0,
                         date: Date.now(),
-                        likeNumber: 0,
+                        likeNumber: "" + 0,
                         isLiked: false,
+                        userID: "" + 1,
                         user: {
                             firstName: document.getElementsByClassName("profile-name")[0].innerHTML.trim().split(" ")[0],
                             lastName: document.getElementsByClassName("profile-name")[0].innerHTML.trim().split(" ")[1]

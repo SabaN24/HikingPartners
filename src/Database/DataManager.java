@@ -1,5 +1,6 @@
 package Database;
 
+import java.sql.Time;
 import java.util.*;
 import Models.Comment;
 import Models.User;
@@ -73,7 +74,9 @@ public class DataManager {
                 String comment = commentsResultSet.getString(2);
                 int userId = commentsResultSet.getInt(3);
                 MiniUser author = getUserById(userId);
-                Date date = commentsResultSet.getDate(4);
+
+                Date date = (Date)commentsResultSet.getObject(4);
+
                 ResultSet likeResultSet = databaseConnector.callProcedure("get_comment_likes", Arrays.asList("" + commentId));
                 int likeNum = 0;
                 if(likeResultSet.next()){
