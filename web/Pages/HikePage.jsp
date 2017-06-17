@@ -112,7 +112,8 @@
     Vue.filter('reverse', function(value) {
         return value.slice().reverse();
     });
-    var ws = new WebSocket("ws://localhost:8080/HikeCommentsSocket/1");
+    var hikeId = <%=request.getParameter("hikeId") == null ? 1 : request.getParameter("hikeId")%>;
+    var ws = new WebSocket("ws://localhost:8080/HikeCommentsSocket/" + hikeId);
     var newComment = null;
     var app = new Vue({
         el: '#vueapp',
@@ -135,7 +136,7 @@
             fetchData: function () {
                 var xhr = new XMLHttpRequest();
                 var self = this;
-                xhr.open('POST', "/HikeCommentsServlet");
+                xhr.open('POST', "/HikeCommentsServlet?hikeId=" + hikeId);
                 xhr.onload = function () {
                     self.aboutModel = JSON.parse(xhr.responseText);
                 };

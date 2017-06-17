@@ -21,7 +21,8 @@ public class HikeCommentsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext sc = request.getServletContext();
         DataManager dataManager = (DataManager) sc.getAttribute(DataManager.ATTR);
-        AboutModel aboutModel = dataManager.getAboutModel(1);
+        int hikeId = Integer.parseInt(request.getParameter("hikeId"));
+        AboutModel aboutModel = dataManager.getAboutModel(hikeId);
         Gson gson = new Gson();
         String jsonAboutModel = gson.toJson(aboutModel);
         Map<String, Object> modelToSent = gson.fromJson(jsonAboutModel, Map.class);
