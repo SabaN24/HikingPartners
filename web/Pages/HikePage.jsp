@@ -13,8 +13,8 @@
 --%>
 <setTitle>
     <%
-        AboutModel aboutModel = (AboutModel) request.getAttribute(AboutModel.ATTR);
-        out.print(aboutModel.getName());
+//        AboutModel aboutModel = (AboutModel) request.getAttribute(AboutModel.ATTR);
+//        out.print(aboutModel.getName());
     %>
 </setTitle>
 
@@ -56,21 +56,21 @@
         <div class="description-block">
             <div class="description-wrapper">
                 <div class="description-header">
-                    <div class="description-header__left"> <%=aboutModel.getName()%> </div>
+                    <%--<div class="description-header__left"> <%=aboutModel.getName()%> </div>--%>
                     <div class="description-header__right">
-                        <span title="ადამიანების მაქსიმალური რაოდენობა" style="margin-right: 30px;"><i class="fa fa-user" aria-hidden="true"></i> <%= aboutModel.getMaxPeople() %> </span>
-                        <span title="გამგზავრების თარიღი" style="margin-right: 20px;"><i class="fa fa-arrow-up" aria-hidden="true"></i> <%= aboutModel.getStartDate() %></span>
-                        <span title="ჩამოსვლის თარიღი"><i class="fa fa-arrow-down" aria-hidden="true"></i> <%= aboutModel.getEndDate() %></span>
+                        <%--<span title="ადამიანების მაქსიმალური რაოდენობა" style="margin-right: 30px;"><i class="fa fa-user" aria-hidden="true"></i> <%= aboutModel.getMaxPeople() %> </span>--%>
+                        <%--<span title="გამგზავრების თარიღი" style="margin-right: 20px;"><i class="fa fa-arrow-up" aria-hidden="true"></i> <%= aboutModel.getStartDate() %></span>--%>
+                        <%--<span title="ჩამოსვლის თარიღი"><i class="fa fa-arrow-down" aria-hidden="true"></i> <%= aboutModel.getEndDate() %></span>--%>
 
                     </div>
                     <%--out.print(" <div class=\"description-header__right\">" + aboutModel.getMaxPeople() + "</div>");--%>
                 </div>
                 <div class="description-body">
                     <div style="margin-bottom: 10px;font-weight:bold;">Description:</div>
-                    <%= aboutModel.getDescription() %>
+                    <%--<%= aboutModel.getDescription() %>--%>
                 </div>
             </div>
-            <div class="comments-count"><%= aboutModel.getComments().size() %> comments.</div>
+            <%--<div class="comments-count"><%= aboutModel.getComments().size() %> comments.</div>--%>
             <div class="comments-block">
                 <div class="comments-block-inner">
                     <div class="comment">
@@ -82,43 +82,43 @@
                             </form>
                         </div>
                     </div>
-                    <ul class="comments-list">
+                    <%--<ul class="comments-list">--%>
 
-                        <%
+                        <%--<%--%>
 
-                            List<Comment> comments = aboutModel.getComments();
-                            for (Comment comment : comments) {
-                                //User user = comment.getUser();
-                                String time = comment.getDate().toString();
-                        %>
-                        <li class="comment">
-                            <div class="avatar-block"></div>
-                            <div class="comment-info">
-                                <div class="comment-info__upper">
-                                    <div class="comment-author">
-                                        <%
-                                            MiniUser author = comment.getUser();
-                                            out.print(author.getFirstName() + " " + author.getLastName());
-                                        %>
-                                    </div>
-                                </div>
-                                <div class="comment-info__lower">
-                                    <div class="comment-time"><%= comment.getDate().toString() %>
-                                    </div>
-                                    <div class="like-block">
-                                        <i class="fa fa-thumbs-up" aria-hidden="true"></i>
-                                        <%= comment.getLikeNUmber() %>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="comment-text"><%= comment.getComment() %>
-                            </div>
-                        </li>
-                        <%
-                            }
-                        %>
+                            <%--List<Comment> comments = aboutModel.getComments();--%>
+                            <%--for (Comment comment : comments) {--%>
+                                <%--//User user = comment.getUser();--%>
+                                <%--String time = comment.getDate().toString();--%>
+                        <%--%>--%>
+                        <%--<li class="comment">--%>
+                            <%--<div class="avatar-block"></div>--%>
+                            <%--<div class="comment-info">--%>
+                                <%--<div class="comment-info__upper">--%>
+                                    <%--<div class="comment-author">--%>
+                                        <%--<%--%>
+                                            <%--MiniUser author = comment.getUser();--%>
+                                            <%--out.print(author.getFirstName() + " " + author.getLastName());--%>
+                                        <%--%>--%>
+                                    <%--</div>--%>
+                                <%--</div>--%>
+                                <%--<div class="comment-info__lower">--%>
+                                    <%--<div class="comment-time"><%= comment.getDate().toString() %>--%>
+                                    <%--</div>--%>
+                                    <%--<div class="like-block">--%>
+                                        <%--<i class="fa fa-thumbs-up" aria-hidden="true"></i>--%>
+                                        <%--<%= comment.getLikeNUmber() %>--%>
+                                    <%--</div>--%>
+                                <%--</div>--%>
+                            <%--</div>--%>
+                            <%--<div class="comment-text"><%= comment.getComment() %>--%>
+                            <%--</div>--%>
+                        <%--</li>--%>
+                        <%--<%--%>
+                            <%--}--%>
+                        <%--%>--%>
 
-                    </ul>
+                    <%--</ul>--%>
                 </div>
             </div>
         </div>
