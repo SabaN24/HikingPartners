@@ -1,19 +1,21 @@
 package WebSockets;
 
 /**
- * Created by Levani on 14.06.2017.
+ * Created by Sandro on 17.06.2017.
  */
 import Models.Comment;
 import Models.MiniUser;
 import Models.Post;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
 import javax.websocket.*;
 import javax.websocket.server.*;
+import java.io.*;
 import java.util.*;
 
-@ServerEndpoint("/HikeFeedSocket/{hikeId}")
-public class HikeFeedWebSocketServer{
+@ServerEndpoint("/HikeCommentsSocket/{hikeId}")
+public class HikeCommentsWebSocketServer {
     private static Map<Integer, Map<String, Session>> connectedSessions = new HashMap<>();
     private static WebSocketHelper webSocketHelper = new WebSocketHelper();
 
@@ -35,23 +37,16 @@ public class HikeFeedWebSocketServer{
     public void handleMessage(String message, Session session, @PathParam("hikeId") int hikeId) {
         //JsonObject jsonMessage = reader.readObject();
         Gson gson = new Gson();
+
         Map<String, Object> jsonMessage = gson.fromJson(message, Map.class);
         if ("getComment".equals(jsonMessage.get("action"))) {
             //bazashi komentaris chagdeba
-            //komentaris gagzavna yvela am hikeze miertebul sesiastan
+            webSocketHelper.sendToAllConnectedSessions(jsonMessage, hikeId, connectedSessions.get(hikeId));
         }
 
         if ("getCommentLike".equals(jsonMessage.get("action"))) {
             //avsaxot bazashi like;
             //am likeze informaciis gagzavna yvela am hikeze miertebul sesiastan
-        }
-
-        if ("getPost".equals(jsonMessage.get("action"))) {
-            //komentaris analogiurad
-        }
-
-        if("getPostLike".equals(jsonMessage.get("action"))){
-            //komentaris analogiurad
         }
     }
 }
