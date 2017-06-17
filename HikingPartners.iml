@@ -32,17 +32,6 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="JUnit5">
-        <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/plugins/junit/lib/junit-jupiter-api-5.0.0-M4.jar!/" />
-          <root url="jar://$APPLICATION_HOME_DIR$/plugins/junit/lib/opentest4j-1.0.0-M2.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="library" name="mysql-connector-java-5.0.8-bin" level="project" />
-    <orderEntry type="module-library">
       <library name="JUnit4">
         <CLASSES>
           <root url="jar://$APPLICATION_HOME_DIR$/lib/junit-4.12.jar!/" />
@@ -53,8 +42,7 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="mysql-connector-java-6.0.6-bin" level="project" />
-    <orderEntry type="library" name="WebSocket-1.0" level="project" />
-    <orderEntry type="library" name="javax.json.processing-1.0" level="project" />
     <orderEntry type="library" name="com.google.code.gson:gson:2.8.1" level="project" />
+    <orderEntry type="library" name="javax.websocket:javax.websocket-api:1.1" level="project" />
   </component>
 </module>

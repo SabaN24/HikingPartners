@@ -9,6 +9,8 @@
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="mysql-connector-java-6.0.6-bin" />
+          <element id="library" level="project" name="com.google.code.gson:gson:2.8.1" />
+          <element id="library" level="project" name="javax.websocket:javax.websocket-api:1.1" />
         </element>
       </element>
     </root>

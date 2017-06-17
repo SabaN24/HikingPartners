@@ -181,8 +181,8 @@
 
                 //These will be called only after socket sends back information about like
                 //if it was liked, disliked, by whom it was done and if there was error on server.
-                this.aboutModel.comments[index].isLiked = !this.comments[index].isLiked;
-                this.aboutModel.comments[index].isLiked ? this.comments[index].likeNumber++ : this.comments[index].likeNumber--;
+                this.aboutModel.comments[index].isLiked = !this.aboutModel.comments[index].isLiked;
+                this.aboutModel.comments[index].isLiked ? this.aboutModel.comments[index].likeNumber++ : this.aboutModel.comments[index].likeNumber--;
 
             }
         }
