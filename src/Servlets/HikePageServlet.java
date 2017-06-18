@@ -32,6 +32,6 @@ public class HikePageServlet extends HttpServlet {
         DefaultModel defaultModel = dataManager.getDefaultModel(hikeId);
         request.setAttribute(DefaultModel.ATTR, defaultModel);
 
-        Helper.view("HikePage", request, response);
+        Helper.view("HikePage", "Home", request, response);
     }
 }

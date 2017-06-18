@@ -44,7 +44,7 @@
         </div>
 
     </header>
-    <jsp:include page='<%=(String)request.getAttribute("view")%>' />
+    <jsp:include page='<%=(String)request.getAttribute("page")%>' />
 </div>
 <footer></footer>
 </body>

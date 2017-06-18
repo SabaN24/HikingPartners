@@ -10,8 +10,8 @@ import java.io.IOException;
 * Gets name of jsp file, request, response and redirects request and response.
 * */
 public class Helper {
-    public static void view(String viewName, HttpServletRequest request, HttpServletResponse response)  {
-        request.setAttribute("view", viewName + ".jsp");
+    public static void view(String page, HttpServletRequest request, HttpServletResponse response)  {
+        request.setAttribute("page", page + ".jsp");
         RequestDispatcher rd = request.getRequestDispatcher("/Pages/Layout.jsp");
         try {
             rd.forward(request, response);
@@ -20,5 +20,10 @@ public class Helper {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void view(String page, String subPage, HttpServletRequest request, HttpServletResponse response)  {
+        request.setAttribute("subPage", page + "_" + subPage + ".jsp");
+        view(page, request, response);
     }
 }
