@@ -36,26 +36,38 @@ public class HikeCommentsWebSocketServer {
     public void handleMessage(String message, Session session, @PathParam("hikeId") int hikeId) {
         //JsonObject jsonMessage = reader.readObject();
         Gson gson = new GsonBuilder().setDateFormat("MMM, d, yyyy HH:mm:ss").create();
-
         Map<String, Object> jsonMessage = gson.fromJson(message, Map.class);
         if ("getComment".equals(jsonMessage.get("action"))) {
-
-            Map<String, Object> data = (Map)(jsonMessage.get("data"));
-
-            String comment = (String)data.get("comment");
-            Integer userID = Integer.parseInt((String)data.get("userID"));
-            int postID = -1;   //postID doesn't matters because its public Post so it will automatically add "null" in database in postID place.
-            int hikeID = hikeId;
-            int privacyType = 1;
-            int returnedID = socketDM.addComment(userID, postID, hikeID, comment, privacyType);
-
-            data.put("commentID", returnedID);
-            webSocketHelper.sendToAllConnectedSessions(jsonMessage, hikeId, connectedSessions.get(hikeId));
+            getComment(jsonMessage, session, hikeId);
         }
-
         if ("getCommentLike".equals(jsonMessage.get("action"))) {
-            //avsaxot bazashi like;
-            //am likeze informaciis gagzavna yvela am hikeze miertebul sesiastan
+            getCommentLike(jsonMessage, session, hikeId);
         }
     }
+
+    private void getComment(Map<String, Object> jsonMessage, Session session, @PathParam("hikeId") int hikeId){
+        Map<String, Object> data = (Map)(jsonMessage.get("data"));
+        String comment = (String)data.get("comment");
+        Integer userID = Integer.parseInt((String)data.get("userID"));
+        int postID = -1;   //postID doesn't matters because its public Post so it will automatically add "null" in database in postID place.
+        int hikeID = hikeId;
+        int privacyType = 1;
+        int returnedID = socketDM.addComment(userID, postID, hikeID, comment, privacyType);
+        data.put("commentID", returnedID);
+        webSocketHelper.sendToAllConnectedSessions(jsonMessage, hikeId, connectedSessions.get(hikeId));
+    }
+
+    private void getCommentLike(Map<String, Object> jsonMessage, Session session, @PathParam("hikeId") int hikeId) {
+        Map<String, Object> data = (Map)(jsonMessage.get("data"));
+        Integer userID = Integer.parseInt((String)data.get("userID"));
+        Integer commentID = Integer.parseInt((String)data.get("commentID"));
+        int returnedID = socketDM.likeComment(userID, commentID);
+        if(returnedID == -1){
+            data.put("likeResult", "unlike");
+        } else {
+            data.put("likeResult", "like");
+        }
+        webSocketHelper.sendToAllConnectedSessions(jsonMessage, hikeId, connectedSessions.get(hikeId));
+    }
+
 }

@@ -12,7 +12,7 @@
     <div class="description-block">
         <div class="description-wrapper">
             <div class="description-header">
-                <div class="description-header__left"> {{aboutModel.name}} </div>
+                <div class="description-header__left"> {{aboutModel.name}}</div>
                 <div class="description-header__right">
                             <span title="ადამიანების მაქსიმალური რაოდენობა" style="margin-right: 30px;"><i
                                     class="fa fa-user" aria-hidden="true"></i> {{aboutModel.maxPeople}}</span>
@@ -126,9 +126,21 @@
             getSocketMessage: function (data) {
                 var jsonData = JSON.parse(data.data);
                 var action = jsonData.action;
-                var comment = jsonData.data;
+                data = jsonData.data;
                 if (action == "getComment") {
-                    this.aboutModel.comments.push(comment);
+                    this.aboutModel.comments.push(data);
+                } else if (action == "getCommentLike") {
+                    if (data.likeResult == "like") {
+                        this.aboutModel.comments[data.commentIndex].likeNumber++;
+                        if (!this.aboutModel.comments[data.commentIndex].isLiked && data.userID == 1) {
+                            this.aboutModel.comments[data.commentIndex].isLiked = true;
+                        }
+                    } else if (data.likeResult == "unlike" && this.aboutModel.comments[data.commentIndex].likeNumber > 0) {
+                        this.aboutModel.comments[data.commentIndex].likeNumber--;
+                        if (this.aboutModel.comments[data.commentIndex].isLiked && data.userID == 1) {
+                            this.aboutModel.comments[data.commentIndex].isLiked = false;
+                        }
+                    }
                 }
             },
 
@@ -154,16 +166,14 @@
 
             //This function is called when like button is clicked.
             like: function (index) {
-                //Here we should send new like/unlike to socket server
-                //using ws.send(message) where message is json transformed to string
-                //and contains message.action = 'getLike' and message.newLike, which has
-                //two values, comment id and user id.
-
-                //These will be called only after socket sends back information about like
-                //if it was liked, disliked, by whom it was done and if there was error on server.
-                this.aboutModel.comments[index].isLiked = !this.aboutModel.comments[index].isLiked;
-                this.aboutModel.comments[index].isLiked ? this.aboutModel.comments[index].likeNumber++ : this.aboutModel.comments[index].likeNumber--;
-
+                ws.send(JSON.stringify({
+                    action: "getCommentLike",
+                    data: {
+                        commentID: "" + this.aboutModel.comments[index].commentID,
+                        userID: "" + 1,
+                        commentIndex: "" + index
+                    }
+                }));
             }
         }
     });
