@@ -35,7 +35,10 @@ public class TestSocketDM {
         int userID = 1;
         int hikeID = 1;
         String post = "TestTestTest";
-        int returnedID = socketDM.writePost(userID, hikeID, post);
+        DateFormat df =  new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Calendar calendar = Calendar.getInstance();
+        String time = df.format(calendar.getTime());
+        int returnedID = socketDM.writePost(userID, hikeID, post, time);
         assertNotEquals(-1, returnedID);
 
         ResultSet resultSet = dbConnector.getData("select * from posts order by ID desc limit 1");
@@ -83,7 +86,7 @@ public class TestSocketDM {
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
 
-        int returnedID2 = socketDM.writePost(1, 1, "Test");
+        int returnedID2 = socketDM.writePost(1, 1, "Test", time);
         int returnedID1 = socketDM.addComment(userID, returnedID2, hikeID, comment+"1", privacyType + 1, time);
         assertNotEquals(-1, returnedID1);
 
@@ -106,7 +109,10 @@ public class TestSocketDM {
 
     @Test
     public void testLikePost(){
-        int returnedID = socketDM.writePost(1, 1, "Test");
+        DateFormat df =  new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Calendar calendar = Calendar.getInstance();
+        String time = df.format(calendar.getTime());
+        int returnedID = socketDM.writePost(1, 1, "Test", time);
         int userID = 1;
         int returnedID1 = socketDM.likePost(userID, returnedID);
         assertNotEquals(-1, returnedID1);
@@ -130,7 +136,7 @@ public class TestSocketDM {
         DateFormat df =  new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Calendar calendar = Calendar.getInstance();
         String time = df.format(calendar.getTime());
-        int returnedID = socketDM.writePost(1, 1, "Test");
+        int returnedID = socketDM.writePost(1, 1, "Test", time);
         int returnedID1 = socketDM.addComment(1, 1, 1, "test", 1, time);
         int userID = 1;
         int returnedID2 = socketDM.likeComment(userID, returnedID1);

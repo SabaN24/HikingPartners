@@ -93,24 +93,6 @@
         },
         //These are stored methods that vue will be able to use.
         methods: {
-            formatDate: function (date) {
-                var months = [
-                    "Jan", "Feb", "Mar",
-                    "Apr", "May", "Jun", "Jul",
-                    "Aug", "Sep", "Oct",
-                    "Nov", "Dec"
-                ];
-
-                var day = date.getDate();
-                var month = date.getMonth();
-                var year = date.getFullYear();
-                var hours = date.getHours();
-                var minutes = date.getMinutes();
-                var seconds = date.getSeconds();
-
-                return months[month] + ', ' + day + ", " + year + " " + hours + ":" + minutes + ":" + seconds;
-            },
-
             fetchData: function () {
                 var xhr = new XMLHttpRequest();
                 var self = this;
@@ -124,7 +106,9 @@
             //This method is invoked automatically when socket
             //server sends messageto this session.
             getSocketMessage: function (data) {
+                console.log(data);
                 var jsonData = JSON.parse(data.data);
+                console.log(jsonData);
                 var action = jsonData.action;
                 data = jsonData.data;
                 if (action == "getComment") {
@@ -151,7 +135,6 @@
                     data: {
                         comment: document.getElementsByClassName("comment-input")[0].value,
                         commentID: "" + 0,
-                        date: this.formatDate(new Date()),
                         likeNumber: "" + 0,
                         isLiked: false,
                         userID: "" + 1,

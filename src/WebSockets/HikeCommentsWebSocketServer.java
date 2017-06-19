@@ -24,6 +24,7 @@ public class HikeCommentsWebSocketServer {
 
     /* Private instance variables. */
     private DateFormat dateFormat;
+    private DateFormat frontDateFormat;
     private Calendar calendar;
 
     @OnOpen
@@ -35,7 +36,8 @@ public class HikeCommentsWebSocketServer {
         connectedSessions.get(hikeId).put(session.getId(), new Pair<>((HttpSession) config.getUserProperties()
                 .get(HttpSession.class.getName()), session));
         socketDM = new HikeFeedSocketDM();
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        frontDateFormat = new SimpleDateFormat("MMM, d, yyyy HH:mm:ss");
         calendar = Calendar.getInstance();
     }
 
@@ -48,7 +50,7 @@ public class HikeCommentsWebSocketServer {
     @OnMessage
     public void handleMessage(String message, Session session, @PathParam("hikeId") int hikeId) {
         //JsonObject jsonMessage = reader.readObject();
-        Gson gson = new GsonBuilder().setDateFormat("MMM, d, yyyy HH:mm").create();
+        Gson gson = new GsonBuilder().setDateFormat("MMM, d, yyyy HH:mm:ss").create();
         Map<String, Object> jsonMessage = gson.fromJson(message, Map.class);
         if ("getComment".equals(jsonMessage.get("action"))) {
             addComment(jsonMessage, session, hikeId);
@@ -65,9 +67,12 @@ public class HikeCommentsWebSocketServer {
         int postID = -1;   //postID doesn't matters because its public Post so it will automatically add "null" in database in postID place.
         int hikeID = hikeId;
         int privacyType = 1;
-        String time = dateFormat.format(calendar.getTime());
+        Date currDate = calendar.getTime();
+        String time = dateFormat.format(currDate);
+        String frontTime = dateFormat.format(currDate);
         int returnedID = socketDM.addComment(userID, postID, hikeID, comment, privacyType, time);
         data.put("commentID", returnedID);
+        data.put("date", frontTime);
         webSocketHelper.sendToAllConnectedSessions(jsonMessage, hikeId, connectedSessions.get(hikeId));
     }
 

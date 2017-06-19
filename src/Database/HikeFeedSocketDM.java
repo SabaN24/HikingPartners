@@ -35,12 +35,12 @@ public class HikeFeedSocketDM {
      * @param post
      * @return ID of currently added post
      */
-    public int writePost(int userID, int hikeID, String post) {
+    public int writePost(int userID, int hikeID, String post, String time) {
         StringBuilder query = new StringBuilder("insert into posts (post_text, hike_id, user_id, post_time) values(");
         query.append("\"" + post + "\",");
         query.append(hikeID + ", ");
         query.append(userID + ", ");
-        query.append("'" + dateFormat.format(calendar.getTime()) + "')");
+        query.append("'" + time + "')");
         databaseConnector.updateData(query.toString());
         ResultSet resultSet = databaseConnector.getData("select ID from posts order by ID desc limit 1");
         try {
