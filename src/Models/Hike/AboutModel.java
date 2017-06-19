@@ -19,7 +19,7 @@ public class AboutModel {
     private Date startDate;
     private Date endDate;
     private int maxPeople;
-    List<Comment > comments;
+    private List<Comment> comments;
 
     public static final String ATTR = "AboutModel";
 

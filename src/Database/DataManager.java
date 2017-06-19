@@ -3,12 +3,12 @@ package Database;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.util.*;
-import Models.Comment;
-import Models.User;
+
+import Models.*;
 import Models.Hike.AboutModel;
 import Models.Hike.DefaultModel;
-import Models.Photo;
-import Models.MiniUser;
+
+import javax.xml.transform.Result;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -117,6 +117,37 @@ public class DataManager {
     }
 
     /**
+     * Returns posts of given hike as list.
+     * @param hikeID id of desired hike
+     * @return list of posts
+     */
+    public List<Post> getPosts(int hikeID) {
+        ResultSet rs = databaseConnector.getData("Select * from posts where hike_ID = " + hikeID + ";");
+        List<Post> posts = new ArrayList<>();
+        try {
+            while(rs.next()){
+                int id = rs.getInt(1);
+                String text = rs.getString(2);
+                int userID = rs.getInt(4);
+                Date postDate = rs.getDate(5);
+                MiniUser user = getUserById(userID);
+                List<Comment> commentsList = getComments("" + id, "" + hikeID, 2);
+                ArrayList<Comment> comments = new ArrayList<>(commentsList);
+                ResultSet likesSet = databaseConnector.callProcedure("get_post_likes", Arrays.asList("" + id));
+                int likes = 0;
+                if(likesSet.next()) {
+                    likes = likesSet.getInt(1);
+                }
+                Post p = new Post(id, text, user, postDate, comments, likes);
+                posts.add(p);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return posts;
+    }
+
+    /**
      * Gets information about creator of given hike from database, using callProcedure
      * method of databaseConnnector class which calls given procedure in database.
      * @param hikeId id of demanded hike
@@ -186,4 +217,5 @@ public class DataManager {
         String query = "SELECT * FROM " + Table + " WHERE " + column + " = " + "\"" + id + "\";";
         return query;
     }
+
 }

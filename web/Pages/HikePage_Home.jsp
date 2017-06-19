@@ -106,8 +106,9 @@
                 var year = date.getFullYear();
                 var hours = date.getHours();
                 var minutes = date.getMinutes();
+                var seconds = date.getSeconds();
 
-                return months[month] + ', ' + day + ", " + year + " " + hours + ":" + minutes;
+                return months[month] + ', ' + day + ", " + year + " " + hours + ":" + minutes + ":" + seconds;
             },
 
             fetchData: function () {
