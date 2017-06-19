@@ -16,12 +16,14 @@ public class HikeFeedSocketDM {
     private DateFormat format;
     private DateFormat dateFormat;
     private Calendar calendar;
-    public static final String ATTR = "ocketDM";
+
+    /* Constants */
+    public static final String ATTR = "SocketDM";
 
     public HikeFeedSocketDM() {
         databaseConnector = DatabaseConnector.getInstance();
         format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         calendar = Calendar.getInstance();
     }
 
@@ -38,7 +40,6 @@ public class HikeFeedSocketDM {
         query.append("\"" + post + "\",");
         query.append(hikeID + ", ");
         query.append(userID + ", ");
-        String a = dateFormat.format(calendar.getTime());
         query.append("'" + dateFormat.format(calendar.getTime()) + "')");
         databaseConnector.updateData(query.toString());
         ResultSet resultSet = databaseConnector.getData("select ID from posts order by ID desc limit 1");
@@ -62,11 +63,10 @@ public class HikeFeedSocketDM {
      * @param privacyType
      * @return ID of currently added comment
      */
-    public int addComment(int userID, int postID, int hikeID, String comment, int privacyType) {
+    public int addComment(int userID, int postID, int hikeID, String comment, int privacyType, String currTime) {
         StringBuilder query = new StringBuilder("insert into comments");
         query.append("(comment_text, hike_ID, user_ID, comment_time, privacy_type, post_ID)");
-        String a = dateFormat.format(calendar.getTime());
-        query.append("values ( '" + comment + "', " + hikeID + ", " + userID + ", '" + dateFormat.format(calendar.getTime()) + "'," + privacyType + ", ");
+        query.append("values ( '" + comment + "', " + hikeID + ", " + userID + ", '" + currTime + "'," + privacyType + ", ");
         if (privacyType == 1) {
             query.append("null)");
         } else if (privacyType == 2) {

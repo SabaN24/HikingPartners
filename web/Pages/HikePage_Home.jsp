@@ -106,9 +106,8 @@
                 var year = date.getFullYear();
                 var hours = date.getHours();
                 var minutes = date.getMinutes();
-                var seconds = date.getSeconds();
 
-                return months[month] + ', ' + day + ", " + year + " " + hours + ":" + minutes + ":" + seconds;
+                return months[month] + ', ' + day + ", " + year + " " + hours + ":" + minutes;
             },
 
             fetchData: function () {
@@ -151,7 +150,6 @@
                     data: {
                         comment: document.getElementsByClassName("comment-input")[0].value,
                         commentID: "" + 0,
-                        date: this.formatDate(new Date()),
                         likeNumber: "" + 0,
                         isLiked: false,
                         userID: "" + 1,

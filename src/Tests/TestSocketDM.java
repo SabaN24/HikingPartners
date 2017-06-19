@@ -59,7 +59,10 @@ public class TestSocketDM {
         int hikeID = 1;
         String comment = "TestTestTest";
         int privacyType = 1;
-        int returnedID = socketDM.addComment(userID, postID, hikeID, comment, privacyType);
+        DateFormat df =  new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Calendar calendar = Calendar.getInstance();
+        String time = df.format(calendar.getTime());
+        int returnedID = socketDM.addComment(userID, postID, hikeID, comment, privacyType, time);
         assertNotEquals(-1, returnedID);
 
         ResultSet resultSet = dbConnector.getData("select * from comments order by ID desc limit 1");
@@ -81,7 +84,7 @@ public class TestSocketDM {
         //-------------------------------------------------------------------
 
         int returnedID2 = socketDM.writePost(1, 1, "Test");
-        int returnedID1 = socketDM.addComment(userID, returnedID2, hikeID, comment+"1", privacyType + 1);
+        int returnedID1 = socketDM.addComment(userID, returnedID2, hikeID, comment+"1", privacyType + 1, time);
         assertNotEquals(-1, returnedID1);
 
         ResultSet resultSet1 = dbConnector.getData("select * from comments order by ID desc limit 1");
@@ -124,8 +127,11 @@ public class TestSocketDM {
 
     @Test
     public void testLikeComment() {
+        DateFormat df =  new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Calendar calendar = Calendar.getInstance();
+        String time = df.format(calendar.getTime());
         int returnedID = socketDM.writePost(1, 1, "Test");
-        int returnedID1 = socketDM.addComment(1, 1, 1, "test", 1);
+        int returnedID1 = socketDM.addComment(1, 1, 1, "test", 1, time);
         int userID = 1;
         int returnedID2 = socketDM.likeComment(userID, returnedID1);
         assertNotEquals(-1, returnedID2);
