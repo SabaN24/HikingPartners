@@ -132,12 +132,12 @@
                 } else if (action == "getCommentLike") {
                     if (data.likeResult == "like") {
                         this.aboutModel.comments[data.commentIndex].likeNumber++;
-                        if (!this.aboutModel.comments[data.commentIndex].isLiked && data.userID == 1) {
+                        if (data.userID == 1) {
                             this.aboutModel.comments[data.commentIndex].isLiked = true;
                         }
                     } else if (data.likeResult == "unlike" && this.aboutModel.comments[data.commentIndex].likeNumber > 0) {
                         this.aboutModel.comments[data.commentIndex].likeNumber--;
-                        if (this.aboutModel.comments[data.commentIndex].isLiked && data.userID == 1) {
+                        if (data.userID == 1) {
                             this.aboutModel.comments[data.commentIndex].isLiked = false;
                         }
                     }

@@ -145,17 +145,17 @@ public class HikeFeedSocketDM {
      * @return boolean depending on result of search.
      */
     public boolean likeExists(int userID, int commentID) {
-        ResultSet rs = databaseConnector.getData("Select * from comment_likes where user_ID = " +
+        ResultSet rs = databaseConnector.getData("Select Count(ID) from comment_likes where user_ID = " +
                 "\"" + userID + "\" AND comment_ID = " + "" + "\"" + commentID + "\";");
-        int nRows = 0;
+        int rows = 0;
         try {
-            while(rs.next()){
-                nRows++;
+            if(rs.next()){
+                rows = rs.getInt(1);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return nRows != 0;
+        return rows != 0;
     }
 
 }
