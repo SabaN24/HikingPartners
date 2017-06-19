@@ -18,7 +18,7 @@ import java.util.*;
 
 @ServerEndpoint(value = "/HikeCommentsSocket/{hikeId}", configurator = GetHttpSessionConfigurator.class)
 public class HikeCommentsWebSocketServer {
-    private static Map<Integer, Map<String, Pair<HttpSession, Session>>> connectedSessions = new HashMap<>();
+    private static Map<Integer, Set<Session>> connectedSessions = new HashMap<>();
     private static WebSocketHelper webSocketHelper = new WebSocketHelper();
     private static HikeFeedSocketDM socketDM;
 
@@ -30,11 +30,10 @@ public class HikeCommentsWebSocketServer {
     @OnOpen
     public void open(Session session, @PathParam("hikeId") int hikeId, EndpointConfig config) {
         if(!connectedSessions.containsKey(hikeId)){
-            connectedSessions.put(hikeId, new HashMap<>());
+            connectedSessions.put(hikeId, new HashSet<>());
         }
 
-        connectedSessions.get(hikeId).put(session.getId(), new Pair<>((HttpSession) config.getUserProperties()
-                .get(HttpSession.class.getName()), session));
+        connectedSessions.get(hikeId).add(session);
         socketDM = new HikeFeedSocketDM();
         dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         frontDateFormat = new SimpleDateFormat("MMM, d, yyyy HH:mm:ss");
@@ -69,7 +68,7 @@ public class HikeCommentsWebSocketServer {
         int privacyType = 1;
         Date currDate = calendar.getTime();
         String time = dateFormat.format(currDate);
-        String frontTime = dateFormat.format(currDate);
+        String frontTime = frontDateFormat.format(currDate);
         int returnedID = socketDM.addComment(userID, postID, hikeID, comment, privacyType, time);
         data.put("commentID", returnedID);
         data.put("date", frontTime);

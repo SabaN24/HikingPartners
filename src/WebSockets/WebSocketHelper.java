@@ -15,11 +15,10 @@ import java.util.*;
  * Created by Sandro on 17-Jun-17.
  */
 public class WebSocketHelper {
-    public void sendToAllConnectedSessions(Map message, int hikeId, Map<String, Pair<HttpSession, Session>> currentSessions) {
+    public void sendToAllConnectedSessions(Map message, int hikeId, Set<Session> currentSessions) {
         Gson gson = new Gson();
 
-        for (Pair<HttpSession, Session> sessionPair : currentSessions.values()) {
-            Session session = sessionPair.getValue();
+        for (Session session : currentSessions) {
             try {
                 sendToSession(session, gson.toJson(message));
             }catch(IOException e){

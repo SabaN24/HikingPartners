@@ -14,15 +14,15 @@ import java.util.*;
 
 @ServerEndpoint("/HikeFeedSocket/{hikeId}")
 public class HikeFeedWebSocketServer{
-    private static Map<Integer, Map<String, Session>> connectedSessions = new HashMap<>();
+    private static Map<Integer, Set<Session>> connectedSessions = new HashMap<>();
     private static WebSocketHelper webSocketHelper = new WebSocketHelper();
 
     @OnOpen
     public void open(Session session, @PathParam("hikeId") int hikeId) {
         if(!connectedSessions.containsKey(hikeId)){
-            connectedSessions.put(hikeId, new HashMap<>());
+            connectedSessions.put(hikeId, new HashSet<>());
         }
-        connectedSessions.get(hikeId).put(session.getId(), session);
+        connectedSessions.get(hikeId).add(session);
     }
 
     @OnClose
