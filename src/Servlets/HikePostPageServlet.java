@@ -12,22 +12,25 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Saba on 19.06.2017.
  */
-@WebServlet(name = "HikePostPageServlet")
+@WebServlet("/HikePostPageServlet")
 public class HikePostPageServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletContext sc = request.getServletContext();
         DataManager dataManager = (DataManager) sc.getAttribute(DataManager.ATTR);
-        Integer id = (Integer) request.getAttribute("hikeID");
+        Integer id = Integer.parseInt(request.getParameter("hikeID"));
         List<Post> posts = dataManager.getPosts(id);
         Gson gson = new GsonBuilder().setDateFormat("MMM, d, yyyy HH:mm:ss").create();
         String result = gson.toJson(posts);
-        request.setAttribute("posts", result);
+        response.setContentType("text/html; charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print(result);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

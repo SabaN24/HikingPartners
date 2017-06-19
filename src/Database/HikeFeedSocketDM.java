@@ -1,12 +1,10 @@
 package Database;
 
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
 
 /**
  * Created by vache on 6/15/2017.
@@ -97,6 +95,12 @@ public class HikeFeedSocketDM {
         query.append("" + userID + ")");
         databaseConnector.updateData(query.toString());
 
+        if (likeExistsComment(userID, postID)) {
+            databaseConnector.updateData("Delete from post_likes where user_ID = " +
+                    "\"" + userID + "\" AND post_ID = " + "" + "\"" + postID + "\";");
+            return -1;
+        }
+
         ResultSet resultSet = databaseConnector.getData("select ID from post_likes order by ID desc limit 1");
         try {
             if (resultSet.next()) {
@@ -120,7 +124,7 @@ public class HikeFeedSocketDM {
         StringBuilder query = new StringBuilder("insert into comment_likes (comment_ID, user_ID) values(");
         query.append("" + commentID + ", ");
         query.append("" + userID + ")");
-        if (likeExists(userID, commentID)) {
+        if (likeExistsComment(userID, commentID)) {
             databaseConnector.updateData("Delete from comment_likes where user_ID = " +
                     "\"" + userID + "\" AND comment_ID = " + "" + "\"" + commentID + "\";");
             return -1;
@@ -144,7 +148,7 @@ public class HikeFeedSocketDM {
      * @param commentID id of comment
      * @return boolean depending on result of search.
      */
-    public boolean likeExists(int userID, int commentID) {
+    public boolean likeExistsComment(int userID, int commentID) {
         ResultSet rs = databaseConnector.getData("Select Count(ID) from comment_likes where user_ID = " +
                 "\"" + userID + "\" AND comment_ID = " + "" + "\"" + commentID + "\";");
         int rows = 0;
@@ -158,4 +162,17 @@ public class HikeFeedSocketDM {
         return rows != 0;
     }
 
+    public boolean likeExistsPost(int userID, int postID){
+        ResultSet rs = databaseConnector.getData("Select Count(ID) from post_likes where user_ID = " +
+                "\"" + userID + "\" AND post_ID = " + "" + "\"" + postID + "\";");
+        int rows = 0;
+        try {
+            if(rs.next()){
+                rows = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rows != 0;
+    }
 }

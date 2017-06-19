@@ -7,11 +7,10 @@ import Database.HikeFeedSocketDM;
 import Listeners.GetHttpSessionConfigurator;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import javafx.util.Pair;
 
-import javax.servlet.http.HttpSession;
 import javax.websocket.*;
-import javax.websocket.server.*;
+import javax.websocket.server.PathParam;
+import javax.websocket.server.ServerEndpoint;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -55,7 +54,7 @@ public class HikeCommentsWebSocketServer {
             addComment(jsonMessage, session, hikeId);
         }
         if ("getCommentLike".equals(jsonMessage.get("action"))) {
-            getCommentLike(jsonMessage, session, hikeId);
+            addCommentLike(jsonMessage, session, hikeId);
         }
     }
 
@@ -75,7 +74,7 @@ public class HikeCommentsWebSocketServer {
         webSocketHelper.sendToAllConnectedSessions(jsonMessage, hikeId, connectedSessions.get(hikeId));
     }
 
-    private void getCommentLike(Map<String, Object> jsonMessage, Session session, @PathParam("hikeId") int hikeId) {
+    private void addCommentLike(Map<String, Object> jsonMessage, Session session, @PathParam("hikeId") int hikeId) {
         Map<String, Object> data = (Map)(jsonMessage.get("data"));
         Integer userID = Integer.parseInt((String)data.get("userID"));
         Integer commentID = Integer.parseInt((String)data.get("commentID"));

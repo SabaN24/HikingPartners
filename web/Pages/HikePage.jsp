@@ -13,7 +13,7 @@
 --%>
 <div id="vueapp">
     <setTitle>
-        {{aboutModel.name}}
+        <%--{{aboutModel.name}}--%>
     </setTitle>
 
     </header>
@@ -37,7 +37,7 @@
         </div>
         <nav>
             <ul class="nav-list">
-                <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Home' }"><a href="#" class="nav-link"><i
+                <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Home' }"><a href="/HikePage/Home" class="nav-link"><i
                         class="fa fa-home fa-pages"></i> Hike
                     Page</a></li>
                 <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Items' }"><a href="#"
@@ -54,7 +54,7 @@
                                                                                                    class="nav-link"><i
                         class="fa fa-map-marker fa-pages"></i>
                     Locations</a></li>
-                <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Feed' }"><a href="#" class="nav-link"><i
+                <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Feed' }"><a href="/HikePage/Feed" class="nav-link"><i
                         class="fa fa-rss-square fa-pages"></i> Feed</a>
                 </li>
             </ul>
@@ -68,8 +68,10 @@
                 </div>
             </div>
 
-            <jsp:include page='<%= fullSubPage %>' />
 
         </div>
+
+        <jsp:include page='<%= fullSubPage %>'/>
+
     </main>
 </div>

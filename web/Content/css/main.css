@@ -228,6 +228,7 @@ main {
     padding: 10px;
 }
 
+
 .slider-block {
     height: 235px;
     width: 100%;
@@ -393,6 +394,7 @@ main {
     display: inline-block;
     vertical-align: middle;
     font-size: 11px;
+    user-select: none;
 }
 
 .comment-text {
@@ -414,4 +416,66 @@ main {
 
 .hidden{
     display:none;
+}
+
+
+.new-post {
+    padding-left: 10px;
+}
+
+.post-block{
+    margin-bottom: 10px;
+}
+
+.post-upper{
+    padding: 3px 10px;
+    margin-bottom: 10px;
+}
+
+.post-author-avatar{
+    background: red;
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+
+}
+
+.post-info{
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.post-author-name{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.post-time{
+    font-size: 12px;
+    color: #aaa;
+}
+
+
+.post-text{
+    padding: 0 10px;
+    margin-bottom: 10px;
+}
+
+.post-form {
+    width: calc(100% - 65px);
+    display: inline-block;
+}
+
+.new-post-input {
+    width: 100%;
+    padding: 20px;
+    font-size: 13px;
+    border: none;
+    border-left: 1px solid #ccc;
+    transition: .3s outline;
+}
+
+.new-post-input:focus {
+    outline: 1px solid #ccc;
+    border-color: transparent;
 }

@@ -1,36 +1,45 @@
 <%--
   Created by IntelliJ IDEA.
-  User: Sandro
-  Date: 18-Jun-17
-  Time: 19:47
+  User: Nodo
+  Date: 6/19/2017
+  Time: 9:46 PM
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 
-<div class="hike_home main-content" id="home">
-    <div class="description-block">
-        <div class="description-wrapper">
-            <div class="description-header">
-                <div class="description-header__left"> {{aboutModel.name}}</div>
-                <div class="description-header__right">
-                            <span title="ადამიანების მაქსიმალური რაოდენობა" style="margin-right: 30px;"><i
-                                    class="fa fa-user" aria-hidden="true"></i> {{aboutModel.maxPeople}}</span>
-                    <span title="გამგზავრების თარიღი" style="margin-right: 20px;"><i class="fa fa-arrow-up"
-                                                                                     aria-hidden="true"></i> {{aboutModel.startDate | cutTime}}</span>
-                    <span title="ჩამოსვლის თარიღი"><i class="fa fa-arrow-down" aria-hidden="true"></i> {{aboutModel.endDate | cutTime}}</span>
+<div class="hike_feed ">
+    <div class="post-block main-content">
+        <div class = "new-post">
+            <div class="avatar-block post-author-avatar"></div>
+            <form action="" class="post-form" v-on:submit.prevent="sendPost">
+                <input type="text" placeholder="Write something..." class="new-post-input" v-model="newPostText">
+            </form>
+        </div>
+    </div>
+    <div class="post-block main-content" v-for="(post, index) in posts" >
+        <div class = "post-upper">
+            <div class = "avatar-block post-author-avatar"></div>
+            <div class="post-info">
+                    <div class="post-author-name">
+                        <span>{{post.user.firstName}} </span><span>{{post.user.lastName}}</span>
 
-                </div>
-            </div>
-            <div class="description-body">
-                <div style="margin-bottom: 10px;font-weight:bold;">Description:</div>
-                {{aboutModel.description}}
+                    </div>
+                    <div class="post-time">
+                        {{post.time | cutTime}}
+                    </div>
             </div>
         </div>
-        <div class="comments-count">{{aboutModel.comments.length}} comments.</div>
+
+        <div class = "post-text">
+            {{post.text}}
+        </div>
+        <div class="comments-count">
+            {{post.comments.length}} comments
+        </div>
         <div class="comments-block">
             <div class="comments-block-inner">
-                <ul class="comments-list" v-for="(comment, index) in aboutModel.comments">
+                <ul class="comments-list" v-for="(comment, index) in post.comments">
                     <li class="comment">
                         <div class="avatar-block"></div>
                         <div class="comment-info">
@@ -57,14 +66,17 @@
                     <div class="add-comment">
                         <div class="avatar-block">
                         </div>
-                        <form action="HikePageServlet" v-on:submit.prevent="sendComment" method="post">
-                            <input class="comment-input" type="text" name="add-comment"
+                        <form action="HikePageServlet" v-on:submit.prevent="sendComment(post.id)" method="post">
+                            <input v-model="commentInputs[post.id]" class="comment-input" type="text" name="add-comment"
                                    placeholder="Write a comment...">
                         </form>
                     </div>
                 </div>
             </div>
         </div>
+
+
+
     </div>
 </div>
 
@@ -74,7 +86,7 @@
     });
 
     var hikeId = <%=request.getParameter("hikeId") == null ? 1 : request.getParameter("hikeId")%>;
-    var ws = new WebSocket("ws://localhost:8080/HikeCommentsSocket/" + hikeId);
+    var ws = new WebSocket("ws://localhost:8080/HikeFeedSocket/" + hikeId);
     var app = new Vue({
         el: '#vueapp',
 
@@ -82,7 +94,9 @@
         //it will use these to bind element data and
         //modify them.
         data: {
-            aboutModel: {}
+            posts: [],
+            commentInputs: {},
+            newPostText: ""
         },
         //These functions will be called when page loads.
         created: function () {
@@ -96,9 +110,9 @@
             fetchData: function () {
                 var xhr = new XMLHttpRequest();
                 var self = this;
-                xhr.open('POST', "/HikeCommentsServlet?hikeId=" + hikeId);
+                xhr.open('POST', "/HikePostPageServlet?hikeID=" + hikeId);
                 xhr.onload = function () {
-                    self.aboutModel = JSON.parse(xhr.responseText);
+                    self.posts = JSON.parse(xhr.responseText);
                 };
                 xhr.send();
             },
@@ -112,30 +126,51 @@
                 var action = jsonData.action;
                 data = jsonData.data;
                 if (action == "getComment") {
-                    this.aboutModel.comments.push(data);
+                    this.posts.find(x => x.id == data.postID).comments.push(data);
                 } else if (action == "getCommentLike") {
                     if (data.likeResult == "like") {
-                        this.aboutModel.comments[data.commentIndex].likeNumber++;
+                        this.posts.comments[data.commentIndex].likeNumber++;
                         if (data.userID == 1) {
-                            this.aboutModel.comments[data.commentIndex].isLiked = true;
+                            this.posts.comments[data.commentIndex].isLiked = true;
                         }
-                    } else if (data.likeResult == "unlike" && this.aboutModel.comments[data.commentIndex].likeNumber > 0) {
-                        this.aboutModel.comments[data.commentIndex].likeNumber--;
+                    } else if (data.likeResult == "unlike" && this.posts.comments[data.commentIndex].likeNumber > 0) {
+                        this.posts.comments[data.commentIndex].likeNumber--;
                         if (data.userID == 1) {
-                            this.aboutModel.comments[data.commentIndex].isLiked = false;
+                            this.posts.comments[data.commentIndex].isLiked = false;
                         }
                     }
+                }else if(action == "getPost"){
+                    this.posts.unshift(data);
                 }
             },
 
             //Sends new comment to socket server, called when enter is hit on comment.
-            sendComment: function () {
+            sendComment: function (postID) {
+                var newCommentText = this.commentInputs[postID];
                 ws.send(JSON.stringify({
                     action: "getComment",
                     data: {
-                        comment: document.getElementsByClassName("comment-input")[0].value,
-                        commentID: "" + 0,
+                        comment: newCommentText,
                         likeNumber: "" + 0,
+                        isLiked: false,
+                        userID: "" + 1,
+                        user: {
+                            firstName: document.getElementsByClassName("profile-name")[0].innerHTML.trim().split(" ")[0],
+                            lastName: document.getElementsByClassName("profile-name")[0].innerHTML.trim().split(" ")[1]
+                        },
+                        postID: postID + ""
+                    }
+                }));
+                this.commentInputs[postID] = "";
+
+            },
+
+            sendPost: function () {
+
+                ws.send(JSON.stringify({
+                    action: "getPost",
+                    data: {
+                        post: this.newPostText + "",
                         isLiked: false,
                         userID: "" + 1,
                         user: {
@@ -144,15 +179,19 @@
                         }
                     }
                 }));
-                document.getElementsByClassName("comment-input")[0].value = '';
+
+                this.newPostText = "";
+
             },
+
+
 
             //This function is called when like button is clicked.
             like: function (index) {
                 ws.send(JSON.stringify({
                     action: "getCommentLike",
                     data: {
-                        commentID: "" + this.aboutModel.comments[index].commentID,
+                        commentID: "" + this.posts.comments[index].commentID,
                         userID: "" + 1,
                         commentIndex: "" + index
                     }
