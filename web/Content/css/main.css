@@ -411,3 +411,7 @@ main {
 .liked{
     color: rgb(88, 144, 255);
 }
+
+.hidden{
+    display:none;
+}

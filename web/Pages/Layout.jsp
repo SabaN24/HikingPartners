@@ -1,4 +1,4 @@
-<%--
+<%@ page import="Models.MiniUser" %><%--
   Created by IntelliJ IDEA.
   User: Levani
   Date: 13.06.2017
@@ -31,15 +31,23 @@
         </div>
         <div class="header-right">
             <div class="profile-block">
+                <%
+                    MiniUser loggedInUser = (MiniUser)request.getAttribute("loggedInUser");
+                    if(loggedInUser != null){
+                %>
                 <a href="#" class="profile-link">
                     <div class="avatar-block">
 
                     </div>
+                    <div class="hidden logged-user-id"><%=loggedInUser.getId()%></div>
                     <div class="profile-name">
-                        Sandro Jikia
+                        <%=loggedInUser.getFirstName()%> <%=loggedInUser.getLastName()%>
                     </div>
                 </a>
                 <div class="logout-block"><a href="#">Log out</a></div>
+                <%} else {%>
+                <div class="logout-block"><a href="#">Log in</a></div>
+                <%}%>
             </div>
         </div>
 
