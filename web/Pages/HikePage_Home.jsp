@@ -150,6 +150,7 @@
                     data: {
                         comment: document.getElementsByClassName("comment-input")[0].value,
                         commentID: "" + 0,
+                        date: this.formatDate(new Date()),
                         likeNumber: "" + 0,
                         isLiked: false,
                         userID: "" + 1,
