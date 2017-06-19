@@ -17,8 +17,8 @@
                             <span title="ადამიანების მაქსიმალური რაოდენობა" style="margin-right: 30px;"><i
                                     class="fa fa-user" aria-hidden="true"></i> {{aboutModel.maxPeople}}</span>
                     <span title="გამგზავრების თარიღი" style="margin-right: 20px;"><i class="fa fa-arrow-up"
-                                                                                     aria-hidden="true"></i> {{aboutModel.startDate}}</span>
-                    <span title="ჩამოსვლის თარიღი"><i class="fa fa-arrow-down" aria-hidden="true"></i> {{aboutModel.endDate}}</span>
+                                                                                     aria-hidden="true"></i> {{aboutModel.startDate | cutTime}}</span>
+                    <span title="ჩამოსვლის თარიღი"><i class="fa fa-arrow-down" aria-hidden="true"></i> {{aboutModel.endDate | cutTime}}</span>
 
                 </div>
             </div>
@@ -40,7 +40,7 @@
                                 </div>
                             </div>
                             <div class="comment-info__lower">
-                                <div class="comment-time">{{comment.date}}
+                                <div class="comment-time">{{comment.date | cutTime}}
                                 </div>
                                 <div class="like-block">
                                     <i class="fa fa-thumbs-up" v-bind:class="{ liked: comment.isLiked }"
@@ -69,8 +69,8 @@
 </div>
 
 <script>
-    Vue.filter('reverse', function (value) {
-        return value.slice().reverse();
+    Vue.filter('cutTime', function (value) {
+        return value.substr(0, value.length - 3);
     });
 
     var hikeId = <%=request.getParameter("hikeId") == null ? 1 : request.getParameter("hikeId")%>;
@@ -106,9 +106,8 @@
                 var year = date.getFullYear();
                 var hours = date.getHours();
                 var minutes = date.getMinutes();
-                var seconds = date.getSeconds();
 
-                return months[month] + ', ' + day + ", " + year + " " + hours + ":" + minutes + ":" + seconds;
+                return months[month] + ', ' + day + ", " + year + " " + hours + ":" + minutes;
             },
 
             fetchData: function () {
@@ -132,12 +131,12 @@
                 } else if (action == "getCommentLike") {
                     if (data.likeResult == "like") {
                         this.aboutModel.comments[data.commentIndex].likeNumber++;
-                        if (!this.aboutModel.comments[data.commentIndex].isLiked && data.userID == 1) {
+                        if (data.userID == 1) {
                             this.aboutModel.comments[data.commentIndex].isLiked = true;
                         }
                     } else if (data.likeResult == "unlike" && this.aboutModel.comments[data.commentIndex].likeNumber > 0) {
                         this.aboutModel.comments[data.commentIndex].likeNumber--;
-                        if (this.aboutModel.comments[data.commentIndex].isLiked && data.userID == 1) {
+                        if (data.userID == 1) {
                             this.aboutModel.comments[data.commentIndex].isLiked = false;
                         }
                     }
