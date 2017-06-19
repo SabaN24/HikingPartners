@@ -4,18 +4,21 @@ package WebSockets;
  * Created by Sandro on 17.06.2017.
  */
 import Database.HikeFeedSocketDM;
+import Listeners.GetHttpSessionConfigurator;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import javafx.util.Pair;
 
+import javax.servlet.http.HttpSession;
 import javax.websocket.*;
 import javax.websocket.server.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-@ServerEndpoint("/HikeCommentsSocket/{hikeId}")
+@ServerEndpoint(value = "/HikeCommentsSocket/{hikeId}", configurator = GetHttpSessionConfigurator.class)
 public class HikeCommentsWebSocketServer {
-    private static Map<Integer, Map<String, Session>> connectedSessions = new HashMap<>();
+    private static Map<Integer, Map<String, Pair<HttpSession, Session>>> connectedSessions = new HashMap<>();
     private static WebSocketHelper webSocketHelper = new WebSocketHelper();
     private static HikeFeedSocketDM socketDM;
 
@@ -24,11 +27,13 @@ public class HikeCommentsWebSocketServer {
     private Calendar calendar;
 
     @OnOpen
-    public void open(Session session, @PathParam("hikeId") int hikeId) {
+    public void open(Session session, @PathParam("hikeId") int hikeId, EndpointConfig config) {
         if(!connectedSessions.containsKey(hikeId)){
             connectedSessions.put(hikeId, new HashMap<>());
         }
-        connectedSessions.get(hikeId).put(session.getId(), session);
+
+        connectedSessions.get(hikeId).put(session.getId(), new Pair<>((HttpSession) config.getUserProperties()
+                .get(HttpSession.class.getName()), session));
         socketDM = new HikeFeedSocketDM();
         dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         calendar = Calendar.getInstance();

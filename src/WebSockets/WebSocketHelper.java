@@ -4,7 +4,9 @@ import Models.MiniUser;
 import Models.Post;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import javafx.util.Pair;
 
+import javax.servlet.http.HttpSession;
 import javax.websocket.*;
 import javax.websocket.server.*;
 import java.io.*;
@@ -13,10 +15,11 @@ import java.util.*;
  * Created by Sandro on 17-Jun-17.
  */
 public class WebSocketHelper {
-    public void sendToAllConnectedSessions(Map message, int hikeId, Map<String, Session> currentSessions) {
+    public void sendToAllConnectedSessions(Map message, int hikeId, Map<String, Pair<HttpSession, Session>> currentSessions) {
         Gson gson = new Gson();
 
-        for (Session session : currentSessions.values()) {
+        for (Pair<HttpSession, Session> sessionPair : currentSessions.values()) {
+            Session session = sessionPair.getValue();
             try {
                 sendToSession(session, gson.toJson(message));
             }catch(IOException e){
