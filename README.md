@@ -22,3 +22,4 @@ Java codes are written using Google Java Style. (See example here: https://googl
 ## Project sprints:
 ### Sprint 1: https://github.com/SabaN24/HikingPartners/wiki/Sprint1
 ### Sprint 2: https://github.com/SabaN24/HikingPartners/wiki/Sprint2 
+### Sprint 3: https://github.com/SabaN24/HikingPartners/wiki/Sprint3
