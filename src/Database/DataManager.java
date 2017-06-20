@@ -148,29 +148,6 @@ public class DataManager {
     }
 
     /**
-     * Gets mini information about user by userId from database,
-     * @param userId int
-     * @return userInfo MiniUser
-     */
-    public MiniUser getMiniUser(int userId){
-        ResultSet rs = databaseConnector.getData(constructQuery("users", "id", userId + ""));
-        String firstName = null, lastName = null, imgUrl = null;
-        try {
-            while (rs.next()) {
-                firstName = rs.getString("first_name");
-                lastName = rs.getString("last_name");
-                imgUrl = rs.getString("img_url");
-            }
-        }catch(Exception e){
-
-        }
-        MiniUser miniUser = null;
-        if(firstName != null)
-            miniUser = new MiniUser(userId, firstName, lastName, imgUrl);
-        return miniUser;
-    }
-
-    /**
      * Gets information about creator of given hike from database, using callProcedure
      * method of databaseConnnector class which calls given procedure in database.
      * @param hikeId id of demanded hike
