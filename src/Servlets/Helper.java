@@ -22,11 +22,11 @@ public class Helper {
         int userId = 1;
         if((Integer)session.getAttribute("userId") != null){
             userId = (Integer)session.getAttribute("userId");
-            request.setAttribute("loggedInUser", dataManager.getMiniUser(userId));
+            request.setAttribute("loggedInUser", dataManager.getUserById(userId));
         }
 
         //This should be deleted in future, when we'll have login page
-        request.setAttribute("loggedInUser", dataManager.getMiniUser(userId));
+        request.setAttribute("loggedInUser", dataManager.getUserById(userId));
 
         request.setAttribute("page", page + ".jsp");
         RequestDispatcher rd = request.getRequestDispatcher("/Pages/Layout.jsp");

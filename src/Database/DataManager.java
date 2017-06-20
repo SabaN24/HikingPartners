@@ -97,7 +97,7 @@ public class DataManager {
      * @param userId id of required user
      * @return MiniUser class built on information from database
      */
-    private MiniUser getUserById(int userId){
+    public MiniUser getUserById(int userId){
         String query = constructQuery("users", "id", "" + userId);
         ResultSet rs = databaseConnector.getData(query);
         MiniUser user = createUserFromResultSet(rs);
