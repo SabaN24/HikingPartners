@@ -18,7 +18,7 @@ import java.io.IOException;
 public class Helper {
     public static void view(String page, HttpServletRequest request, HttpServletResponse response)  {
         HttpSession session = request.getSession();
-        DataManager dataManager = (DataManager)request.getServletContext().getAttribute(DataManager.ATTR);
+        DataManager dataManager = DataManager.getInstance();
         int userId = 1;
         if((Integer)session.getAttribute("userId") != null){
             userId = (Integer)session.getAttribute("userId");
@@ -42,8 +42,7 @@ public class Helper {
     public static void view(String page, String subPage, HttpServletRequest request, HttpServletResponse response)  {
         request.setAttribute("subPage", page + "_" + subPage + ".jsp");
         if(page.equals("HikePage")) {
-            ServletContext sc = request.getServletContext();
-            DataManager dataManager = (DataManager) sc.getAttribute(DataManager.ATTR);
+            DataManager dataManager = DataManager.getInstance();
             int hikeId = 1;
             if(request.getParameter("hikeId") != null) {
                 hikeId = Integer.parseInt(request.getParameter("hikeId"));

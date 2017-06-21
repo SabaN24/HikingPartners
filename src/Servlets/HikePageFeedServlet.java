@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.crypto.Data;
 import java.io.IOException;
 
 /**
@@ -21,9 +22,7 @@ public class HikePageFeedServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        ServletContext sc = request.getServletContext();
-        DataManager dataManager = (DataManager) sc.getAttribute(DataManager.ATTR);
+        DataManager dataManager = DataManager.getInstance();
         int hikeId = 1;
         if(request.getParameter("hikeId") != null) {
             hikeId = Integer.parseInt(request.getParameter("hikeId"));

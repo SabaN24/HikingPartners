@@ -19,7 +19,7 @@ public class TestDataManager {
 
     @BeforeEach
     public void testSetup(){
-        dataManager = new DataManager();
+        dataManager = DataManager.getInstance();
     }
 
     /**

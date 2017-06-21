@@ -7,6 +7,7 @@ import java.util.Date;
  */
 public class Comment {
     private int commentID;
+    private int postID;
     private String comment;
     private MiniUser user;
     private Date date;
@@ -20,12 +21,13 @@ public class Comment {
      * @param date
      * @param likeNumber
      */
-    public Comment(int commentID, String comment, MiniUser user, Date date, int likeNumber){
+    public Comment(int commentID, String comment, int postID, MiniUser user, Date date, int likeNumber){
         this.commentID = commentID;
         this.comment = comment;
         this.user = user;
         this.date = date;
         this.likeNumber = likeNumber;
+        this.postID = postID;
     }
 
 
@@ -63,4 +65,9 @@ public class Comment {
     public Date getDate(){
         return date;
     }
+
+    /**
+     * @return Post ID
+     */
+    public int getPostID(){return postID;}
 }

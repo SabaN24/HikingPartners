@@ -16,7 +16,7 @@ public class TestComment {
     public void TestComment() {
         MiniUser mockUser = new MiniUser(0, "bla", "bla", "bla");
         Date date = new Date();
-        Comment comment = new Comment(0, "test1", mockUser, date, 10);
+        Comment comment = new Comment(0, "test1", 0, mockUser, date, 10);
         int ID = comment.getCommentID();
         assertEquals(0, ID);
 

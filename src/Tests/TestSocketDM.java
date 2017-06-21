@@ -26,7 +26,7 @@ public class TestSocketDM {
 
     @BeforeEach
     public void testSetup(){
-        socketDM = new HikeFeedSocketDM();
+        socketDM = HikeFeedSocketDM.getInstance();
         dbConnector = DatabaseConnector.getInstance();
     }
 

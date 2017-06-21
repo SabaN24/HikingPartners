@@ -33,10 +33,10 @@ public class TestPost {
         user1 = new MiniUser(1, "bla", "bla", "bla");
         user2 = new MiniUser(2, "bla", "bla", "bla");
         date = new Date();
-        c1 = new Comment(1, "abc", user1, date, 10);
-        c2 = new Comment(2, "abcd", user1, date, 10);
-        c3 = new Comment(3, "abcde", user2, date, 10);
-        c4 = new Comment(4, "abcef", user2, date, 10);
+        c1 = new Comment(1, "abc", 0, user1, date, 10);
+        c2 = new Comment(2, "abcd", 0, user1, date, 10);
+        c3 = new Comment(3, "abcde", 0, user2, date, 10);
+        c4 = new Comment(4, "abcef", 0, user2, date, 10);
         comments = new ArrayList<Comment>();
         comments.add(c1);
         comments.add(c2);

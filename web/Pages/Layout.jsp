@@ -15,11 +15,24 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title></title>
     <link rel="stylesheet" href="../Content/css/normalize.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../Content/css/font-awesome.min.css">
     <link rel="stylesheet" href="../Content/css/main.css">
+    <script src="../Scripts/axios.min.js"></script>
     <script src="../Scripts/vue.min.js"></script>
 </head>
 <body>
+<%
+    MiniUser loggedInUser = (MiniUser)request.getAttribute("loggedInUser");
+    if(loggedInUser != null){
+%>
+<script>
+    var user = {
+        id : '<%= loggedInUser.getId() %>',
+        firstName: '<%= loggedInUser.getFirstName()%>',
+        lastName: '<%= loggedInUser.getLastName() %>',
+        profilePictureAddress: '<%= loggedInUser.getProfilePictureAddress() %>'
+    };
+</script>
 <div class="wrapper clearfix">
     <header>
         <div class="header-left">
@@ -31,10 +44,7 @@
         </div>
         <div class="header-right">
             <div class="profile-block">
-                <%
-                    MiniUser loggedInUser = (MiniUser)request.getAttribute("loggedInUser");
-                    if(loggedInUser != null){
-                %>
+
                 <a href="#" class="profile-link">
                     <div class="avatar-block">
 

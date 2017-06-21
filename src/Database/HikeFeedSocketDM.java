@@ -11,20 +11,22 @@ import java.util.Calendar;
  */
 public class HikeFeedSocketDM {
     private DatabaseConnector databaseConnector;
-    private DateFormat format;
-    private DateFormat dateFormat;
-    private Calendar calendar;
 
     /* Constants */
     public static final String ATTR = "SocketDM";
 
-    public HikeFeedSocketDM() {
+    private static HikeFeedSocketDM socketDM = null;
+
+    private HikeFeedSocketDM() {
         databaseConnector = DatabaseConnector.getInstance();
-        format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        calendar = Calendar.getInstance();
     }
 
+    public static HikeFeedSocketDM getInstance(){
+        if(socketDM == null){
+            socketDM = new HikeFeedSocketDM();
+        }
+        return socketDM;
+    }
     /**
      * Adding post in database
      *

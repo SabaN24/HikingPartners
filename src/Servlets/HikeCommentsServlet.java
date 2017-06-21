@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +22,7 @@ import java.util.Map;
 @WebServlet("/HikeCommentsServlet")
 public class HikeCommentsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ServletContext sc = request.getServletContext();
-        DataManager dataManager = (DataManager) sc.getAttribute(DataManager.ATTR);
+        DataManager dataManager = DataManager.getInstance();
         int hikeId = Integer.parseInt(request.getParameter("hikeId"));
         AboutModel aboutModel = dataManager.getAboutModel(hikeId);
         Gson gson = new GsonBuilder().setDateFormat("MMM, d, yyyy HH:mm:ss").create();

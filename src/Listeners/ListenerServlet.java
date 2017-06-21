@@ -25,9 +25,9 @@ public class ListenerServlet implements ServletContextListener,
     // ServletContextListener implementation
     // -------------------------------------------------------
     public void contextInitialized(ServletContextEvent sce) {
-        DataManager dm = new DataManager();
-        ServletContext sc = (ServletContext)sce.getServletContext();
-        sc.setAttribute(dm.ATTR, dm);
+        //DataManager dm = new DataManager();
+        //ServletContext sc = (ServletContext)sce.getServletContext();
+        //sc.setAttribute(dm.ATTR, dm);
     }
 
     public void contextDestroyed(ServletContextEvent sce) {

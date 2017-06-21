@@ -8,6 +8,7 @@ import Models.*;
 import Models.Hike.AboutModel;
 import Models.Hike.DefaultModel;
 
+import javax.xml.crypto.Data;
 import javax.xml.transform.Result;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,8 +21,17 @@ public class DataManager {
 
     public static final String ATTR = "DatabaseManager";
 
-    public DataManager() {
+    private static DataManager dm = null;
+
+    private DataManager() {
         databaseConnector = DatabaseConnector.getInstance();
+    }
+
+    public static DataManager getInstance(){
+        if(dm == null) {
+            dm = new DataManager();
+        }
+        return dm;
     }
 
 
@@ -83,7 +93,7 @@ public class DataManager {
                 if(likeResultSet.next()){
                     likeNum = likeResultSet.getInt(1);
                 }
-                Comment currComment = new Comment(commentId, comment, author, date, likeNum);
+                Comment currComment = new Comment(commentId, comment, -1, author, date, likeNum);
                 comments.add(currComment);
             }
         } catch (SQLException e) {
@@ -129,7 +139,7 @@ public class DataManager {
                 int id = rs.getInt(1);
                 String text = rs.getString(2);
                 int userID = rs.getInt(4);
-                Date postDate = rs.getDate(5);
+                Date postDate = (Date)rs.getObject(5);
                 MiniUser user = getUserById(userID);
                 List<Comment> commentsList = getComments("" + id, "" + hikeID, 2);
                 ArrayList<Comment> comments = new ArrayList<>(commentsList);

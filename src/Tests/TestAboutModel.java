@@ -45,7 +45,7 @@ public class TestAboutModel {
 
         MiniUser user = new MiniUser(1, "bla", "bla", "bla");
         for(int i = 0; i < 100; i++)
-            commentList.add(new Comment(i, "bla" + i,user, date1, 10));
+            commentList.add(new Comment(i, "bla" + i, 0,user, date1, 10));
 
          aboutModel = new AboutModel(199, name, desc, date1, date2,5, commentList );
 

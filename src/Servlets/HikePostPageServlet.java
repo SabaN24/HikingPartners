@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -21,9 +22,8 @@ import java.util.List;
 @WebServlet("/HikePostPageServlet")
 public class HikePostPageServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ServletContext sc = request.getServletContext();
-        DataManager dataManager = (DataManager) sc.getAttribute(DataManager.ATTR);
-        Integer id = Integer.parseInt(request.getParameter("hikeID"));
+        DataManager dataManager = DataManager.getInstance();
+        Integer id = Integer.parseInt(request.getParameter("hikeId"));
         List<Post> posts = dataManager.getPosts(id);
         Gson gson = new GsonBuilder().setDateFormat("MMM, d, yyyy HH:mm:ss").create();
         String result = gson.toJson(posts);

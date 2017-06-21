@@ -13,7 +13,7 @@
         <div class = "new-post">
             <div class="avatar-block post-author-avatar"></div>
             <form action="" class="post-form" v-on:submit.prevent="sendPost">
-                <input type="text" placeholder="Write something..." class="new-post-input" v-model="newPostText">
+                <input type="text" placeholder="Write something..." class="new-post-input" autocomplete="off" v-model="newPostText">
             </form>
         </div>
     </div>
@@ -67,7 +67,7 @@
                         <div class="avatar-block">
                         </div>
                         <form action="HikePageServlet" v-on:submit.prevent="sendComment(post.id)" method="post">
-                            <input v-model="commentInputs[post.id]" class="comment-input" type="text" name="add-comment"
+                            <input v-model="commentInputs[post.id]" class="comment-input" type="text" autocomplete="off" name="add-comment"
                                    placeholder="Write a comment...">
                         </form>
                     </div>
@@ -108,18 +108,16 @@
         //These are stored methods that vue will be able to use.
         methods: {
             fetchData: function () {
-                var xhr = new XMLHttpRequest();
-                var self = this;
-                xhr.open('POST', "/HikePostPageServlet?hikeID=" + hikeId);
-                xhr.onload = function () {
-                    self.posts = JSON.parse(xhr.responseText);
-                };
-                xhr.send();
+                var th = this;
+                axios.post("/HikePostPageServlet?hikeId=" + hikeId, {}).then(function(response){
+                    th.posts = response.data.reverse();
+                });
             },
 
             //This method is invoked automatically when socket
             //server sends messageto this session.
             getSocketMessage: function (data) {
+                console.log("----------");
                 console.log(data);
                 var jsonData = JSON.parse(data.data);
                 console.log(jsonData);
@@ -145,41 +143,28 @@
             },
 
             //Sends new comment to socket server, called when enter is hit on comment.
-            sendComment: function (postID) {
-                var newCommentText = this.commentInputs[postID];
+            sendComment: function (postId) {
+                var newCommentText = this.commentInputs[postId];
                 ws.send(JSON.stringify({
                     action: "getComment",
                     data: {
-                        comment: newCommentText,
-                        likeNumber: "" + 0,
-                        isLiked: false,
-                        userID: "" + 1,
-                        user: {
-                            firstName: document.getElementsByClassName("profile-name")[0].innerHTML.trim().split(" ")[0],
-                            lastName: document.getElementsByClassName("profile-name")[0].innerHTML.trim().split(" ")[1]
-                        },
-                        postID: postID + ""
+                        comment: newCommentText + "",
+                        userID: user.id + "",
+                        postID: postId + ""
                     }
                 }));
-                this.commentInputs[postID] = "";
+                this.commentInputs[postId] = "";
 
             },
 
             sendPost: function () {
-
                 ws.send(JSON.stringify({
                     action: "getPost",
                     data: {
                         post: this.newPostText + "",
-                        isLiked: false,
-                        userID: "" + 1,
-                        user: {
-                            firstName: document.getElementsByClassName("profile-name")[0].innerHTML.trim().split(" ")[0],
-                            lastName: document.getElementsByClassName("profile-name")[0].innerHTML.trim().split(" ")[1]
-                        }
+                        userID: user.id + ""
                     }
                 }));
-
                 this.newPostText = "";
 
             },

@@ -1,4 +1,4 @@
-<%--
+<%@ page import="Models.MiniUser" %><%--
   Created by IntelliJ IDEA.
   User: Sandro
   Date: 18-Jun-17
@@ -7,7 +7,7 @@
 --%>
 <%@ page contentType="text/html; charset=UTF-8" %>
 
-
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <div class="hike_home main-content" id="home">
     <div class="description-block">
         <div class="description-wrapper">
@@ -44,7 +44,7 @@
                                 </div>
                                 <div class="like-block">
                                     <i class="fa fa-thumbs-up" v-bind:class="{ liked: comment.isLiked }"
-                                       v-on:click="like(index)" aria-hidden="true"></i>
+                                       v-on:click="like(comment.commentID)" aria-hidden="true"></i>
                                     {{comment.likeNumber}}
                                 </div>
                             </div>
@@ -58,8 +58,8 @@
                         <div class="avatar-block">
                         </div>
                         <form action="HikePageServlet" v-on:submit.prevent="sendComment" method="post">
-                            <input class="comment-input" type="text" name="add-comment"
-                                   placeholder="Write a comment...">
+                            <input class="comment-input" type="text" autocomplete="off" name="add-comment"
+                                   placeholder="Write a comment..." v-model="newCommentInput">
                         </form>
                     </div>
                 </div>
@@ -70,6 +70,7 @@
 
 <script>
     Vue.filter('cutTime', function (value) {
+        if(!value) return "";
         return value.substr(0, value.length - 3);
     });
 
@@ -82,7 +83,8 @@
         //it will use these to bind element data and
         //modify them.
         data: {
-            aboutModel: {}
+            aboutModel: {},
+            newCommentInput: ""
         },
         //These functions will be called when page loads.
         created: function () {
@@ -94,35 +96,31 @@
         //These are stored methods that vue will be able to use.
         methods: {
             fetchData: function () {
-                var xhr = new XMLHttpRequest();
-                var self = this;
-                xhr.open('POST', "/HikeCommentsServlet?hikeId=" + hikeId);
-                xhr.onload = function () {
-                    self.aboutModel = JSON.parse(xhr.responseText);
-                };
-                xhr.send();
+                var th = this;
+                axios.post("/HikeCommentsServlet?hikeId=" + hikeId, {}).then(function(response){
+                    th.aboutModel = response.data;
+                });
             },
 
             //This method is invoked automatically when socket
             //server sends messageto this session.
             getSocketMessage: function (data) {
-                console.log(data);
                 var jsonData = JSON.parse(data.data);
-                console.log(jsonData);
                 var action = jsonData.action;
                 data = jsonData.data;
-                if (action == "getComment") {
+                if (action === "getComment") {
                     this.aboutModel.comments.push(data);
-                } else if (action == "getCommentLike") {
-                    if (data.likeResult == "like") {
-                        this.aboutModel.comments[data.commentIndex].likeNumber++;
-                        if (data.userID == 1) {
-                            this.aboutModel.comments[data.commentIndex].isLiked = true;
+                } else if (action === "getCommentLike") {
+                    var comment = this.aboutModel.comments.find(x => x.commentID == data.commentID);
+                    if (data.liked) {
+                        comment.likeNumber++;
+                        if (data.userID == user.id) {
+                            comment.isLiked = true;
                         }
-                    } else if (data.likeResult == "unlike" && this.aboutModel.comments[data.commentIndex].likeNumber > 0) {
-                        this.aboutModel.comments[data.commentIndex].likeNumber--;
-                        if (data.userID == 1) {
-                            this.aboutModel.comments[data.commentIndex].isLiked = false;
+                    } else if (comment.likeNumber > 0) {
+                        comment.likeNumber--;
+                        if (data.userID == user.id) {
+                            comment.isLiked = false;
                         }
                     }
                 }
@@ -133,28 +131,20 @@
                 ws.send(JSON.stringify({
                     action: "getComment",
                     data: {
-                        comment: document.getElementsByClassName("comment-input")[0].value,
-                        commentID: "" + 0,
-                        likeNumber: "" + 0,
-                        isLiked: false,
-                        userID: "" + 1,
-                        user: {
-                            firstName: document.getElementsByClassName("profile-name")[0].innerHTML.trim().split(" ")[0],
-                            lastName: document.getElementsByClassName("profile-name")[0].innerHTML.trim().split(" ")[1]
-                        }
+                        comment: this.newCommentInput,
+                        userID: user.id
                     }
                 }));
-                document.getElementsByClassName("comment-input")[0].value = '';
+                this.newCommentInput = "";
             },
 
             //This function is called when like button is clicked.
-            like: function (index) {
+            like: function (commentId) {
                 ws.send(JSON.stringify({
                     action: "getCommentLike",
                     data: {
-                        commentID: "" + this.aboutModel.comments[index].commentID,
-                        userID: "" + 1,
-                        commentIndex: "" + index
+                        commentID: commentId + "",
+                        userID: user.id
                     }
                 }));
             }
