@@ -135,6 +135,95 @@ CREATE TABLE IF NOT EXISTS comment_likes (
 	FOREIGN KEY (comment_ID) REFERENCES comments(ID)
 );
 
+-- ----------------------------------------------------------------------------- -- 
+
+INSERT INTO users VALUES
+(1, 'Nodo', 'Sairmeli', ''),
+(2, 'Vache', 'Katsadze', ''),
+(3, 'Levaniko', 'Beroshvili', ''),
+(4, 'Sandro', 'Jiqia', ''),
+(5, 'Saba', 'Natroshvili', '');
+
+INSERT INTO location_types VALUES
+(1, 'ZGVAAAA');
+
+INSERT INTO privacy_types VALUES
+(1, 'public'),
+(2, 'private');
+
+INSERT INTO roles VALUES 
+(1, 'Creator');
+
+INSERT INTO locations VALUES
+(1, 'QVABISTAVI', '45', '45', 1);
+
+INSERT INTO hikes VALUES 
+(1, 'KVELAZE MAGARI PAXODE', str_to_date('1989.12.01', '%Y.%m.%d'), str_to_date('1989.12.01', '%Y.%m.%d'), 'MAGARI PAXODI!!! SHEMODIT ALL :***', 5);
+
+
+
+INSERT INTO comments VALUES
+(1, 'რა დაგვჭირდება?', NULL, 1, 1, str_to_date('1999.12.01', '%Y.%m.%d'), 1),
+(2, 'ადგილები არის?', NULL, 1, 2, str_to_date('1999.08.01', '%Y.%m.%d'), 1),
+(3, 'წასვლის დროს ვერ გადმოვწევთ?', NULL, 1, 3, str_to_date('1999.09.01', '%Y.%m.%d'), 1),
+(4, 'ანი როგორ ხარ მთავარანგელოზობა ვერ მოგილოცე', NULL, 1, 4, str_to_date('1999.10.01', '%Y.%m.%d'), 1),
+(5, 'უკაცრავად მაინტერესებს პატარა ბავშვის პამპერსები თუ გაქვთ, 3 ზომა შავ პარკში რო ჩამიდოთ, მადლობა', NULL, 1, 5, str_to_date('1999.11.01', '%Y.%m.%d'), 1);
+
+
+INSERT INTO hike_to_user VALUES
+(1, 1, 1, 1);
+
+INSERT INTO cover_photos VALUES
+(1, 1, 'მაგარი ლოკაცია დზნ', 1, '');
+
+INSERT INTO comment_likes VALUES
+(1, 1, 1),
+(2, 2, 2),
+(3, 3, 3),
+(4, 3, 4),
+(5, 3, 5),
+(6, 3, 1),
+(7, 4, 2),
+(8, 4, 3),
+(9, 5, 4),
+(10, 5, 5),
+(11, 5, 1);
+
+insert into posts values
+(1,"9ზე ოკრიბაშ იყავით ბერლინში მივდივართ", 1, 4, now()),
+(2,"რუსი ნაშები ჩითავენ? XD XD XD", 1, 3, now()),
+(3,"ხალვა მომაქ მე", 1, 2, now()),
+(4, "შავი ქამრები არ დამანახოთ!!! მწვანე კაია", 1, 1, now());
+
+insert into comments 
+(comment_text, post_ID, hike_ID, user_ID, comment_time, privacy_type)
+		values 
+			( "9ზე ვერ ვასწრებ 10იის ნახზე მანდ ვარ", 1, 1, 2, now(), 2),
+			( "ე ვერ მოვასწრებთ !!! ", 1, 1, 4, now(), 2),
+			( "კაია", 2, 1, 2, now(), 2);
+
+
+
+
+update hikes set hike_name = "მოლაშქრეთა კლუბი აიეტი", description = "ტურის ორგანიზატორია მოლაშქრეთა კლუბი აიეტი, გასვლის და დაბრუნების თარიღი : 15 ივლისი - 16 ივლისი, მთავარი ლოკაციები : თბილისი, ბათმი, თურქეთი, ყაზბეგი" where id = 1;
+
+-- select ID from posts order by ID desc limit 1;
+
+-- insert into posts (hike_id, post_text, user_id, post_time) values(1,"vache", 1, str_to_date('1989.12.01', '%Y.%m.%d'));
+
+-- select  * from posts;
+-- select  * from comments;
+-- select  * from comment_likes;
+-- insert into comments(comment_text, hike_ID, user_ID, comment_time, privacy_type, post_ID)values ( 'TestTestTest', 1, 1, '15/06/17 21:05:37', 2, 14);
+
+-- insert into comments(comment_text, hike_ID, user_ID, comment_time, privacy_type, post_ID)values ( 'TestTestTest', 1, 1, '15/06/17 21:08:23',1, null);
+
+-- insert into posts (post_text, hike_id, user_id, post_time) values("TestTestTest",1, 1, '15/06/17 19:00:04');
+-- delete from posts where ID = 36;
+-- delete from comments where ID = 100;
+-- delete from post_likes where ID = 5;
+-- delete from comment_likes where ID = 12;
+
 -- --------------------------------------------------------------------- --
 DELIMITER $$
 
@@ -171,11 +260,11 @@ END$$
 
 DELIMITER $$
 
-CREATE PROCEDURE get_private_comments(post_id INT)
+create PROCEDURE get_private_comments(post_id INT)
 BEGIN
 SELECT comments.ID, comments.comment_text, comments.user_ID, comments.comment_time
 FROM comments
-WHERE comments.hike_id = hike_id AND comments.privacy_type = 2;
+WHERE comments.post_ID = post_id AND comments.privacy_type = 2;
 
 END$$
 
@@ -198,3 +287,21 @@ FROM post_likes
 WHERE post_likes.post_id = post_id;
 
 END$$
+
+DELIMITER $$
+
+create PROCEDURE get_post_comments_likes(post_id INT, hike_id int, privacy int)
+BEGIN
+if(privacy = 1) then
+	SELECT cl.comment_ID comment_id, cl.user_ID user_id
+	FROM comment_likes cl 
+	inner join (select ID from comments c where c.hike_ID = hike_id) c on c.ID = cl.comment_id;
+else
+	SELECT cl.comment_ID comment_id, cl.user_ID user_id
+	FROM comment_likes cl 
+	inner join (select ID from comments c where c.post_ID = post_id) c on c.ID = cl.comment_id;
+end if;
+
+END$$
+
+call get_post_comments_likes(

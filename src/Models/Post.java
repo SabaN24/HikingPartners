@@ -2,6 +2,7 @@ package Models;
 
 import java.util.Date;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Saba on 10.06.2017.
@@ -14,7 +15,7 @@ public class Post {
     private MiniUser user;
     private Date time;
     private int likes;
-    private ArrayList<Comment> comments;
+    private List<Comment> comments;
 
     /**
      * Constructor of Post class
@@ -25,7 +26,7 @@ public class Post {
      * @param time time in the moment when post was created
      * @param likes like number
      */
-    public Post(int id, String text, MiniUser user, Date time, ArrayList<Comment> comments, int likes) {
+    public Post(int id, String text, MiniUser user, Date time, List<Comment> comments, int likes) {
         this.id = id;
         this.text = text;
         this.user = user;
@@ -79,8 +80,8 @@ public class Post {
     /**
      * @return all comments on this post as an array list
      */
-    public ArrayList<Comment> seeAllComments() {
-        ArrayList<Comment> result = new ArrayList<Comment>();
+    public List<Comment> seeAllComments() {
+        List<Comment> result = new ArrayList<Comment>();
         for (int i = 0; i < comments.size(); i++) {
             result.add(comments.get(i));
         }

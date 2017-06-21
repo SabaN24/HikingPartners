@@ -40,10 +40,11 @@ public class DataManager {
      * finds Hike with ID and puts infrmation into AboutModel class
      *
      * @param id which Hike user needs
+     * @param userID which user is trying to access this hike
      * @throws SQLException
      * @returns AboutModel thaat has relevant information
      */
-    public AboutModel getAboutModel(int id) {
+    public AboutModel getAboutModel(int id, int userID) {
         AboutModel aboutModel = null;
         String hikeQuery = constructQuery("hikes", "ID", "" + id);
         ResultSet hikeResultSet = databaseConnector.getData(hikeQuery);
@@ -54,13 +55,25 @@ public class DataManager {
                 Date endDate = hikeResultSet.getDate(4);
                 String description = hikeResultSet.getString(5);
                 int maxPeople = hikeResultSet.getInt(6);
-                List<Comment> comments = getComments("", "" + id, 1);
+                List<Comment> comments = getComments("-1", "" + id, 1, userID);
                 aboutModel = new AboutModel(id, name, description, startDate, endDate, maxPeople, comments);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return aboutModel;
+    }
+
+    /**
+     * Returns if user has liked this comment or not.
+     */
+    private boolean userHasLiked(List<Like> likes, int userID, int commentID){
+        for(Like like : likes){
+            if(like.getCommentID() == commentID && like.getUserID() == userID){
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -71,8 +84,12 @@ public class DataManager {
      * @param commentType type of comment (private or public)
      * @return comments on given post as ArrayList
      */
-    public List<Comment> getComments(String postID, String hikeID, int commentType) {
+    public List<Comment> getComments(String postID, String hikeID, int commentType, int userID) {
         List<Comment> comments = new ArrayList<>();
+        List<Like> likes = new ArrayList<>();
+        ResultSet likesSet;
+        likesSet = databaseConnector.callProcedure("get_post_comments_likes", Arrays.asList(postID, hikeID, "" + commentType));
+        likes = parseLikes(likesSet);
         ResultSet commentsResultSet;
         if (commentType == 1) {
             commentsResultSet = databaseConnector.callProcedure("get_public_comments", Arrays.asList(hikeID));
@@ -83,8 +100,8 @@ public class DataManager {
             while (commentsResultSet.next()) {
                 int commentId = commentsResultSet.getInt(1);
                 String comment = commentsResultSet.getString(2);
-                int userID = commentsResultSet.getInt(3);
-                MiniUser author = getUserById(userID);
+                int authorID = commentsResultSet.getInt(3);
+                MiniUser author = getUserById(authorID);
 
                 Date date = (Date)commentsResultSet.getObject(4);
 
@@ -93,13 +110,27 @@ public class DataManager {
                 if(likeResultSet.next()){
                     likeNum = likeResultSet.getInt(1);
                 }
-                Comment currComment = new Comment(commentId, comment, -1, author, date, likeNum);
+                Comment currComment = new Comment(commentId, comment, -1, author, date, likeNum, userHasLiked(likes, userID, commentId));
                 comments.add(currComment);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return comments;
+    }
+
+    private List<Like> parseLikes(ResultSet likesSet) {
+        List<Like> likes = new ArrayList<>();
+        try{
+            while(likesSet.next()){
+                int userID = likesSet.getInt("user_id");
+                int commentID = likesSet.getInt("comment_ID");
+                likes.add(new Like(commentID, userID));
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return likes;
     }
 
     /**
@@ -129,20 +160,20 @@ public class DataManager {
     /**
      * Returns posts of given hike as list.
      * @param hikeID id of desired hike
+     * @param userID id of view requesting user
      * @return list of posts
      */
-    public List<Post> getPosts(int hikeID) {
+    public List<Post> getPosts(int hikeID, int userID) {
         ResultSet rs = databaseConnector.getData("Select * from posts where hike_ID = " + hikeID + ";");
         List<Post> posts = new ArrayList<>();
         try {
             while(rs.next()){
                 int id = rs.getInt(1);
                 String text = rs.getString(2);
-                int userID = rs.getInt(4);
+                int authorID = rs.getInt(4);
                 Date postDate = (Date)rs.getObject(5);
-                MiniUser user = getUserById(userID);
-                List<Comment> commentsList = getComments("" + id, "" + hikeID, 2);
-                ArrayList<Comment> comments = new ArrayList<>(commentsList);
+                MiniUser user = getUserById(authorID);
+                List<Comment> comments = getComments("" + id, "" + hikeID, 2, userID);
                 ResultSet likesSet = databaseConnector.callProcedure("get_post_likes", Arrays.asList("" + id));
                 int likes = 0;
                 if(likesSet.next()) {

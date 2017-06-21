@@ -22,14 +22,6 @@ public class HikePageFeedServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        DataManager dataManager = DataManager.getInstance();
-        int hikeId = 1;
-        if(request.getParameter("hikeId") != null) {
-            hikeId = Integer.parseInt(request.getParameter("hikeId"));
-        }
-        DefaultModel defaultModel = dataManager.getDefaultModel(hikeId);
-        request.setAttribute(DefaultModel.ATTR, defaultModel);
-
         Helper.view("HikePage", "Feed", request, response);
     }
 }

@@ -6,10 +6,7 @@ package WebSockets;
 import Database.DataManager;
 import Database.HikeFeedSocketDM;
 import Listeners.GetHttpSessionConfigurator;
-import Models.Comment;
-import Models.HikeResponse;
-import Models.MiniUser;
-import Models.Post;
+import Models.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -60,7 +57,7 @@ public class HikeFeedWebSocketServer{
         }
 
         if ("getCommentLike".equals(jsonMessage.get("action"))) {
-            addCommentLike(jsonMessage, session, hikeId);
+            addCommentLike(jsonMessage, session, hikeId, "getCommentLike");
         }
 
         if ("getPost".equals(jsonMessage.get("action"))) {
@@ -89,19 +86,17 @@ public class HikeFeedWebSocketServer{
         webSocketHelper.sendToAllConnectedSessions(com, action, hikeId, connectedSessions.get(hikeId).keySet());
     }
 
-    private void addCommentLike(Map<String, Object> jsonMessage, Session session, @PathParam("hikeId") int hikeId){
+    private void addCommentLike(Map<String, Object> jsonMessage, Session session, @PathParam("hikeId") int hikeId, String action){
         Map<String, Object> data = (Map)(jsonMessage.get("data"));
         Integer userID = Integer.parseInt((String)data.get("userID"));
         HttpSession httpSession = connectedSessions.get(hikeId).get(session);
         if(userID != httpSession.getAttribute("userID")) return;
         Integer commentID = Integer.parseInt((String)data.get("commentID"));
+        int postID = Integer.parseInt((String)data.get("postID"));
         int returnedID = HikeFeedSocketDM.getInstance().likeComment(userID, commentID);
-        if(returnedID == -1){
-            data.put("likeResult", "unlike");
-        } else{
-            data.put("likeResult", "like");
-        }
-        webSocketHelper.sendToAllConnectedSessions(new Object(), "", hikeId, connectedSessions.get(hikeId).keySet());
+        Like like;
+        like = new Like(postID, commentID, userID, returnedID != -1);
+        webSocketHelper.sendToAllConnectedSessions(like, action, hikeId, connectedSessions.get(hikeId).keySet());
     }
 
     private void addPost(Map<String, Object> jsonMessage, Session session, @PathParam("hikeId") int hikeId, String action){

@@ -84,13 +84,8 @@ public class HikeCommentsWebSocketServer {
         if(userID != httpSession.getAttribute("userID")) return;
         Integer commentID = Integer.parseInt((String)data.get("commentID"));
         int returnedID = HikeFeedSocketDM.getInstance().likeComment(userID, commentID);
-
         Like like;
-        if(returnedID == -1){
-            like = new Like(commentID, userID, false);
-        }else {
-            like = new Like(commentID, userID, true);
-        }
+        like = new Like(commentID, userID, returnedID != -1);
         webSocketHelper.sendToAllConnectedSessions(like, action, hikeId, connectedSessions.get(hikeId).keySet());
     }
 

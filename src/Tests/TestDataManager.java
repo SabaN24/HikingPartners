@@ -29,7 +29,7 @@ public class TestDataManager {
     @Test
     public void testGetAboutModel()throws SQLException{
 
-        AboutModel aboutModel = dataManager.getAboutModel(1);
+        AboutModel aboutModel = dataManager.getAboutModel(1, 1);
 
         assertEquals(1,aboutModel.getID());
         assertEquals("KVELAZE MAGARI PAXODE", aboutModel.getName());

@@ -53,7 +53,7 @@
                                 </div>
                                 <div class="like-block">
                                     <i class="fa fa-thumbs-up" v-bind:class="{ liked: comment.isLiked }"
-                                       v-on:click="like(index)" aria-hidden="true"></i>
+                                       v-on:click="like(post.id, comment.commentID)" aria-hidden="true"></i>
                                     {{comment.likeNumber}}
                                 </div>
                             </div>
@@ -126,15 +126,15 @@
                 if (action == "getComment") {
                     this.posts.find(x => x.id == data.postID).comments.push(data);
                 } else if (action == "getCommentLike") {
-                    if (data.likeResult == "like") {
-                        this.posts.comments[data.commentIndex].likeNumber++;
-                        if (data.userID == 1) {
-                            this.posts.comments[data.commentIndex].isLiked = true;
+                    if (data.liked) {
+                        this.posts.find(x => x.id == data.postID).comments.find(x => x.commentID == data.commentID).likeNumber++;
+                        if (data.userID == user.id) {
+                            this.posts.find(x => x.id == data.postID).comments.find(x => x.commentID == data.commentID).isLiked = true;
                         }
-                    } else if (data.likeResult == "unlike" && this.posts.comments[data.commentIndex].likeNumber > 0) {
-                        this.posts.comments[data.commentIndex].likeNumber--;
-                        if (data.userID == 1) {
-                            this.posts.comments[data.commentIndex].isLiked = false;
+                    } else if (this.posts.find(x => x.id == data.postID).comments.find(x => x.commentID == data.commentID).likeNumber > 0) {
+                        this.posts.find(x => x.id == data.postID).comments.find(x => x.commentID == data.commentID).likeNumber--;
+                        if (data.userID == user.id) {
+                            this.posts.find(x => x.id == data.postID).comments.find(x => x.commentID == data.commentID).isLiked = false;
                         }
                     }
                 }else if(action == "getPost"){
@@ -172,13 +172,13 @@
 
 
             //This function is called when like button is clicked.
-            like: function (index) {
+            like: function (postID, commentID) {
                 ws.send(JSON.stringify({
                     action: "getCommentLike",
                     data: {
-                        commentID: "" + this.posts.comments[index].commentID,
-                        userID: "" + 1,
-                        commentIndex: "" + index
+                        postID: "" + postID,
+                        commentID: "" + commentID,
+                        userID: user.id
                     }
                 }));
             }

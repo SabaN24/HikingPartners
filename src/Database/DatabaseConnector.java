@@ -86,7 +86,9 @@ public class DatabaseConnector {
             for(int i = 0; i < parameters.size() - 1; i++){
                 query.append(parameters.get(i) + ", ");
             }
-            query.append(parameters.get(parameters.size() - 1) + ");");
+            if(parameters.size() != 0) {
+                query.append(parameters.get(parameters.size() - 1) + ");");
+            }
             rs = statement.executeQuery(query.toString());
         } catch (SQLException e) {
             e.printStackTrace();

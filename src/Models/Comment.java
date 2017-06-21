@@ -12,6 +12,7 @@ public class Comment {
     private MiniUser user;
     private Date date;
     private int likeNumber;
+    private boolean isLiked;
 
     /**
      * Constructor
@@ -28,6 +29,20 @@ public class Comment {
         this.date = date;
         this.likeNumber = likeNumber;
         this.postID = postID;
+        this.isLiked = false;
+    }
+
+    public Comment(int commentID, String comment, int postID, MiniUser user, Date date, int likeNumber, boolean isLiked){
+        this(commentID, comment, postID, user, date, likeNumber);
+        this.isLiked = isLiked;
+    }
+
+    /**
+     * Setter for isLiked
+     * @param liked
+     */
+    public void setLiked(boolean liked) {
+        isLiked = liked;
     }
 
 
