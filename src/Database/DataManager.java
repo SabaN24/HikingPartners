@@ -83,8 +83,8 @@ public class DataManager {
             while (commentsResultSet.next()) {
                 int commentId = commentsResultSet.getInt(1);
                 String comment = commentsResultSet.getString(2);
-                int userId = commentsResultSet.getInt(3);
-                MiniUser author = getUserById(userId);
+                int userID = commentsResultSet.getInt(3);
+                MiniUser author = getUserById(userID);
 
                 Date date = (Date)commentsResultSet.getObject(4);
 
@@ -104,11 +104,11 @@ public class DataManager {
 
     /**
      * Gets information from database about user given user's id.
-     * @param userId id of required user
+     * @param userID id of required user
      * @return MiniUser class built on information from database
      */
-    public MiniUser getUserById(int userId){
-        String query = constructQuery("users", "id", "" + userId);
+    public MiniUser getUserById(int userID){
+        String query = constructQuery("users", "id", "" + userID);
         ResultSet rs = databaseConnector.getData(query);
         MiniUser user = createUserFromResultSet(rs);
         return user;

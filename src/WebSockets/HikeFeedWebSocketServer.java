@@ -5,6 +5,7 @@ package WebSockets;
  */
 import Database.DataManager;
 import Database.HikeFeedSocketDM;
+import Listeners.GetHttpSessionConfigurator;
 import Models.Comment;
 import Models.HikeResponse;
 import Models.MiniUser;
@@ -12,6 +13,7 @@ import Models.Post;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import javax.servlet.http.HttpSession;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
@@ -19,9 +21,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-@ServerEndpoint("/HikeFeedSocket/{hikeId}")
+@ServerEndpoint(value = "/HikeFeedSocket/{hikeId}", configurator = GetHttpSessionConfigurator.class)
 public class HikeFeedWebSocketServer{
-    private static Map<Integer, Set<Session>> connectedSessions = new HashMap<>();
+    private static Map<Integer, Map<Session, HttpSession>> connectedSessions = new HashMap<>();
     private static WebSocketHelper webSocketHelper = new WebSocketHelper();
 
     /* Private instance variables. */
@@ -33,9 +35,10 @@ public class HikeFeedWebSocketServer{
     @OnOpen
     public void open(Session session, @PathParam("hikeId") int hikeId, EndpointConfig config) {
         if(!connectedSessions.containsKey(hikeId)){
-            connectedSessions.put(hikeId, new HashSet<>());
+            connectedSessions.put(hikeId, new HashMap<>());
         }
-        connectedSessions.get(hikeId).add(session);
+        HttpSession httpsession =  (HttpSession) config.getUserProperties().get(HttpSession.class.getName());
+        connectedSessions.get(hikeId).put(session, httpsession);
         dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         calendar = Calendar.getInstance();
         frontGson = new GsonBuilder().setDateFormat("MMM, d, yyyy HH:mm:ss").create();
@@ -73,6 +76,8 @@ public class HikeFeedWebSocketServer{
         Map<String, Object> data = (Map)(jsonMessage.get("data"));
         String comment = (String)data.get("comment");
         Integer userID = Integer.parseInt((String)data.get("userID"));
+        HttpSession httpSession = connectedSessions.get(hikeId).get(session);
+        if(userID != httpSession.getAttribute("userID")) return;
         Integer postID = Integer.parseInt((String)data.get("postID"));
         int hikeID = hikeId;
         int privacyType = 2;
@@ -81,12 +86,14 @@ public class HikeFeedWebSocketServer{
         int returnedID = HikeFeedSocketDM.getInstance().addComment(userID, postID, hikeID, comment, privacyType, time);
         MiniUser user = DataManager.getInstance().getUserById(userID);
         Comment com = new Comment(returnedID, comment, postID, user, currDate, 0);
-        webSocketHelper.sendToAllConnectedSessions(com, action, hikeId, connectedSessions.get(hikeId));
+        webSocketHelper.sendToAllConnectedSessions(com, action, hikeId, connectedSessions.get(hikeId).keySet());
     }
 
     private void addCommentLike(Map<String, Object> jsonMessage, Session session, @PathParam("hikeId") int hikeId){
         Map<String, Object> data = (Map)(jsonMessage.get("data"));
         Integer userID = Integer.parseInt((String)data.get("userID"));
+        HttpSession httpSession = connectedSessions.get(hikeId).get(session);
+        if(userID != httpSession.getAttribute("userID")) return;
         Integer commentID = Integer.parseInt((String)data.get("commentID"));
         int returnedID = HikeFeedSocketDM.getInstance().likeComment(userID, commentID);
         if(returnedID == -1){
@@ -94,13 +101,15 @@ public class HikeFeedWebSocketServer{
         } else{
             data.put("likeResult", "like");
         }
-        webSocketHelper.sendToAllConnectedSessions(new Object(), "", hikeId, connectedSessions.get(hikeId));
+        webSocketHelper.sendToAllConnectedSessions(new Object(), "", hikeId, connectedSessions.get(hikeId).keySet());
     }
 
     private void addPost(Map<String, Object> jsonMessage, Session session, @PathParam("hikeId") int hikeId, String action){
         Map<String, Object> data = (Map)(jsonMessage.get("data"));
         String post = (String)data.get("post");
         Integer userID = Integer.parseInt((String)data.get("userID"));
+        HttpSession httpSession = connectedSessions.get(hikeId).get(session);
+        if(userID != httpSession.getAttribute("userID")) return;
         int hikeID = hikeId;
         Date currDate = calendar.getTime();
         String time = dateFormat.format(currDate);
@@ -108,12 +117,14 @@ public class HikeFeedWebSocketServer{
         MiniUser user = DataManager.getInstance().getUserById(userID);
 
         Post newPost = new Post(returnedID, post, user, currDate, new ArrayList<>(), 0);
-        webSocketHelper.sendToAllConnectedSessions(newPost, action, hikeId, connectedSessions.get(hikeId));
+        webSocketHelper.sendToAllConnectedSessions(newPost, action, hikeId, connectedSessions.get(hikeId).keySet());
     }
 
     private void addPostLike(Map<String, Object> jsonMessage, Session session, @PathParam("hikeId") int hikeId){
         Map<String, Object> data = (Map)(jsonMessage.get("data"));
         Integer userID = Integer.parseInt((String)data.get("userID"));
+        HttpSession httpSession = connectedSessions.get(hikeId).get(session);
+        if(userID != httpSession.getAttribute("userID")) return;
         Integer postID = Integer.parseInt((String)data.get("postID"));
         int returnedID = HikeFeedSocketDM.getInstance().likePost(userID, postID);
         if(returnedID == -1){
@@ -121,6 +132,6 @@ public class HikeFeedWebSocketServer{
         } else{
             data.put("likeResult", "like");
         }
-        webSocketHelper.sendToAllConnectedSessions(new Object(), "", hikeId, connectedSessions.get(hikeId));
+        webSocketHelper.sendToAllConnectedSessions(new Object(), "", hikeId, connectedSessions.get(hikeId).keySet());
     }
 }

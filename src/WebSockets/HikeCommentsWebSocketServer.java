@@ -10,17 +10,17 @@ import Models.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import javax.servlet.http.HttpSession;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
-import javax.xml.crypto.Data;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 @ServerEndpoint(value = "/HikeCommentsSocket/{hikeId}", configurator = GetHttpSessionConfigurator.class)
 public class HikeCommentsWebSocketServer {
-    private static Map<Integer, Set<Session>> connectedSessions = new HashMap<>();
+    private static Map<Integer, Map<Session, HttpSession>> connectedSessions = new HashMap<>();
     private static WebSocketHelper webSocketHelper = new WebSocketHelper();
 
     /* Private instance variables. */
@@ -32,9 +32,10 @@ public class HikeCommentsWebSocketServer {
     @OnOpen
     public void open(Session session, @PathParam("hikeId") int hikeId, EndpointConfig config) {
         if(!connectedSessions.containsKey(hikeId)){
-            connectedSessions.put(hikeId, new HashSet<>());
+            connectedSessions.put(hikeId, new HashMap<>());
         }
-        connectedSessions.get(hikeId).add(session);
+        HttpSession httpsession =  (HttpSession) config.getUserProperties().get(HttpSession.class.getName());
+        connectedSessions.get(hikeId).put(session, httpsession);
         dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         calendar = Calendar.getInstance();
         gson = new Gson();
@@ -63,6 +64,8 @@ public class HikeCommentsWebSocketServer {
         Map<String, Object> data = (Map)(jsonMessage.get("data"));
         String comment = (String)data.get("comment");
         Integer userID = Integer.parseInt((String)data.get("userID"));
+        HttpSession httpSession = connectedSessions.get(hikeId).get(session);
+        if(userID != httpSession.getAttribute("userID")) return;
         int postID = -1;   //postID doesn't matters because its public Post so it will automatically add "null" in database in postID place.
         int hikeID = hikeId;
         int privacyType = 1;
@@ -71,12 +74,14 @@ public class HikeCommentsWebSocketServer {
         int returnedID = HikeFeedSocketDM.getInstance().addComment(userID, postID, hikeID, comment, privacyType, time);
         MiniUser user = DataManager.getInstance().getUserById(userID);
         Comment comm = new Comment(returnedID, comment, postID, user, currDate, 0);
-        webSocketHelper.sendToAllConnectedSessions(comm, action, hikeId, connectedSessions.get(hikeId));
+        webSocketHelper.sendToAllConnectedSessions(comm, action, hikeId, connectedSessions.get(hikeId).keySet());
     }
 
     private void addCommentLike(Map<String, Object> jsonMessage, Session session, @PathParam("hikeId") int hikeId, String action) {
         Map<String, Object> data = (Map)(jsonMessage.get("data"));
         Integer userID = Integer.parseInt((String)data.get("userID"));
+        HttpSession httpSession = connectedSessions.get(hikeId).get(session);
+        if(userID != httpSession.getAttribute("userID")) return;
         Integer commentID = Integer.parseInt((String)data.get("commentID"));
         int returnedID = HikeFeedSocketDM.getInstance().likeComment(userID, commentID);
 
@@ -86,7 +91,7 @@ public class HikeCommentsWebSocketServer {
         }else {
             like = new Like(commentID, userID, true);
         }
-        webSocketHelper.sendToAllConnectedSessions(like, action, hikeId, connectedSessions.get(hikeId));
+        webSocketHelper.sendToAllConnectedSessions(like, action, hikeId, connectedSessions.get(hikeId).keySet());
     }
 
 }

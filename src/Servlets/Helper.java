@@ -19,14 +19,15 @@ public class Helper {
     public static void view(String page, HttpServletRequest request, HttpServletResponse response)  {
         HttpSession session = request.getSession();
         DataManager dataManager = DataManager.getInstance();
-        int userId = 1;
-        if((Integer)session.getAttribute("userId") != null){
-            userId = (Integer)session.getAttribute("userId");
-            request.setAttribute("loggedInUser", dataManager.getUserById(userId));
+        int userID = 1;
+        if((Integer)session.getAttribute("userID") != null){
+            userID = (Integer)session.getAttribute("userID");
+            request.setAttribute("loggedInUser", dataManager.getUserById(userID));
         }
 
         //This should be deleted in future, when we'll have login page
-        request.setAttribute("loggedInUser", dataManager.getUserById(userId));
+        session.setAttribute("userID", userID);
+        request.setAttribute("loggedInUser", dataManager.getUserById(userID));
 
         request.setAttribute("page", page + ".jsp");
         RequestDispatcher rd = request.getRequestDispatcher("/Pages/Layout.jsp");
