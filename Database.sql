@@ -303,5 +303,3 @@ else
 end if;
 
 END$$
-
-call get_post_comments_likes(
