@@ -13,7 +13,10 @@
 --%>
 <div id="vueapp">
     <setTitle>
-        <%--{{aboutModel.name}}--%>
+        <%
+            DefaultModel defaultModel = (DefaultModel) request.getAttribute(DefaultModel.ATTR);
+            out.print(defaultModel.getName());
+        %>
     </setTitle>
 
     </header>
@@ -27,7 +30,6 @@
                     <%
                         String fullSubPage = (String) request.getAttribute("subPage");
                         String subPage = fullSubPage.substring(9, fullSubPage.length() - 4);
-                        DefaultModel defaultModel = (DefaultModel) request.getAttribute(DefaultModel.ATTR);
                         MiniUser creator = defaultModel.getCreator();
                         out.print(creator.getFirstName() + " " + creator.getLastName());
                     %>
@@ -72,6 +74,7 @@
         </div>
 
         <jsp:include page='<%= fullSubPage %>'/>
+        <script>document.querySelectorAll("title")[0].innerHTML = document.querySelectorAll("setTitle")[0].innerHTML;</script>
 
     </main>
 </div>

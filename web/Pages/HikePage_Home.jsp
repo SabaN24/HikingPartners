@@ -1,4 +1,5 @@
-<%@ page import="Models.MiniUser" %><%--
+<%@ page import="Models.MiniUser" %>
+<%@ page import="Models.Hike.DefaultModel" %><%--
   Created by IntelliJ IDEA.
   User: Sandro
   Date: 18-Jun-17
@@ -12,7 +13,12 @@
     <div class="description-block">
         <div class="description-wrapper">
             <div class="description-header">
-                <div class="description-header__left"> {{aboutModel.name}}</div>
+                <div class="description-header__left">
+                    <%
+                        DefaultModel defaultModel = (DefaultModel) request.getAttribute(DefaultModel.ATTR);
+                        out.print(defaultModel.getName());
+                    %>
+                </div>
                 <div class="description-header__right">
                             <span title="ადამიანების მაქსიმალური რაოდენობა" style="margin-right: 30px;"><i
                                     class="fa fa-user" aria-hidden="true"></i> {{aboutModel.maxPeople}}</span>
@@ -73,12 +79,10 @@
         if(!value) return "";
         return value.substr(0, value.length - 3);
     });
-
     var hikeId = <%=request.getParameter("hikeId") == null ? 1 : request.getParameter("hikeId")%>;
     var ws = new WebSocket("ws://localhost:8080/HikeCommentsSocket/" + hikeId);
     var app = new Vue({
         el: '#vueapp',
-
         //These are stored instance variables for vue,
         //it will use these to bind element data and
         //modify them.
@@ -101,7 +105,6 @@
                     th.aboutModel = response.data;
                 });
             },
-
             //This method is invoked automatically when socket
             //server sends messageto this session.
             getSocketMessage: function (data) {
@@ -125,7 +128,6 @@
                     }
                 }
             },
-
             //Sends new comment to socket server, called when enter is hit on comment.
             sendComment: function () {
                 ws.send(JSON.stringify({
@@ -137,7 +139,6 @@
                 }));
                 this.newCommentInput = "";
             },
-
             //This function is called when like button is clicked.
             like: function (commentId) {
                 ws.send(JSON.stringify({

@@ -2,6 +2,7 @@ package Tests;
 
 import Models.Hike.AboutModel;
 import Database.DataManager;
+import Models.Hike.DefaultModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.sql.SQLException;
@@ -29,11 +30,10 @@ public class TestDataManager {
     @Test
     public void testGetAboutModel()throws SQLException{
 
+        DefaultModel defaultModel = dataManager.getDefaultModel(1);
         AboutModel aboutModel = dataManager.getAboutModel(1, 1);
 
-        assertEquals(1,aboutModel.getID());
-        assertEquals("KVELAZE MAGARI PAXODE", aboutModel.getName());
-        assertEquals("MAGARI PAXODI!!! SHEMODIT ALL :***", aboutModel.getDescription());
+        assertEquals("MAGARI PAXODI!!! SHEMODIT ALL :***", defaultModel.getName());
         assertEquals(5, aboutModel.getMaxPeople());
 
         assertEquals(5, aboutModel.getComments().size());

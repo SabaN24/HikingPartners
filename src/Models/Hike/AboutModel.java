@@ -2,6 +2,7 @@ package Models.Hike;
 
 
 import Models.Comment;
+
 import java.text.DateFormat;
 import java.util.Date;
 import java.text.ParseException;
@@ -13,8 +14,6 @@ import java.util.*;
  */
 public class AboutModel {
 
-    private int ID;
-    private String name;
     private String description;
     private Date startDate;
     private Date endDate;
@@ -26,37 +25,18 @@ public class AboutModel {
 
     /**
      * constructor of about of hike
-     * @param ID
-     * @param name
+     *
      * @param description
      * @param startDate
      * @param endDate
      * @param comments
      */
-    public AboutModel(int ID, String name, String description, Date startDate, Date endDate,int maxPeople, List<Comment> comments) {
-        this.ID = ID;
-        this.name = name;
+    public AboutModel(String description, Date startDate, Date endDate, int maxPeople, List<Comment> comments) {
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
         this.comments = comments;
         this.maxPeople = maxPeople;
-    }
-
-
-    /**
-     * @return of hikes
-     */
-    public int getID() {
-        return ID;
-    }
-
-
-    /**
-     * @returns name of hike
-     */
-    public String getName() {
-        return name;
     }
 
 
@@ -85,7 +65,9 @@ public class AboutModel {
     /**
      * @return comments of about
      */
-    public List<Comment> getComments() { return comments; }
+    public List<Comment> getComments() {
+        return comments;
+    }
 
     /**
      * @return maximum number of users that can go the trip
@@ -94,13 +76,9 @@ public class AboutModel {
         return maxPeople;
     }
 
-    /**
-     * equals compares of aboutHike with their hike id
-     * @param obj
-     * @return true if ids are same and returns false if not
-     */
     @Override
-    public boolean equals(Object obj) {
-        AboutModel other = (AboutModel) obj;
-        return other.ID == this.ID;
-    }}
+    public String toString(){
+        return "Start: " + startDate.toString() + " End: " + endDate.toString() + " Max: " + maxPeople;
+    }
+
+}

@@ -7,6 +7,7 @@ import java.util.*;
 import Models.*;
 import Models.Hike.AboutModel;
 import Models.Hike.DefaultModel;
+import Models.Hike.HikeInfo;
 
 import javax.xml.crypto.Data;
 import javax.xml.transform.Result;
@@ -27,19 +28,49 @@ public class DataManager {
         databaseConnector = DatabaseConnector.getInstance();
     }
 
-    public static DataManager getInstance(){
-        if(dm == null) {
+    public static DataManager getInstance() {
+        if (dm == null) {
             dm = new DataManager();
         }
         return dm;
     }
 
+    /**
+     * Returns list of all hikes that are in database.
+     * @return all hikes as List<HikeInfo>
+     */
+    public List<HikeInfo> getAllHikes() {
+        List<HikeInfo> hikes = new ArrayList<>();
+        ResultSet allHikes = databaseConnector.getData("Select * from hikes;");
+        try {
+            while (allHikes.next()) {
+                int id = allHikes.getInt(1);
+                Date startDate = allHikes.getDate(3);
+                Date endDate = allHikes.getDate(4);
+                String descrption = allHikes.getString(5);
+                int maxPeople = allHikes.getInt(6);
+                ResultSet joinedPeopleRS = databaseConnector.callProcedure("get_joined_people",
+                        Arrays.asList("" + id));
+                int joinedPeople = 0;
+                if (joinedPeopleRS.next()) {
+                    joinedPeople = joinedPeopleRS.getInt(1);
+                }
+                DefaultModel defaultModel = getDefaultModel(id);
+                HikeInfo current = new HikeInfo(id, defaultModel.getName(), defaultModel.getCreator(),
+                        defaultModel.getCoverPhotos(), maxPeople, joinedPeople, startDate, endDate, descrption);
+                hikes.add(current);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return hikes;
+    }
 
     /**
      * method uses dataConnector and gets resultset with query that
      * finds Hike with ID and puts infrmation into AboutModel class
      *
-     * @param id which Hike user needs
+     * @param id     which Hike user needs
      * @param userID which user is trying to access this hike
      * @throws SQLException
      * @returns AboutModel thaat has relevant information
@@ -50,13 +81,12 @@ public class DataManager {
         ResultSet hikeResultSet = databaseConnector.getData(hikeQuery);
         try {
             while (hikeResultSet.next()) {
-                String name = hikeResultSet.getString(2);
                 Date startDate = hikeResultSet.getDate(3);
                 Date endDate = hikeResultSet.getDate(4);
                 String description = hikeResultSet.getString(5);
                 int maxPeople = hikeResultSet.getInt(6);
                 List<Comment> comments = getComments("-1", "" + id, 1, userID);
-                aboutModel = new AboutModel(id, name, description, startDate, endDate, maxPeople, comments);
+                aboutModel = new AboutModel(description, startDate, endDate, maxPeople, comments);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -67,9 +97,9 @@ public class DataManager {
     /**
      * Returns if user has liked this comment or not.
      */
-    private boolean userHasLiked(List<Like> likes, int userID, int commentID){
-        for(Like like : likes){
-            if(like.getCommentID() == commentID && like.getUserID() == userID){
+    private boolean userHasLiked(List<Like> likes, int userID, int commentID) {
+        for (Like like : likes) {
+            if (like.getCommentID() == commentID && like.getUserID() == userID) {
                 return true;
             }
         }
@@ -79,8 +109,9 @@ public class DataManager {
 
     /**
      * Gets comments of given post.
-     * @param postID id of required post
-     * @param hikeID id of hike, on which this post is written
+     *
+     * @param postID      id of required post
+     * @param hikeID      id of hike, on which this post is written
      * @param commentType type of comment (private or public)
      * @return comments on given post as ArrayList
      */
@@ -103,11 +134,11 @@ public class DataManager {
                 int authorID = commentsResultSet.getInt(3);
                 MiniUser author = getUserById(authorID);
 
-                Date date = (Date)commentsResultSet.getObject(4);
+                Date date = (Date) commentsResultSet.getObject(4);
 
                 ResultSet likeResultSet = databaseConnector.callProcedure("get_comment_likes", Arrays.asList("" + commentId));
                 int likeNum = 0;
-                if(likeResultSet.next()){
+                if (likeResultSet.next()) {
                     likeNum = likeResultSet.getInt(1);
                 }
                 Comment currComment = new Comment(commentId, comment, -1, author, date, likeNum, userHasLiked(likes, userID, commentId));
@@ -121,13 +152,13 @@ public class DataManager {
 
     private List<Like> parseLikes(ResultSet likesSet) {
         List<Like> likes = new ArrayList<>();
-        try{
-            while(likesSet.next()){
+        try {
+            while (likesSet.next()) {
                 int userID = likesSet.getInt("user_id");
                 int commentID = likesSet.getInt("comment_ID");
                 likes.add(new Like(commentID, userID));
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return likes;
@@ -135,10 +166,11 @@ public class DataManager {
 
     /**
      * Gets information from database about user given user's id.
+     *
      * @param userID id of required user
      * @return MiniUser class built on information from database
      */
-    public MiniUser getUserById(int userID){
+    public MiniUser getUserById(int userID) {
         String query = constructQuery("users", "id", "" + userID);
         ResultSet rs = databaseConnector.getData(query);
         MiniUser user = createUserFromResultSet(rs);
@@ -147,18 +179,30 @@ public class DataManager {
 
     /**
      * Returns information needed for DefaultModel class.
+     *
      * @param hikeId id of demanded hike
      * @return DefaultModel class built from information about given hike
      */
     public DefaultModel getDefaultModel(int hikeId) {
+        String hikeQuery = constructQuery("hikes", "ID", "" + hikeId);
+        ResultSet hikeResultSet = databaseConnector.getData(hikeQuery);
+        String name = null;
+        try {
+            while (hikeResultSet.next()) {
+                name = hikeResultSet.getString(2);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         MiniUser creator = getCreator(hikeId);
         List<Photo> coverPhotos = getCoverPhotos(hikeId);
-        DefaultModel defaultModel = new DefaultModel(creator, coverPhotos);
+        DefaultModel defaultModel = new DefaultModel(hikeId, name, creator, coverPhotos);
         return defaultModel;
     }
 
     /**
      * Returns posts of given hike as list.
+     *
      * @param hikeID id of desired hike
      * @param userID id of view requesting user
      * @return list of posts
@@ -167,16 +211,16 @@ public class DataManager {
         ResultSet rs = databaseConnector.getData("Select * from posts where hike_ID = " + hikeID + ";");
         List<Post> posts = new ArrayList<>();
         try {
-            while(rs.next()){
+            while (rs.next()) {
                 int id = rs.getInt(1);
                 String text = rs.getString(2);
                 int authorID = rs.getInt(4);
-                Date postDate = (Date)rs.getObject(5);
+                Date postDate = (Date) rs.getObject(5);
                 MiniUser user = getUserById(authorID);
                 List<Comment> comments = getComments("" + id, "" + hikeID, 2, userID);
                 ResultSet likesSet = databaseConnector.callProcedure("get_post_likes", Arrays.asList("" + id));
                 int likes = 0;
-                if(likesSet.next()) {
+                if (likesSet.next()) {
                     likes = likesSet.getInt(1);
                 }
                 Post p = new Post(id, text, user, postDate, comments, likes);
@@ -191,6 +235,7 @@ public class DataManager {
     /**
      * Gets information about creator of given hike from database, using callProcedure
      * method of databaseConnnector class which calls given procedure in database.
+     *
      * @param hikeId id of demanded hike
      * @return DefaultMode.User class object built from information of creator of given hike
      */
@@ -202,10 +247,11 @@ public class DataManager {
 
     /**
      * Builds MiniUser object from given resultset.
+     *
      * @param rs data which needs to be processed
      * @return MiniUser object
      */
-    private MiniUser createUserFromResultSet(ResultSet rs){
+    private MiniUser createUserFromResultSet(ResultSet rs) {
         MiniUser creator = null;
         try {
             while (rs.next()) {
@@ -224,14 +270,15 @@ public class DataManager {
     /**
      * Gets cover photos of given hike from database, using callProcedure
      * method of databaseConnnector class which calls given procedure in database.
+     *
      * @param hikeId id of demanded hike
      * @return List<Photo> object built from cover photos of given hike
      */
-    private List<Photo> getCoverPhotos(int hikeId){
+    private List<Photo> getCoverPhotos(int hikeId) {
         ResultSet rs = databaseConnector.callProcedure("get_cover_photos", Arrays.asList("" + hikeId));
         List<Photo> coverPhotos = new ArrayList<>();
         try {
-            while(rs.next()){
+            while (rs.next()) {
                 int id = rs.getInt(1);
                 String url = rs.getString(2);
                 String name = rs.getString(3);

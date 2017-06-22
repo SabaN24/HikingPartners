@@ -34,7 +34,7 @@ public class TestHikeDefaultModel {
         photos.add(photo2);
 
         //default model setup
-        defaultModel = new DefaultModel(user, photos);
+        defaultModel = new DefaultModel(1, "bla", user, photos);
     }
 
     /**

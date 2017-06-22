@@ -15,6 +15,8 @@ public class DefaultModel {
     /**
      * Private instance variables.
      */
+    private int id;
+    private String name;
     private MiniUser creator;
     private List<Photo> coverPhotos;
 
@@ -23,9 +25,25 @@ public class DefaultModel {
      * @param creator User
      * @param coverPhotos List<Photo>
      */
-    public DefaultModel(MiniUser creator, List<Photo> coverPhotos) {
+    public DefaultModel(int id, String name, MiniUser creator, List<Photo> coverPhotos) {
+        this.id = id;
+        this.name = name;
         this.creator = creator;
         this.coverPhotos = coverPhotos;
+    }
+
+    /**
+     * @return id of hike
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * @return name of hike
+     */
+    public String getName() {
+        return name;
     }
 
     /**
@@ -43,4 +61,21 @@ public class DefaultModel {
     public List<Photo> getCoverPhotos() {
         return coverPhotos;
     }
+
+    /**
+     * equals compares of aboutHike with their hike id
+     * @param obj
+     * @return true if ids are same and returns false if not
+     */
+    @Override
+    public boolean equals(Object obj) {
+        DefaultModel other = (DefaultModel) obj;
+        return other.id == this.id;
+    }
+
+    @Override
+    public String toString(){
+        return id + " " + name + " created by: " + creator.getFirstName() + " " + creator.getLastName();
+    }
+
 }
