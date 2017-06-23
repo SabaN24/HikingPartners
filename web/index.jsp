@@ -6,7 +6,7 @@
 </head>
 <body>
    <%
-       RequestDispatcher rd = request.getRequestDispatcher("HikePage/Home");
+       RequestDispatcher rd = request.getRequestDispatcher("Home");
        rd.forward(request, response);
    %>
 

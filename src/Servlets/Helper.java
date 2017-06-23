@@ -19,7 +19,7 @@ public class Helper {
     public static void view(String page, HttpServletRequest request, HttpServletResponse response)  {
         HttpSession session = request.getSession();
         DataManager dataManager = DataManager.getInstance();
-        int userID = 1;
+        int userID = 3;
         if((Integer)session.getAttribute("userID") != null){
             userID = (Integer)session.getAttribute("userID");
             request.setAttribute("loggedInUser", dataManager.getUserById(userID));

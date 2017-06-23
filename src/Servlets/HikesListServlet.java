@@ -24,10 +24,10 @@ public class HikesListServlet extends HttpServlet {
         DataManager dataManager = DataManager.getInstance();
         List<HikeInfo> hikes = dataManager.getAllHikes();
         Gson gson = new GsonBuilder().setDateFormat("MMM, d, yyyy HH:mm:ss").create();
-        String jsonAboutModel = gson.toJson(hikes);
+        String hikesList = gson.toJson(hikes);
         response.setContentType("text/html; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().print(jsonAboutModel);
+        response.getWriter().print(hikesList);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
