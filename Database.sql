@@ -303,3 +303,13 @@ else
 end if;
 
 END$$
+
+DELIMITER $$
+ 
+CREATE PROCEDURE get_joined_people(hike_id INT)
+BEGIN
+SELECT COUNT(user_id)
+FROM hike_to_user
+WHERE hike_to_user.hike_id = hike_id;
+
+END$$
