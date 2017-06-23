@@ -37,7 +37,7 @@
     <header>
         <div class="header-left">
             <div class="logo-block">
-                <a class="logo-link" href="#">
+                <a class="logo-link" href="/Home">
                     <img src="../Content/img/logo.png" alt="" class="logo-img">
                 </a>
             </div>
@@ -63,6 +63,7 @@
 
     </header>
     <jsp:include page='<%=(String)request.getAttribute("page")%>' />
+    <script>document.querySelectorAll("title")[0].innerHTML = document.querySelectorAll("setTitle")[0].innerHTML;</script>
 </div>
 <footer></footer>
 </body>

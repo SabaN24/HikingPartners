@@ -35,7 +35,7 @@
             {{post.text}}
         </div>
         <div class="comments-count">
-            {{post.comments.length}} comments
+            {{post.comments.length}} comment<span v-show="post.comments.length != 1">s</span>
         </div>
         <div class="comments-block">
             <div class="comments-block-inner">
@@ -85,7 +85,6 @@
         return value.substr(0, value.length - 3);
     });
 
-    var hikeId = <%=request.getParameter("hikeId") == null ? 1 : request.getParameter("hikeId")%>;
     var ws = new WebSocket("ws://localhost:8080/HikeFeedSocket/" + hikeId);
     var app = new Vue({
         el: '#vueapp',

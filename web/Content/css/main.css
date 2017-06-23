@@ -17,8 +17,8 @@ html {
     box-sizing: border-box;
 }
 
-setTitle{
-    display:none;
+setTitle {
+    display: none;
 }
 
 *, *:before, *:after {
@@ -33,7 +33,7 @@ html, body {
 }
 
 body {
-    font-family: myriad-regular, bpg-arial,Arial, sans-serif;
+    font-family: myriad-regular, bpg-arial, Arial, sans-serif;
     background-image: url(../img/main_background.jpg);
     background-size: cover;
     background-position: center center;
@@ -51,7 +51,6 @@ a:link, a:visited, a:hover, a:active {
     text-decoration: none;
     color: inherit;
 }
-
 
 .clearfix:before,
 .clearfix:after {
@@ -194,7 +193,7 @@ aside {
     transition: .2s opacity;
 }
 
-.fa-pages{
+.fa-pages {
     margin-right: 15px;
     width: 20px;
     text-align: center;
@@ -227,7 +226,6 @@ main {
     background: white;
     padding: 10px;
 }
-
 
 .slider-block {
     height: 235px;
@@ -347,9 +345,9 @@ main {
     box-shadow: 0 0px 1px #477164, 0 0 8px #477164;
 }
 
-.add-comment form{
+.add-comment form {
     width: calc(100% - 50px);
-    display:inline-block;
+    display: inline-block;
 }
 
 .comment {
@@ -405,34 +403,33 @@ main {
 }
 
 .fa-thumbs-up {
-    cursor:pointer;
+    cursor: pointer;
     color: #ccc;
     margin-right: 3px;
 }
 
-.liked{
+.liked {
     color: rgb(88, 144, 255);
 }
 
-.hidden{
-    display:none;
+.hidden {
+    display: none;
 }
-
 
 .new-post {
     padding-left: 10px;
 }
 
-.post-block{
+.post-block {
     margin-bottom: 10px;
 }
 
-.post-upper{
+.post-upper {
     padding: 3px 10px;
     margin-bottom: 10px;
 }
 
-.post-author-avatar{
+.post-author-avatar {
     background: lightseagreen;
     width: 50px;
     height: 50px;
@@ -440,23 +437,22 @@ main {
 
 }
 
-.post-info{
+.post-info {
     display: inline-block;
     vertical-align: middle;
 }
 
-.post-author-name{
+.post-author-name {
     font-size: 20px;
     font-weight: bold;
 }
 
-.post-time{
+.post-time {
     font-size: 12px;
     color: #aaa;
 }
 
-
-.post-text{
+.post-text {
     padding: 0 10px;
     margin-bottom: 10px;
 }
@@ -479,3 +475,66 @@ main {
     outline: 1px solid #ccc;
     border-color: transparent;
 }
+
+.hike-container {
+    width: 50%;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.hike-item {
+    margin-bottom: 40px;
+}
+
+.hike-info {
+    padding: 0 15px;
+    position: relative;
+}
+
+.hike-info_upper {
+    margin-bottom: 10px;
+}
+
+.hike-info_middle {
+    margin-bottom: 10px;
+}
+
+.hike-title {
+    display: inline-block;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.hike-people {
+    display: inline-block;
+    color: steelblue;
+    font-size: 12px;
+    vertical-align: middle;
+}
+
+.submit-request {
+    background: none;
+    border: none;
+    outline: none;
+    font-family: myriad-regular;
+    border: 1px solid black;
+    padding: 7px 14px;
+    position: absolute;
+    right: 15px;
+    top: -5px;
+}
+
+.submit-request:hover {
+    color: white;
+    background: darkslategrey;
+}
+
+.dates-block {
+    font-size: 12px;
+    display: inline-block;
+    color: steelblue;
+    vertical-align: middle;
+    margin-right: 7px;
+}
+

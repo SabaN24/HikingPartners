@@ -8,7 +8,6 @@
 --%>
 <%@ page contentType="text/html; charset=UTF-8" %>
 
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <div class="hike_home main-content" id="home">
     <div class="description-block">
         <div class="description-wrapper">
@@ -21,7 +20,7 @@
                 </div>
                 <div class="description-header__right">
                             <span title="ადამიანების მაქსიმალური რაოდენობა" style="margin-right: 30px;"><i
-                                    class="fa fa-user" aria-hidden="true"></i> {{aboutModel.maxPeople}}</span>
+                                    class="fa fa-user" aria-hidden="true"></i> {{aboutModel.maxPeople}} </span>
                     <span title="გამგზავრების თარიღი" style="margin-right: 20px;"><i class="fa fa-arrow-up"
                                                                                      aria-hidden="true"></i> {{aboutModel.startDate | cutTime}}</span>
                     <span title="ჩამოსვლის თარიღი"><i class="fa fa-arrow-down" aria-hidden="true"></i> {{aboutModel.endDate | cutTime}}</span>
@@ -33,7 +32,7 @@
                 {{aboutModel.description}}
             </div>
         </div>
-        <div class="comments-count">{{aboutModel.comments.length}} comments.</div>
+        <div class="comments-count">{{aboutModel.comments.length}} comment<span v-show="aboutModel.comments.length != 1">s</span></div>
         <div class="comments-block">
             <div class="comments-block-inner">
                 <ul class="comments-list" v-for="(comment, index) in aboutModel.comments">
@@ -76,10 +75,9 @@
 
 <script>
     Vue.filter('cutTime', function (value) {
-        if(!value) return "";
+        if (!value) return "";
         return value.substr(0, value.length - 3);
     });
-    var hikeId = <%=request.getParameter("hikeId") == null ? 1 : request.getParameter("hikeId")%>;
     var ws = new WebSocket("ws://localhost:8080/HikeCommentsSocket/" + hikeId);
     var app = new Vue({
         el: '#vueapp',
@@ -101,7 +99,9 @@
         methods: {
             fetchData: function () {
                 var th = this;
-                axios.post("/HikeCommentsServlet?hikeId=" + hikeId, {}).then(function(response){
+                console.log("fasdadfs")
+                axios.post("/HikeCommentsServlet?hikeId=" + hikeId, {}).then(function (response) {
+                    console.log(response);
                     th.aboutModel = response.data;
                 });
             },

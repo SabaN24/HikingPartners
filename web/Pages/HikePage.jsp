@@ -12,9 +12,13 @@
   To change this template use File | Settings | File Templates.
 --%>
 <div id="vueapp">
+    <script>
+        var hikeId = <%= Integer.parseInt(request.getParameter("hikeId"))%>;
+    </script>
     <setTitle>
         <%
             DefaultModel defaultModel = (DefaultModel) request.getAttribute(DefaultModel.ATTR);
+            int hikeId = defaultModel.getId();
             out.print(defaultModel.getName());
         %>
     </setTitle>
@@ -39,7 +43,7 @@
         </div>
         <nav>
             <ul class="nav-list">
-                <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Home' }"><a href="/HikePage/Home" class="nav-link"><i
+                <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Home' }"><a href='<%= "/HikePage/Home?hikeId=" + hikeId%>' class="nav-link"><i
                         class="fa fa-home fa-pages"></i> Hike
                     Page</a></li>
                 <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Items' }"><a href="#"
@@ -56,7 +60,7 @@
                                                                                                    class="nav-link"><i
                         class="fa fa-map-marker fa-pages"></i>
                     Locations</a></li>
-                <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Feed' }"><a href="/HikePage/Feed" class="nav-link"><i
+                <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Feed' }"><a href='<%= "/HikePage/Feed?hikeId=" + hikeId%>' class="nav-link"><i
                         class="fa fa-rss-square fa-pages"></i> Feed</a>
                 </li>
             </ul>
@@ -74,7 +78,6 @@
         </div>
 
         <jsp:include page='<%= fullSubPage %>'/>
-        <script>document.querySelectorAll("title")[0].innerHTML = document.querySelectorAll("setTitle")[0].innerHTML;</script>
 
     </main>
 </div>
