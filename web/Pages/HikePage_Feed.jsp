@@ -7,7 +7,6 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-
 <div class="hike_feed ">
     <div class="post-block main-content">
         <div class = "new-post">
