@@ -33,7 +33,7 @@
                 {{aboutModel.description}}
             </div>
         </div>
-        <div class="comments-count">{{aboutModel.comments.length}} comments.</div>
+        <div class="comments-count">{{aboutModel.comments.length}} comment<span v-show="aboutModel.comments.length != 1">s</span></div>
         <div class="comments-block">
             <div class="comments-block-inner">
                 <ul class="comments-list" v-for="(comment, index) in aboutModel.comments">

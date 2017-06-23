@@ -74,7 +74,6 @@
         </div>
 
         <jsp:include page='<%= fullSubPage %>'/>
-        <script>document.querySelectorAll("title")[0].innerHTML = document.querySelectorAll("setTitle")[0].innerHTML;</script>
 
     </main>
 </div>
