@@ -96,4 +96,49 @@ public class DatabaseConnector {
         return rs;
     }
 
+    /*
+     * Added this 3 methods Because UserIndoDM is using PreparedStatement instead of Statement
+     * Someone must change this class and all other classes which using Statement and not PreparedStatement.
+     */
+
+    /**
+     * returning prepared statement depending on query
+     * @param query
+     * @return PreparedStatement
+     */
+    public PreparedStatement getPreparedStatement(String query){
+        try {
+            return connection.prepareStatement(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * Updating data in database using PreparedStatement
+     * @param st
+     */
+    public void updateDataWithPreparedStatement(PreparedStatement st){
+        try {
+            st.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Getting data from database using PreparedStatement
+     * @param st
+     * @return
+     */
+    public ResultSet getDataWithPreparedStatement(PreparedStatement st) {
+        ResultSet result = null;
+        try {
+            result = st.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 }

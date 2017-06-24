@@ -6,7 +6,7 @@
 </head>
 <body>
    <%
-       RequestDispatcher rd = request.getRequestDispatcher("Home");
+       RequestDispatcher rd = request.getRequestDispatcher("LoginServlet");
        rd.forward(request, response);
    %>
 

@@ -15,11 +15,16 @@ CREATE TABLE IF NOT EXISTS hikes (
 
 CREATE TABLE IF NOT EXISTS users (
 	ID INT AUTO_INCREMENT NOT NULL,
+    facebook_ID bigint NOT NULL,
     first_name NVARCHAR(10) NOT NULL,
     last_name NVARCHAR(20) NOT NULL,
     img_url nvarchar(50),
+    birth_date DATE,
+    gender ENUM('male', 'female'),
+    email VARCHAR(50) NOT NULL,
     PRIMARY KEY(ID)
 );
+
 
 CREATE TABLE IF NOT EXISTS roles (
     ID INT AUTO_INCREMENT NOT NULL,
@@ -137,12 +142,13 @@ CREATE TABLE IF NOT EXISTS comment_likes (
 
 -- ----------------------------------------------------------------------------- -- 
 
-INSERT INTO users VALUES
-(1, 'Nodo', 'Sairmeli', ''),
-(2, 'Vache', 'Katsadze', ''),
-(3, 'Levaniko', 'Beroshvili', ''),
-(4, 'Sandro', 'Jiqia', ''),
-(5, 'Saba', 'Natroshvili', '');
+INSERT INTO users (id, facebook_id, first_name, last_name, img_url, email) VALUES
+(1, 1,'Nodo', 'Sairmeli', '', ''),
+(2, 2,'Vache', 'Katsadze', '', ''),
+(3, 3,'Levaniko', 'Beroshvili', '', ''),
+(4, 4,'Sandro', 'Jiqia', '', ''),
+(5, 5,'Saba', 'Natroshvili', '', '');
+
 
 INSERT INTO location_types VALUES
 (1, 'ZGVAAAA');
@@ -176,18 +182,7 @@ INSERT INTO hike_to_user VALUES
 INSERT INTO cover_photos VALUES
 (1, 1, 'მაგარი ლოკაცია დზნ', 1, '');
 
-INSERT INTO comment_likes VALUES
-(1, 1, 1),
-(2, 2, 2),
-(3, 3, 3),
-(4, 3, 4),
-(5, 3, 5),
-(6, 3, 1),
-(7, 4, 2),
-(8, 4, 3),
-(9, 5, 4),
-(10, 5, 5),
-(11, 5, 1);
+
 
 insert into posts values
 (1,"9ზე ოკრიბაშ იყავით ბერლინში მივდივართ", 1, 4, now()),
@@ -211,7 +206,8 @@ update hikes set hike_name = "მოლაშქრეთა კლუბი ა
 
 -- insert into posts (hike_id, post_text, user_id, post_time) values(1,"vache", 1, str_to_date('1989.12.01', '%Y.%m.%d'));
 
--- select  * from posts;
+-- select  * from users;
+
 -- select  * from comments;
 -- select  * from comment_likes;
 -- insert into comments(comment_text, hike_ID, user_ID, comment_time, privacy_type, post_ID)values ( 'TestTestTest', 1, 1, '15/06/17 21:05:37', 2, 14);

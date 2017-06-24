@@ -34,7 +34,7 @@ html, body {
 
 body {
     font-family: myriad-regular, bpg-arial, Arial, sans-serif;
-    background-image: url(../img/main_background.jpg);
+    background-image: url(../img/main_background_dark.png);
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -82,9 +82,17 @@ header {
 }
 
 footer {
-    background: #333;
+    text-align: center;
     height: 40px;
     margin-top: -40px;
+}
+
+.footer-info{
+    color: rgba(255, 255, 255, 0.66);
+    top: 30%;
+    font-family: bpg-arial,Arial, sans-serif;
+    position: relative;
+    font-size: 13px;
 }
 
 .header-left {

@@ -65,6 +65,8 @@
     <jsp:include page='<%=(String)request.getAttribute("page")%>' />
     <script>document.querySelectorAll("title")[0].innerHTML = document.querySelectorAll("setTitle")[0].innerHTML;</script>
 </div>
-<footer></footer>
+<footer>
+    <div class="footer-info"> All Rights Reserved  © HikingPartners.ge  2017</div>
+</footer>
 </body>
 </html>
