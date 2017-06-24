@@ -14,7 +14,7 @@ public class UserInfoDM {
     private DatabaseConnector databaseConnector;
     private static UserInfoDM userInfoDM = null;
 
-    private UserInfoDM(){}
+    private UserInfoDM(){databaseConnector = DatabaseConnector.getInstance();}
 
     public static UserInfoDM getInstance() {
         if (userInfoDM == null) {

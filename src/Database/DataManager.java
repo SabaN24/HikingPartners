@@ -24,7 +24,9 @@ public class DataManager {
 
     private static DataManager dm = null;
 
-    private DataManager() {}
+    private DataManager() {
+        databaseConnector = DatabaseConnector.getInstance();
+    }
 
     public static DataManager getInstance() {
         if (dm == null) {

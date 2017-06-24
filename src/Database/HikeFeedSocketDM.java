@@ -17,7 +17,7 @@ public class HikeFeedSocketDM {
 
     private static HikeFeedSocketDM socketDM = null;
 
-    private HikeFeedSocketDM() {}
+    private HikeFeedSocketDM() {databaseConnector = DatabaseConnector.getInstance();}
 
     public static HikeFeedSocketDM getInstance(){
         if(socketDM == null){
