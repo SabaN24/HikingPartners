@@ -83,7 +83,7 @@ public class DataManager {
             while (hikeResultSet.next()) {
                 Date startDate = hikeResultSet.getDate("start_date");
                 Date endDate = hikeResultSet.getDate("end_date");
-                String description = hikeResultSet.getString("desxription");
+                String description = hikeResultSet.getString("description");
                 int maxPeople = hikeResultSet.getInt("max_people");
                 List<Comment> comments = getComments("-1", "" + id, 1, userID);
                 aboutModel = new AboutModel(description, startDate, endDate, maxPeople, comments);
