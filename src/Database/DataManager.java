@@ -24,9 +24,7 @@ public class DataManager {
 
     private static DataManager dm = null;
 
-    private DataManager() {
-        databaseConnector = DatabaseConnector.getInstance();
-    }
+    private DataManager() {}
 
     public static DataManager getInstance() {
         if (dm == null) {
@@ -44,16 +42,16 @@ public class DataManager {
         ResultSet allHikes = databaseConnector.getData("Select * from hikes;");
         try {
             while (allHikes.next()) {
-                int id = allHikes.getInt(1);
-                Date startDate = allHikes.getDate(3);
-                Date endDate = allHikes.getDate(4);
-                String descrption = allHikes.getString(5);
-                int maxPeople = allHikes.getInt(6);
+                int id = allHikes.getInt("ID");
+                Date startDate = allHikes.getDate("start_date");
+                Date endDate = allHikes.getDate("end_date");
+                String descrption = allHikes.getString("description");
+                int maxPeople = allHikes.getInt("max_people");
                 ResultSet joinedPeopleRS = databaseConnector.callProcedure("get_joined_people",
                         Arrays.asList("" + id));
                 int joinedPeople = 0;
                 if (joinedPeopleRS.next()) {
-                    joinedPeople = joinedPeopleRS.getInt(1);
+                    joinedPeople = joinedPeopleRS.getInt("count");
                 }
                 DefaultModel defaultModel = getDefaultModel(id);
                 HikeInfo current = new HikeInfo(id, defaultModel.getName(), defaultModel.getCreator(),
@@ -81,10 +79,10 @@ public class DataManager {
         ResultSet hikeResultSet = databaseConnector.getData(hikeQuery);
         try {
             while (hikeResultSet.next()) {
-                Date startDate = hikeResultSet.getDate(3);
-                Date endDate = hikeResultSet.getDate(4);
-                String description = hikeResultSet.getString(5);
-                int maxPeople = hikeResultSet.getInt(6);
+                Date startDate = hikeResultSet.getDate("start_date");
+                Date endDate = hikeResultSet.getDate("end_date");
+                String description = hikeResultSet.getString("desxription");
+                int maxPeople = hikeResultSet.getInt("max_people");
                 List<Comment> comments = getComments("-1", "" + id, 1, userID);
                 aboutModel = new AboutModel(description, startDate, endDate, maxPeople, comments);
             }
@@ -129,17 +127,17 @@ public class DataManager {
         }
         try {
             while (commentsResultSet.next()) {
-                int commentId = commentsResultSet.getInt(1);
-                String comment = commentsResultSet.getString(2);
-                int authorID = commentsResultSet.getInt(3);
+                int commentId = commentsResultSet.getInt("ID");
+                String comment = commentsResultSet.getString("comment_text");
+                int authorID = commentsResultSet.getInt("user_ID");
                 MiniUser author = getUserById(authorID);
 
-                Date date = (Date) commentsResultSet.getObject(4);
+                Date date = (Date) commentsResultSet.getObject("comment_time");
 
                 ResultSet likeResultSet = databaseConnector.callProcedure("get_comment_likes", Arrays.asList("" + commentId));
                 int likeNum = 0;
                 if (likeResultSet.next()) {
-                    likeNum = likeResultSet.getInt(1);
+                    likeNum = likeResultSet.getInt("count");
                 }
                 Comment currComment = new Comment(commentId, comment, -1, author, date, likeNum, userHasLiked(likes, userID, commentId));
                 comments.add(currComment);
@@ -189,7 +187,7 @@ public class DataManager {
         String name = null;
         try {
             while (hikeResultSet.next()) {
-                name = hikeResultSet.getString(2);
+                name = hikeResultSet.getString("hike_name");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -212,16 +210,16 @@ public class DataManager {
         List<Post> posts = new ArrayList<>();
         try {
             while (rs.next()) {
-                int id = rs.getInt(1);
-                String text = rs.getString(2);
-                int authorID = rs.getInt(4);
-                Date postDate = (Date) rs.getObject(5);
+                int id = rs.getInt("ID");
+                String text = rs.getString("post_text");
+                int authorID = rs.getInt("user_ID");
+                Date postDate = (Date) rs.getObject("post_time");
                 MiniUser user = getUserById(authorID);
                 List<Comment> comments = getComments("" + id, "" + hikeID, 2, userID);
                 ResultSet likesSet = databaseConnector.callProcedure("get_post_likes", Arrays.asList("" + id));
                 int likes = 0;
                 if (likesSet.next()) {
-                    likes = likesSet.getInt(1);
+                    likes = likesSet.getInt("count");
                 }
                 Post p = new Post(id, text, user, postDate, comments, likes);
                 posts.add(p);
@@ -255,10 +253,10 @@ public class DataManager {
         MiniUser creator = null;
         try {
             while (rs.next()) {
-                int id = rs.getInt(1);
-                String firstName = rs.getString(2);
-                String lastName = rs.getString(3);
-                String imgUrl = rs.getString(4);
+                int id = rs.getInt("ID");
+                String firstName = rs.getString("first_name");
+                String lastName = rs.getString("last_name");
+                String imgUrl = rs.getString("img_url");
                 creator = new MiniUser(id, firstName, lastName, imgUrl);
             }
         } catch (SQLException e) {
@@ -279,10 +277,10 @@ public class DataManager {
         List<Photo> coverPhotos = new ArrayList<>();
         try {
             while (rs.next()) {
-                int id = rs.getInt(1);
-                String url = rs.getString(2);
-                String name = rs.getString(3);
-                String description = rs.getString(4);
+                int id = rs.getInt("ID");
+                String url = rs.getString("img_url");
+                String name = rs.getString("loc_name");
+                String description = rs.getString("description");
                 Photo photo = new Photo(id, url, name, description);
                 coverPhotos.add(photo);
             }

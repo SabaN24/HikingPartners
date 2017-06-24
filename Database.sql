@@ -225,7 +225,7 @@ DELIMITER $$
 
 CREATE PROCEDURE get_creator_info(user_id INT)
 BEGIN
-SELECT users.id, users.first_name, users.last_name, users.img_url
+SELECT users.id as ID, users.first_name as first_name, users.last_name as last_name, users.img_url as img_url
 FROM hike_to_user INNER JOIN users
 ON users.id = user_id
 WHERE hike_to_user.user_ID = user_id AND role_id = 1;
@@ -237,7 +237,7 @@ DELIMITER $$
 
 CREATE PROCEDURE get_cover_photos(hike_id INT)
 BEGIN
-SELECT cover_photos.id, cover_photos.img_url, locations.loc_name, cover_photos.description
+SELECT cover_photos.id as ID, cover_photos.img_url as img_url, locations.loc_name as loc_name, cover_photos.description as description
 FROM cover_photos INNER JOIN locations
 ON cover_photos.location_ID = locations.id
 WHERE cover_photos.hike_ID = hike_id;
@@ -248,7 +248,7 @@ DELIMITER $$
 
 CREATE PROCEDURE get_public_comments(hike_id INT)
 BEGIN
-SELECT comments.ID, comments.comment_text, comments.user_ID, comments.comment_time
+SELECT comments.ID as ID, comments.comment_text as comment_text, comments.user_ID user_ID, comments.comment_time comment_time
 FROM comments
 WHERE comments.hike_id = hike_id AND comments.privacy_type = 1;
 
@@ -258,7 +258,7 @@ DELIMITER $$
 
 create PROCEDURE get_private_comments(post_id INT)
 BEGIN
-SELECT comments.ID, comments.comment_text, comments.user_ID, comments.comment_time
+SELECT comments.ID ID, comments.comment_text comment_text, comments.user_ID user_ID, comments.comment_time comment_time
 FROM comments
 WHERE comments.post_ID = post_id AND comments.privacy_type = 2;
 
@@ -268,7 +268,7 @@ DELIMITER $$
 
 CREATE PROCEDURE get_comment_likes(comment_id INT)
 BEGIN
-SELECT COUNT(comment_ID)
+SELECT COUNT(comment_ID) as count
 FROM comment_likes
 WHERE comment_likes.comment_id = comment_id;
 
@@ -278,7 +278,7 @@ DELIMITER $$
 
 CREATE PROCEDURE get_post_likes(post_id INT)
 BEGIN
-SELECT COUNT(post_ID)
+SELECT COUNT(post_ID) as count
 FROM post_likes
 WHERE post_likes.post_id = post_id;
 
@@ -304,7 +304,7 @@ DELIMITER $$
  
 CREATE PROCEDURE get_joined_people(hike_id INT)
 BEGIN
-SELECT COUNT(user_id)
+SELECT COUNT(user_id) as count
 FROM hike_to_user
 WHERE hike_to_user.hike_id = hike_id;
 

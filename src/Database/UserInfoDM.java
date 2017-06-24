@@ -14,9 +14,7 @@ public class UserInfoDM {
     private DatabaseConnector databaseConnector;
     private static UserInfoDM userInfoDM = null;
 
-    private UserInfoDM(){
-        databaseConnector = DatabaseConnector.getInstance();
-    }
+    private UserInfoDM(){}
 
     public static UserInfoDM getInstance() {
         if (userInfoDM == null) {
@@ -65,13 +63,13 @@ public class UserInfoDM {
      * @return boolean
      */
     public boolean isUserRegistered(long facebookID){
-        String query = "select count(facebook_ID) from users where facebook_id = ?";
+        String query = "select count(facebook_ID) count from users where facebook_id = ?";
         PreparedStatement checkUser = databaseConnector.getPreparedStatement(query);
         try {
             checkUser.setLong(1, facebookID);
             ResultSet resultSet = databaseConnector.getDataWithPreparedStatement(checkUser);
             if (resultSet.next()) {
-                int count = resultSet.getInt(1);
+                int count = resultSet.getInt("count");
                 if(count == 0) return false;
                 else if(count == 1) return true;
             }
@@ -109,7 +107,7 @@ public class UserInfoDM {
             returnIDst.setLong(1, facebookID);
             ResultSet resultSet = databaseConnector.getDataWithPreparedStatement(returnIDst);
             if (resultSet.next()) {
-                return resultSet.getInt(1);
+                return resultSet.getInt("ID");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -129,14 +127,14 @@ public class UserInfoDM {
             statement.setLong(1, facebookID);
             ResultSet resultSet = databaseConnector.getDataWithPreparedStatement(statement);
             if (resultSet.next()) {
-                int userID = resultSet.getInt(1);
-                long facebookId = resultSet.getLong(2);
-                String firstName = resultSet.getString(3);
-                String lastName = resultSet.getString(4);
-                String imgUrl = resultSet.getString(5);
-                Date birthDate = resultSet.getDate(6);
-                String gender = resultSet.getString(7);
-                String email = resultSet.getString(8);
+                int userID = resultSet.getInt("ID");
+                long facebookId = resultSet.getLong("facebook_id");
+                String firstName = resultSet.getString("first_name");
+                String lastName = resultSet.getString("last_name");
+                String imgUrl = resultSet.getString("img_url");
+                Date birthDate = resultSet.getDate("birth_date");
+                String gender = resultSet.getString("gender");
+                String email = resultSet.getString("email");
                 User user = new User(userID, firstName, lastName, imgUrl, facebookId, birthDate, gender, email);
                 return user;
             }
