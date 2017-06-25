@@ -18,7 +18,6 @@ public class LoginServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher rd = request.getRequestDispatcher("/Pages/LoginPage.jsp");
-        rd.forward(request, response);
+        Helper.view("LoginPage", request, response);
     }
 }

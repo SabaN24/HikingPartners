@@ -1,66 +1,4 @@
-@font-face {
-    font-family: myriad-regular;
-    src: url(../fonts/MyriadPro-Regular.otf);
-}
 
-@font-face {
-    font-family: alk-rounded-mtav;
-    src: url(../fonts/alk-rounded-mtav-med-webfont.ttf);
-}
-
-@font-face {
-    font-family: bpg-arial;
-    src: url(../fonts/bpg_arial_2009.ttf);
-}
-
-html {
-    box-sizing: border-box;
-}
-
-setTitle {
-    display: none;
-}
-
-*, *:before, *:after {
-    box-sizing: inherit;
-}
-
-html, body {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: myriad-regular, bpg-arial, Arial, sans-serif;
-    background-image: url(../img/main_background_dark.png);
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-}
-
-ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-a:link, a:visited, a:hover, a:active {
-    text-decoration: none;
-    color: inherit;
-}
-
-.clearfix:before,
-.clearfix:after {
-    content: "";
-    display: table;
-}
-
-.clearfix:after {
-    clear: both;
-}
 
 header {
     height: 80px;
@@ -85,13 +23,12 @@ footer {
     text-align: center;
     height: 40px;
     margin-top: -40px;
+    line-height: 40px;
 }
 
 .footer-info{
     color: rgba(255, 255, 255, 0.66);
-    top: 30%;
     font-family: bpg-arial,Arial, sans-serif;
-    position: relative;
     font-size: 13px;
 }
 
@@ -523,19 +460,21 @@ main {
 
 .submit-request {
     background: none;
-    border: none;
     outline: none;
-    font-family: myriad-regular;
+    font-family: myriad-regular, Helvetica, sans-serif;
     border: 1px solid black;
     padding: 7px 14px;
     position: absolute;
     right: 15px;
     top: -5px;
+    cursor: pointer;
+    transition: color .3s, background .3s, border .3s;
 }
 
 .submit-request:hover {
     color: white;
     background: darkslategrey;
+    border-color: transparent;
 }
 
 .dates-block {

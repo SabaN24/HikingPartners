@@ -1,0 +1,63 @@
+@font-face {
+    font-family: myriad-regular;
+    src: url(../fonts/MyriadPro-Regular.otf);
+}
+
+@font-face {
+    font-family: alk-rounded-mtav;
+    src: url(../fonts/alk-rounded-mtav-med-webfont.ttf);
+}
+
+@font-face {
+    font-family: bpg-arial;
+    src: url(../fonts/bpg_arial_2009.ttf);
+}
+
+html {
+    box-sizing: border-box;
+}
+
+setTitle {
+    display: none;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: myriad-regular, bpg-arial, Arial, sans-serif;
+    background-image: url(../img/main_background_dark.png);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+a:link, a:visited, a:hover, a:active {
+    text-decoration: none;
+    color: inherit;
+}
+
+.clearfix:before,
+.clearfix:after {
+    content: "";
+    display: table;
+}
+
+.clearfix:after {
+    clear: both;
+}

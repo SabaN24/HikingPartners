@@ -1,4 +1,5 @@
-<%@ page import="Models.MiniUser" %><%--
+<%@ page import="Models.MiniUser" %>
+<%@ page import="Servlets.Helper" %><%--
   Created by IntelliJ IDEA.
   User: Levani
   Date: 13.06.2017
@@ -16,14 +17,17 @@
     <title></title>
     <link rel="stylesheet" href="../Content/css/normalize.css">
     <link rel="stylesheet" href="../Content/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../Content/css/common.css">
+    <link rel="stylesheet" href="../Content/css/login-page.css">
     <link rel="stylesheet" href="../Content/css/main.css">
-    <script src="../Scripts/axios.min.js"></script>
-    <script src="../Scripts/vue.min.js"></script>
 </head>
 <body>
 <%
+    String pageName = (String)request.getAttribute("page");
     MiniUser loggedInUser = (MiniUser)request.getAttribute("loggedInUser");
-    if(loggedInUser != null){
+    if(loggedInUser == null){
+        Helper.view("LoginPage", request, response);
+    }
 %>
 <script>
     var user = {
@@ -34,6 +38,7 @@
     };
 </script>
 <div class="wrapper clearfix">
+    <% if(!pageName.equals("LoginPage.jsp")){ %>
     <header>
         <div class="header-left">
             <div class="logo-block">
@@ -55,18 +60,17 @@
                     </div>
                 </a>
                 <div class="logout-block"><a href="#">Log out</a></div>
-                <%} else {%>
-                <div class="logout-block"><a href="#">Log in</a></div>
-                <%}%>
             </div>
         </div>
 
     </header>
-    <jsp:include page='<%=(String)request.getAttribute("page")%>' />
+    <% } %>
+    <jsp:include page='<%= pageName %>' />
     <script>document.querySelectorAll("title")[0].innerHTML = document.querySelectorAll("setTitle")[0].innerHTML;</script>
 </div>
 <footer>
     <div class="footer-info"> All Rights Reserved  © HikingPartners.ge  2017</div>
 </footer>
+
 </body>
 </html>

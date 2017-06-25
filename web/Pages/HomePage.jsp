@@ -45,6 +45,9 @@
     </ul>
 </div>
 
+<script src="../Scripts/axios.min.js"></script>
+<script src="../Scripts/vue.min.js"></script>
+
 <script>
     Vue.filter('cutTime', function (value) {
         if (!value) return "";
@@ -61,11 +64,10 @@
             var th = this;
             axios.post("/HikesListServlet", {}).then(function (response) {
                 th.hikes = response.data;
-                console.log(th.hikes[0].coverPhotos[0].locationName);
             });
         },
 
-        methods: {},
+        methods: {}
 
 
     });
