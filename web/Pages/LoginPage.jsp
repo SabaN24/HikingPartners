@@ -25,6 +25,31 @@
 </div>
 
 <script>
+
+    function post(path, params, method) {
+        method = method || "post"; // Set method to post by default if not specified.
+
+        // The rest of this code assumes you are not using a library.
+        // It can be made less wordy if you use one.
+        var form = document.createElement("form");
+        form.setAttribute("method", method);
+        form.setAttribute("action", path);
+
+        for(var key in params) {
+            if(params.hasOwnProperty(key)) {
+                var hiddenField = document.createElement("input");
+                hiddenField.setAttribute("type", "hidden");
+                hiddenField.setAttribute("name", key);
+                hiddenField.setAttribute("value", params[key]);
+
+                form.appendChild(hiddenField);
+            }
+        }
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+
     window.fbAsyncInit = function() {
         FB.init({
             appId      : '237100913454789',
@@ -47,15 +72,25 @@
         FB.getLoginStatus(function(response) {
             FB.login(function (response) {
                 if (response.status === 'connected')
-                //getData();
+                loginUser(response.accessToken);
                     window.location = '/Home'
             }, {scope: 'user_birthday, email'});
         });
     }
 
-    function getData() {
+    function loginUser(accessToken) {
         FB.api('/me?fields=name,email,age_range,link,id,picture,gender,birthday', function (response) {
-            document.getElementById('status').innerHTML = response.birthday;
+            post("/LoginServlet", {
+                accessToken: accessToken,
+                name: response.name,
+                email: response.email,
+                age_range: response.age_range,
+                link: response.link,
+                id: response.id,
+                picture: response.picture,
+                gender: response.gender,
+                birthday: response.birthday
+            });
         });
     }
 
