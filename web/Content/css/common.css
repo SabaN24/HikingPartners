@@ -47,7 +47,7 @@ ul {
     list-style: none;
 }
 
-a:link, a:visited, a:hover, a:active {
+a, a:visited, a:hover, a:active {
     text-decoration: none;
     color: inherit;
 }
@@ -60,4 +60,13 @@ a:link, a:visited, a:hover, a:active {
 
 .clearfix:after {
     clear: both;
+}
+
+.btn {
+    background: teal;
+    border: none;
+    outline: none;
+    padding: 5px 14px;
+    cursor: pointer;
+    color: white;
 }

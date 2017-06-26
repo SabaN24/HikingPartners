@@ -18,7 +18,6 @@
     <link rel="stylesheet" href="../Content/css/normalize.css">
     <link rel="stylesheet" href="../Content/css/font-awesome.min.css">
     <link rel="stylesheet" href="../Content/css/common.css">
-    <link rel="stylesheet" href="../Content/css/login-page.css">
     <link rel="stylesheet" href="../Content/css/main.css">
 </head>
 <body>
@@ -49,7 +48,7 @@
         <div class="header-right">
             <div class="profile-block">
 
-                <a href="#" class="profile-link">
+                <a href="/Profile" class="profile-link">
                     <div class="avatar-block">
 
                     </div>
