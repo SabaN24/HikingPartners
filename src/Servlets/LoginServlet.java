@@ -34,7 +34,12 @@ public class LoginServlet extends HttpServlet {
             String picture_url = request.getParameter("picture_url");
             String gender = request.getParameter("gender");
             String birthday = request.getParameter("birthday");
-            Date birthDate = birthday.equals("undefined") ? null : new Date(300000);
+            Date birthDate = null;
+            if(!birthday.equals("undefined")){
+                String birthDayArr[] = birthday.split("/");
+                String birthdaySql = birthDayArr[2] + "-" + birthDayArr[1] + "-" + birthDayArr[0];
+                birthDate = Date.valueOf(birthdaySql);
+            }
             int userID = -1;
             if(dm.isUserRegistered(id)){
                 userID = dm.updateUserInfo(id, firstname, lastname, picture_url, birthDate, gender, email);

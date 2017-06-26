@@ -49,7 +49,7 @@
             <div class="profile-block">
 
                 <a href="/Profile" class="profile-link">
-                    <div class="avatar-block">
+                    <div class="avatar-block" style="background-image: url(<%= loggedInUser.getProfilePictureAddress() %>) ">
 
                     </div>
                     <div class="hidden logged-user-id"><%=loggedInUser.getId()%></div>

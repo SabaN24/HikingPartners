@@ -37,7 +37,7 @@
             <div class="comments-block-inner">
                 <ul class="comments-list" v-for="(comment, index) in aboutModel.comments">
                     <li class="comment">
-                        <div class="avatar-block"></div>
+                        <div class="avatar-block" v-bind:style="{ backgroundImage: 'url(' + comment.user.profilePictureAddress + ')' }"></div>
                         <div class="comment-info">
                             <div class="comment-info__upper">
                                 <div class="comment-author">
@@ -60,7 +60,7 @@
                 </ul>
                 <div class="comment">
                     <div class="add-comment">
-                        <div class="avatar-block">
+                        <div class="avatar-block" v-bind:style="{ backgroundImage: 'url(' + user.profilePictureAddress + ')' }">
                         </div>
                         <form action="HikePageServlet" v-on:submit.prevent="sendComment" method="post">
                             <input class="comment-input" type="text" autocomplete="off" name="add-comment"

@@ -75,7 +75,6 @@ footer {
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
-    background-attachment: fixed;
 }
 
 .profile-block .avatar-block {
@@ -360,7 +359,7 @@ main {
 }
 
 .post-author-avatar {
-    background: lightseagreen;
+    background-color: lightseagreen;
     width: 50px;
     height: 50px;
     margin-right: 10px;

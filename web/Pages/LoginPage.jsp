@@ -74,14 +74,14 @@
             FB.login(function (response) {
                 if (response.status === 'connected')
                     loginUser(response.authResponse.accessToken);
-            }, {scope: 'user_birthday, email'});
+            }, {scope: 'public_profile,email,user_birthday'});
         });
     }
 
     function loginUser(accessToken) {
-        FB.api('/me?fields=name,email,age_range,link,id,picture,gender,birthday', function (response) {
-//            console.log("----fb data----");
-//            console.log(response);
+        FB.api('/me?fields=name,email,age_range,link,id,picture.width(1000).height(1000),gender,birthday', function (response) {
+            console.log("----fb data----");
+            console.log(response);
             post("/Login", {
                 accessToken: accessToken,
                 name: response.name,

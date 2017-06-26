@@ -10,7 +10,7 @@
 <div class="hike_feed ">
     <div class="post-block main-content">
         <div class = "new-post">
-            <div class="avatar-block post-author-avatar"></div>
+            <div class="avatar-block post-author-avatar" v-bind:style="{ backgroundImage: 'url(' + user.profilePictureAddress + ')' }"></div>
             <form action="" class="post-form" v-on:submit.prevent="sendPost">
                 <input type="text" placeholder="Write something..." class="new-post-input" autocomplete="off" v-model="newPostText">
             </form>
@@ -18,7 +18,7 @@
     </div>
     <div class="post-block main-content" v-for="(post, index) in posts" >
         <div class = "post-upper">
-            <div class = "avatar-block post-author-avatar"></div>
+            <div class = "avatar-block post-author-avatar" v-bind:style="{ backgroundImage: 'url(' + post.user.profilePictureAddress + ')' }"></div>
             <div class="post-info">
                     <div class="post-author-name">
                         <span>{{post.user.firstName}} </span><span>{{post.user.lastName}}</span>
@@ -40,7 +40,7 @@
             <div class="comments-block-inner">
                 <ul class="comments-list" v-for="(comment, index) in post.comments">
                     <li class="comment">
-                        <div class="avatar-block"></div>
+                        <div class="avatar-block" v-bind:style="{ backgroundImage: 'url(' + comment.user.profilePictureAddress + ')' }"></div>
                         <div class="comment-info">
                             <div class="comment-info__upper">
                                 <div class="comment-author">
@@ -63,7 +63,7 @@
                 </ul>
                 <div class="comment">
                     <div class="add-comment">
-                        <div class="avatar-block">
+                        <div class="avatar-block"  v-bind:style="{ backgroundImage: 'url(' + user.profilePictureAddress + ')' }">
                         </div>
                         <form action="HikePageServlet" v-on:submit.prevent="sendComment(post.id)" method="post">
                             <input v-model="commentInputs[post.id]" class="comment-input" type="text" autocomplete="off" name="add-comment"
@@ -94,11 +94,14 @@
         data: {
             posts: [],
             commentInputs: {},
-            newPostText: ""
+            newPostText: "",
+            user: {}
         },
         //These functions will be called when page loads.
         created: function () {
-            this.fetchData()
+            this.fetchData();
+            this.user = user;
+            console.log(this.user);
         },
         updated: function () {
             document.getElementsByTagName("title")[0].innerHTML = document.getElementsByTagName("setTitle")[0].innerHTML;

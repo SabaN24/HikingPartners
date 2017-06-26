@@ -51,6 +51,7 @@ public class HikeCommentsWebSocketServer {
     @OnMessage
     public void handleMessage(String message, Session session, @PathParam("hikeId") int hikeId) {
         //JsonObject jsonMessage = reader.readObject();
+        calendar = Calendar.getInstance();
         Map<String, Object> jsonMessage = frontGson.fromJson(message, Map.class);
         if ("getComment".equals(jsonMessage.get("action"))) {
             addComment(jsonMessage, session, hikeId, "getComment");

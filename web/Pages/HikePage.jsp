@@ -19,6 +19,10 @@
         <%
             DefaultModel defaultModel = (DefaultModel) request.getAttribute(DefaultModel.ATTR);
             int hikeId = defaultModel.getId();
+            String fullSubPage = (String) request.getAttribute("subPage");
+            String subPage = fullSubPage.substring(9, fullSubPage.length() - 4);
+            MiniUser creator = defaultModel.getCreator();
+
             out.print(defaultModel.getName());
         %>
     </setTitle>
@@ -26,17 +30,12 @@
     </header>
     <aside>
         <div class="creator-block">
-            <div class="avatar-block">
+            <div class="avatar-block" style="background-image: url(<%= creator.getProfilePictureAddress() %>)">
 
             </div>
             <div class="name-block">
                 <div class="name-text">
-                    <%
-                        String fullSubPage = (String) request.getAttribute("subPage");
-                        String subPage = fullSubPage.substring(9, fullSubPage.length() - 4);
-                        MiniUser creator = defaultModel.getCreator();
-                        out.print(creator.getFirstName() + " " + creator.getLastName());
-                    %>
+                    <%= creator.getFirstName() + " " + creator.getLastName() %>
                 </div>
                 <div class="role-block">Creator</div>
             </div>
