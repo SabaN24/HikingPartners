@@ -1,3 +1,4 @@
+
 Create Database IF NOT EXISTS Hiking_Partners
 Default Character set UTF8;
 
@@ -18,7 +19,7 @@ CREATE TABLE IF NOT EXISTS users (
     facebook_ID bigint NOT NULL,
     first_name NVARCHAR(10) NOT NULL,
     last_name NVARCHAR(20) NOT NULL,
-    img_url nvarchar(50),
+    img_url nvarchar(500),
     birth_date DATE,
     gender ENUM('male', 'female'),
     email VARCHAR(50) NOT NULL,
