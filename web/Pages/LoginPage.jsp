@@ -72,22 +72,24 @@
         FB.getLoginStatus(function(response) {
             FB.login(function (response) {
                 if (response.status === 'connected')
-                loginUser(response.accessToken);
-                    window.location = '/Home'
+                    loginUser(response.authResponse.accessToken);
             }, {scope: 'user_birthday, email'});
         });
     }
 
     function loginUser(accessToken) {
         FB.api('/me?fields=name,email,age_range,link,id,picture,gender,birthday', function (response) {
+//            console.log("----fb data----");
+//            console.log(response);
             post("/LoginServlet", {
                 accessToken: accessToken,
                 name: response.name,
                 email: response.email,
-                age_range: response.age_range,
+                age_range_min: response.age_range.min,
+                age_range_max: response.age_range.max,
                 link: response.link,
                 id: response.id,
-                picture: response.picture,
+                picture_url: response.picture.data.url,
                 gender: response.gender,
                 birthday: response.birthday
             });
