@@ -58,7 +58,7 @@
                         <%=loggedInUser.getFirstName()%> <%=loggedInUser.getLastName()%>
                     </div>
                 </a>
-                <div class="logout-block"><a href="#">Log out</a></div>
+                <div class="logout-block"><a href="/Logout">Log out</a></div>
             </div>
         </div>
 
