@@ -81,7 +81,7 @@
         FB.api('/me?fields=name,email,age_range,link,id,picture,gender,birthday', function (response) {
 //            console.log("----fb data----");
 //            console.log(response);
-            post("/LoginServlet", {
+            post("/Login", {
                 accessToken: accessToken,
                 name: response.name,
                 email: response.email,

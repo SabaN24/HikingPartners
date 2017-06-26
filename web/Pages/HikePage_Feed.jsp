@@ -147,7 +147,6 @@
                     action: "getComment",
                     data: {
                         comment: newCommentText + "",
-                        userID: user.id + "",
                         postID: postId + ""
                     }
                 }));
@@ -160,7 +159,6 @@
                     action: "getPost",
                     data: {
                         post: this.newPostText + "",
-                        userID: user.id + ""
                     }
                 }));
                 this.newPostText = "";
@@ -176,7 +174,6 @@
                     data: {
                         postID: "" + postID,
                         commentID: "" + commentID,
-                        userID: user.id
                     }
                 }));
             }

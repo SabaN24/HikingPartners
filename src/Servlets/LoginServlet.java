@@ -15,7 +15,7 @@ import java.sql.Date;
 /**
  * Created by Levani on 19.06.2017.
  */
-@WebServlet("/LoginServlet")
+@WebServlet("/Login")
 public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
@@ -37,16 +37,16 @@ public class LoginServlet extends HttpServlet {
             Date birthDate = birthday.equals("undefined") ? null : new Date(300000);
             int userID = -1;
             if(dm.isUserRegistered(id)){
-                userID = dm.getUserByFacebookkID(id).getId();
+                userID = dm.updateUserInfo(id, firstname, lastname, picture_url, birthDate, gender, email);
             }else {
                 userID = dm.registerUser(id, firstname, lastname, picture_url, birthDate, gender, email);
             }
             HttpSession session = request.getSession();
             session.setAttribute("userID", userID);
-            Helper.view("HomePage", request, response);
+            Helper.servlet("/Home", request, response);
         }catch(Exception e){
             int x = 5;
-            //anu vigac chalichobs shemosvlas vinc realurad fbti ar daloginebula da am shemtxvevashi ar unda shevushvat.
+            doGet(request, response);
         }
     }
 

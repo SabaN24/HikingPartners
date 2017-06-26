@@ -21,15 +21,16 @@ public class Helper {
     public static void view(String page, HttpServletRequest request, HttpServletResponse response)  {
         HttpSession session = request.getSession();
         DataManager dataManager = DataManager.getInstance();
-        int userID = 3;
-        if((Integer)session.getAttribute("userID") != null){
-            userID = (Integer)session.getAttribute("userID");
+
+        Integer userID = (Integer)session.getAttribute("userID");
+
+        if(!page.equals("LoginPage") ){
+            if(userID == null){
+                servlet("/Login", request, response);
+                return;
+            }
             request.setAttribute("loggedInUser", dataManager.getUserById(userID));
         }
-
-        //This should be deleted in future, when we'll have login page
-        session.setAttribute("userID", userID);
-        request.setAttribute("loggedInUser", dataManager.getUserById(userID));
 
         request.setAttribute("page", page + ".jsp");
         RequestDispatcher rd = request.getRequestDispatcher("/Pages/Layout.jsp");
@@ -55,6 +56,14 @@ public class Helper {
             view(page, request, response);
         }else{
             view(page, request, response);
+        }
+    }
+
+    public static void servlet(String servlet, HttpServletRequest request, HttpServletResponse response){
+        try {
+            response.sendRedirect(servlet);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

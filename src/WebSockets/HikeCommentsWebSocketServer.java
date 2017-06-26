@@ -63,9 +63,8 @@ public class HikeCommentsWebSocketServer {
     private void addComment(Map<String, Object> jsonMessage, Session session, @PathParam("hikeId") int hikeId, String action){
         Map<String, Object> data = (Map)(jsonMessage.get("data"));
         String comment = (String)data.get("comment");
-        Integer userID = Integer.parseInt((String)data.get("userID"));
         HttpSession httpSession = connectedSessions.get(hikeId).get(session);
-        if(userID != httpSession.getAttribute("userID")) return;
+        Integer userID = (Integer) httpSession.getAttribute("userID");
         int postID = -1;   //postID doesn't matters because its public Post so it will automatically add "null" in database in postID place.
         int hikeID = hikeId;
         int privacyType = 1;
@@ -79,9 +78,8 @@ public class HikeCommentsWebSocketServer {
 
     private void addCommentLike(Map<String, Object> jsonMessage, Session session, @PathParam("hikeId") int hikeId, String action) {
         Map<String, Object> data = (Map)(jsonMessage.get("data"));
-        Integer userID = Integer.parseInt((String)data.get("userID"));
         HttpSession httpSession = connectedSessions.get(hikeId).get(session);
-        if(userID != httpSession.getAttribute("userID")) return;
+        Integer userID = (Integer) httpSession.getAttribute("userID");
         Integer commentID = Integer.parseInt((String)data.get("commentID"));
         int returnedID = HikeFeedSocketDM.getInstance().likeComment(userID, commentID);
         Like like;

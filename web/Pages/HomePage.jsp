@@ -12,9 +12,7 @@
         <li class="hike-item" v-for="hike in hikes">
             <div class="slider-block">
                 <div class="caption">
-                    <div v-for="ph in hike.coverPhotos">
-                        {{ph.locationName}}
-                    </div>
+                    {{hike.coverPhotos[0].locationName}}
                 </div>
             </div>
             <div class="hike-info">

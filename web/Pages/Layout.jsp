@@ -25,10 +25,8 @@
 <%
     String pageName = (String)request.getAttribute("page");
     MiniUser loggedInUser = (MiniUser)request.getAttribute("loggedInUser");
-    if(loggedInUser == null){
-        Helper.view("LoginPage", request, response);
-    }
 %>
+<% if(!pageName.equals("LoginPage.jsp")){ %>
 <script>
     var user = {
         id : '<%= loggedInUser.getId() %>',
@@ -37,6 +35,7 @@
         profilePictureAddress: '<%= loggedInUser.getProfilePictureAddress() %>'
     };
 </script>
+<% } %>
 <div class="wrapper clearfix">
     <% if(!pageName.equals("LoginPage.jsp")){ %>
     <header>

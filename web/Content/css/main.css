@@ -256,20 +256,6 @@ main {
     padding: 0 10px;
 }
 
-/*
-.comments-block-inner {
-    border-top: 2px solid black;
-    padding: 20px 0;
-}
-*/
-
-/*.add-comment input {*/
-/*width:100%;*/
-/*border: 4px solid rgba(0,0,0,0.1);*/
-/*padding: 9px;*/
-/*border-radius: 5px;*/
-/*}*/
-
 .comment-input {
     display: inline-block;
     vertical-align: middle;
@@ -278,8 +264,7 @@ main {
     font-size: 14px;
     line-height: 1.42857143;
     color: #555;
-    border: 1px solid #bbb;
-    border-radius: 5px;
+    border: 1px solid transparent;
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
 
@@ -449,6 +434,10 @@ main {
     display: inline-block;
     margin-right: 10px;
     vertical-align: middle;
+}
+
+.hike-title:hover {
+    font-weight: bold;
 }
 
 .hike-people {

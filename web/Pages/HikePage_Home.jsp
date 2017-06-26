@@ -134,7 +134,6 @@
                     action: "getComment",
                     data: {
                         comment: this.newCommentInput,
-                        userID: user.id
                     }
                 }));
                 this.newCommentInput = "";
@@ -145,7 +144,6 @@
                     action: "getCommentLike",
                     data: {
                         commentID: commentId + "",
-                        userID: user.id
                     }
                 }));
             }
