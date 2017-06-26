@@ -41,8 +41,17 @@
                 var hiddenField = document.createElement("input");
                 hiddenField.setAttribute("type", "hidden");
                 hiddenField.setAttribute("name", key);
-                hiddenField.setAttribute("value", params[key]);
-
+                if(key === "cover_url"){
+                    console.log(params[key]);
+                    if(params[key] === undefined){
+                        hiddenField.setAttribute("value", "undefined");
+                    }else{
+                        hiddenField.setAttribute("value", params[key].source);
+                    }
+                }
+                else {
+                    hiddenField.setAttribute("value", params[key]);
+                }
                 form.appendChild(hiddenField);
             }
         }
@@ -79,20 +88,20 @@
     }
 
     function loginUser(accessToken) {
-        FB.api('/me?fields=name,email,age_range,link,id,picture.width(1000).height(1000),gender,birthday', function (response) {
+        FB.api('/me?fields=name,email,link,id,picture,gender,birthday,cover', function (response) {
             console.log("----fb data----");
             console.log(response);
             post("/Login", {
                 accessToken: accessToken,
                 name: response.name,
                 email: response.email,
-                age_range_min: response.age_range.min,
-                age_range_max: response.age_range.max,
+                cover_url: response.cover,
                 link: response.link,
                 id: response.id,
                 picture_url: response.picture.data.url,
                 gender: response.gender,
-                birthday: response.birthday
+                birthday: response.birthday,
+                facebook_link: response.link
             });
         });
     }

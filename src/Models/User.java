@@ -15,29 +15,35 @@ public class User extends MiniUser{
     private Date birthDate;
     private String gender;
     private String email;
+    private String aboutMe;
+    private String coverPictureAddress;
+    private String facebookLink;
 
 
     /**
-     * constructor of User class that extends Mini User
-     * constructor calls super constructor for appropriate information for Mini Class
-     * parameters needed super class
+     *constructor of the user
+     * gets these parameters:
      * @param id
      * @param firstName
      * @param lastName
      * @param profilePictureAddress
-     *
-     * parameter needed for this class
      * @param facebookID
      * @param birthDate
      * @param gender
      * @param email
+     * @param aboutMe
+     * @param coverPictureAddress
+     * @param facebookLink
      */
-    public User(int id, String firstName, String lastName, String profilePictureAddress, long facebookID, Date birthDate, String gender, String email) {
+    public User(int id, String firstName, String lastName, String profilePictureAddress, long facebookID, Date birthDate, String gender, String email, String aboutMe, String coverPictureAddress , String facebookLink) {
         super(id, firstName, lastName, profilePictureAddress);
         this.facebookID = facebookID;
         this.birthDate = birthDate;
         this.gender = gender;
         this.email = email;
+        this.aboutMe = aboutMe;
+        this.coverPictureAddress  = coverPictureAddress;
+        this.facebookLink = facebookLink;
     }
 
 
@@ -79,5 +85,19 @@ public class User extends MiniUser{
 
     }
 
+    /**
+     * returns about me text of this user
+     * @returns String
+     */
+    public String getAboutMe() {
+        return aboutMe;
+    }
 
+    /**
+     * returns cover photo address of this user
+     * @return
+     */
+    public String getCoverPictureAddress() {
+        return coverPictureAddress;
+    }
 }

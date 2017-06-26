@@ -2,7 +2,6 @@ package Servlets;
 
 import Database.UserInfoDM;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -27,9 +26,6 @@ public class LoginServlet extends HttpServlet {
             String firstname = nameArr[0];
             String lastname = nameArr[1];
             String email = request.getParameter("email");
-            Integer age_range_min = Integer.parseInt(request.getParameter("age_range_min"));
-            Integer age_range_max = Integer.parseInt(request.getParameter("age_range_max"));
-            String link = request.getParameter("link");
             Long id = Long.parseLong(request.getParameter("id"));
             String picture_url = request.getParameter("picture_url");
             String gender = request.getParameter("gender");
@@ -40,11 +36,15 @@ public class LoginServlet extends HttpServlet {
                 String birthdaySql = birthDayArr[2] + "-" + birthDayArr[1] + "-" + birthDayArr[0];
                 birthDate = Date.valueOf(birthdaySql);
             }
+            String coverPicUrl = request.getParameter("cover_url");
+            if(coverPicUrl.equals("undefined"))
+                coverPicUrl = null;
+            String link = request.getParameter("link");
             int userID = -1;
             if(dm.isUserRegistered(id)){
-                userID = dm.updateUserInfo(id, firstname, lastname, picture_url, birthDate, gender, email);
+                userID = dm.updateUserInfo(id, firstname, lastname, picture_url, birthDate, gender, email,coverPicUrl, link);
             }else {
-                userID = dm.registerUser(id, firstname, lastname, picture_url, birthDate, gender, email);
+                userID = dm.registerUser(id, firstname, lastname, picture_url, birthDate, gender, email, coverPicUrl, link);
             }
             HttpSession session = request.getSession();
             session.setAttribute("userID", userID);

@@ -1,18 +1,16 @@
 package Database;
 
-import java.sql.Time;
-import java.text.DateFormat;
-import java.util.*;
-
 import Models.*;
 import Models.Hike.AboutModel;
 import Models.Hike.DefaultModel;
 import Models.Hike.HikeInfo;
 
-import javax.xml.crypto.Data;
-import javax.xml.transform.Result;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 
 public class DataManager {
@@ -258,7 +256,7 @@ public class DataManager {
                 int id = rs.getInt("ID");
                 String firstName = rs.getString("first_name");
                 String lastName = rs.getString("last_name");
-                String imgUrl = rs.getString("img_url");
+                String imgUrl = rs.getString("profile_picture_url");
                 creator = new MiniUser(id, firstName, lastName, imgUrl);
             }
         } catch (SQLException e) {

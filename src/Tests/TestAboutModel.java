@@ -1,20 +1,19 @@
 package Tests;
 
-import java.util.*;
-
+import Models.Comment;
 import Models.Hike.AboutModel;
 import Models.MiniUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import Models.Comment;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 
 
