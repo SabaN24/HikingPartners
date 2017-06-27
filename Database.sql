@@ -1,4 +1,3 @@
-
 Create Database IF NOT EXISTS Hiking_Partners
   Default Character set UTF8;
 
@@ -145,7 +144,7 @@ CREATE TABLE IF NOT EXISTS comment_likes (
   FOREIGN KEY (comment_ID) REFERENCES comments(ID)
 );
 
--- ----------------------------------------------------------------------------- -- 
+-- ----------------------------------------------------------------------------- --
 
 INSERT INTO users (id, facebook_id, first_name, last_name, profile_picture_url, email, about_me_text,cover_picture_url,facebook_link ) VALUES
   (1, 1,'Nodo', 'Sairmeli', '', '','','',''),
@@ -315,5 +314,14 @@ CREATE PROCEDURE get_joined_people(hike_id INT)
 
   END$$
 
+DELIMITER $$
 
-select * from hikes;
+CREATE PROCEDURE get_hikes_by_user(user_id INT)
+  BEGIN
+    SELECT hikes.id, hikes.hike_name, hikes.start_date,
+      hikes.end_date, hikes.description, hikes.max_people FROM hikes
+      INNER JOIN hike_to_user ON
+                                hike_to_user.user_ID = user_id AND hike_to_user.role_ID = 1;
+  END$$
+
+CALL get_hikes_by_user(1);
