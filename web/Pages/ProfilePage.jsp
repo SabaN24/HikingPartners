@@ -35,10 +35,9 @@
         <div class="created-hikes-block-inner">
             <div class="profile-title">Created Hikes</div>
             <ul class="created-hikes-list">
-                <li class="created-hike"></li>
-                <li class="created-hike"></li>
-                <li class="created-hike"></li>
-                <li class="created-hike"></li>
+                <li class="created-hike" v-for="hike in createdHikes">
+                    {{ hike.name }}
+                </li>
             </ul>
         </div>
     </div>
@@ -55,7 +54,7 @@
         },
         created: function(){
             this.getProfileUser();
-            //this.getCreatedHikes();
+            this.getCreatedHikes();
 
         },
         methods: {
@@ -68,7 +67,8 @@
 
             },
             getCreatedHikes: function(){
-                axios.post("/GetCreatedHikes?userID=<%= request.getParameter("userID") %>",  {}).then(function(response){
+                var th = this;
+                axios.post("/CreatedHikesServlet?userID=<%= request.getParameter("userID") %>",  {}).then(function(response){
                     console.log(response);
                     th.createdHikes = response.data;
                 });

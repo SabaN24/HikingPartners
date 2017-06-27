@@ -37,15 +37,20 @@ public class DataManager {
      * Returns list of all hikes that are in database.
      * @return all hikes as List<HikeInfo>
      */
-    public List<HikeInfo> getAllHikes() {
+    public List<HikeInfo> getHikes(int userId) {
         List<HikeInfo> hikes = new ArrayList<>();
-        ResultSet allHikes = databaseConnector.getData("Select * from hikes;");
+        ResultSet allHikes = null;
+        if(userId == -1){
+            allHikes = databaseConnector.getData("Select * from hikes;");
+        } else {
+           allHikes = databaseConnector.callProcedure("get_hikes_by_user", Arrays.asList("" + userId));
+        }
         try {
             while (allHikes.next()) {
                 int id = allHikes.getInt("ID");
                 Date startDate = allHikes.getDate("start_date");
                 Date endDate = allHikes.getDate("end_date");
-                String descrption = allHikes.getString("description");
+                String description = allHikes.getString("description");
                 int maxPeople = allHikes.getInt("max_people");
                 ResultSet joinedPeopleRS = databaseConnector.callProcedure("get_joined_people",
                         Arrays.asList("" + id));
@@ -55,7 +60,7 @@ public class DataManager {
                 }
                 DefaultModel defaultModel = getDefaultModel(id);
                 HikeInfo current = new HikeInfo(id, defaultModel.getName(), defaultModel.getCreator(),
-                        defaultModel.getCoverPhotos(), maxPeople, joinedPeople, startDate, endDate, descrption);
+                        defaultModel.getCoverPhotos(), maxPeople, joinedPeople, startDate, endDate, description);
                 hikes.add(current);
             }
         } catch (SQLException e) {
