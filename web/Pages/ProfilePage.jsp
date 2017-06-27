@@ -1,4 +1,4 @@
-<%--
+<%@ page import="Models.User" %><%--
   Created by IntelliJ IDEA.
   User: Sandro
   Date: 26-Jun-17
@@ -12,9 +12,9 @@
     Profile
 </setTitle>
 
-<div class="profile-content">
+<div class="profile-content" id="vueapp">
     <div class="profile-cover">
-        <div class="profile-name-block">Sandro Jikia</div>
+        <div class="profile-name-block">{{ profileUser.firstName }} {{ profileUser.lastName }} </div>
     </div>
     <div class="user-info-block">
         <div class="profile-picture">
@@ -22,13 +22,13 @@
         </div>
         <div class="user-info">
             <div style="font-size: 18px; margin-bottom: 10px">ABOUT</div>
-            <div class="profile-status">Hi I'm Sandro and I love chocolate.</div>
-            <a href="https://www.facebook.com" class="facebook-page-btn btn">
+            <div class="profile-status">{{ profileUser.aboutMe }}</div>
+            <a :href="profileUser.facebookLink" target="_blank" class="facebook-page-btn btn">
                 Go To Facebook Profile
             </a>
-            <div class="info-item">Gender: Xvad</div>
-            <div class="info-item">Birth date: 5/6/1997</div>
-            <div class="info-item">Email: gio@mail.ru</div>
+            <div class="info-item">Gender: {{ profileUser.gender }}</div>
+            <div class="info-item">Birth date: {{ !profileUser.birthdate ? "Hidden" : profileUser.birthdate }}</div>
+            <div class="info-item">Email: {{ profileUser.email }}</div>
         </div>
     </div>
     <div class="created-hikes-block">
@@ -43,4 +43,37 @@
         </div>
     </div>
 </div>
+<script src="../Scripts/axios.min.js"></script>
+<script src="../Scripts/vue.min.js"></script>
+<script>
+
+    var app = new Vue({
+        el: '#vueapp',
+        data: {
+            profileUser: {},
+            createdHikes: []
+        },
+        created: function(){
+            this.getProfileUser();
+            //this.getCreatedHikes();
+
+        },
+        methods: {
+            getProfileUser: function(){
+                var th = this;
+                axios.post("/GetProfileUser?userID=<%= request.getParameter("userID") %>",  {}).then(function(response){
+                    console.log(response);
+                    th.profileUser = response.data;
+                });
+
+            },
+            getCreatedHikes: function(){
+                axios.post("/GetCreatedHikes?userID=<%= request.getParameter("userID") %>",  {}).then(function(response){
+                    console.log(response);
+                    th.createdHikes = response.data;
+                });
+            }
+        }
+    });
+</script>
 

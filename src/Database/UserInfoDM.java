@@ -156,4 +156,36 @@ public class UserInfoDM {
         return null;
     }
 
+    /**
+     * Getting User by ID
+     * @param ID
+     * @return User depending on ID
+     */
+    public User getUserByID(int ID) {
+        String userReturnQuery = "select * from users where ID = ?";
+        PreparedStatement statement = databaseConnector.getPreparedStatement(userReturnQuery);
+        try {
+            statement.setInt(1, ID);
+            ResultSet resultSet = databaseConnector.getDataWithPreparedStatement(statement);
+            if (resultSet.next()) {
+                int userID = resultSet.getInt("ID");
+                long facebookId = resultSet.getLong("facebook_id");
+                String firstName = resultSet.getString("first_name");
+                String lastName = resultSet.getString("last_name");
+                String imgUrl = resultSet.getString("profile_picture_url");
+                Date birthDate = resultSet.getDate("birth_date");
+                String gender = resultSet.getString("gender");
+                String email = resultSet.getString("email");
+                String aboutMe = resultSet.getString("about_me_text");
+                String coverPictureAddress = resultSet.getString("cover_picture_url");
+                String facebookLink = resultSet.getString("facebook_link");
+                User user = new User(userID, firstName, lastName, imgUrl, facebookId, birthDate, gender, email, aboutMe, coverPictureAddress , facebookLink);
+                return user;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

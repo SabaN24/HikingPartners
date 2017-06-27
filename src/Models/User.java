@@ -7,6 +7,8 @@ import java.util.Date;
  */
 public class User extends MiniUser{
 
+    /* Constants. */
+    public static String ATTR = "User";
 
     /**
      * private instance variables
@@ -91,6 +93,14 @@ public class User extends MiniUser{
      */
     public String getAboutMe() {
         return aboutMe;
+    }
+
+    /**
+     * returns facebook link of this user
+     * @returns String
+     */
+    public String getFacebookLink(){
+        return facebookLink;
     }
 
     /**

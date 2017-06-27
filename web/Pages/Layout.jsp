@@ -48,7 +48,7 @@
         <div class="header-right">
             <div class="profile-block">
 
-                <a href="/Profile" class="profile-link">
+                <a href="/Profile?userID=<%=loggedInUser.getId()%>" class="profile-link">
                     <div class="avatar-block" style="background-image: url(<%= loggedInUser.getProfilePictureAddress() %>) ">
 
                     </div>

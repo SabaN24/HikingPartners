@@ -1,5 +1,8 @@
 package Servlets;
 
+import Database.UserInfoDM;
+import Models.User;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,6 +21,17 @@ public class ProfileServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String userID = request.getParameter("userID");
+        if(userID == null){
+            Helper.servlet("/Home", request, response);
+            return;
+        }
+        User user = UserInfoDM.getInstance().getUserByID(Integer.parseInt(userID));
+        if(user == null){
+            Helper.servlet("/Home", request, response);
+            return;
+        }
+        request.setAttribute(User.ATTR, user);
         Helper.view("ProfilePage", request, response);
     }
 }
