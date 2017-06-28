@@ -4,7 +4,7 @@ Create Database IF NOT EXISTS Hiking_Partners
 USE Hiking_Partners;
 
 CREATE TABLE IF NOT EXISTS hikes (
-  ID INT NOT NULL,
+  ID INT NOT NULL auto_increment,
   hike_name NVARCHAR(50),
   start_date DATETIME NOT NULL,
   end_date DATETIME NOT NULL,
@@ -47,8 +47,8 @@ CREATE TABLE IF NOT EXISTS hike_to_user (
   hike_ID INT NOT NULL,
   user_ID INT NOT NULL,
   role_ID INT NOT NULL,
-  PRIMARY KEY (hike_ID),
-  FOREIGN KEY (ID) REFERENCES hikes(ID),
+  PRIMARY KEY (ID),
+  FOREIGN KEY (hike_ID) REFERENCES hikes(ID),
   FOREIGN KEY (role_ID) REFERENCES roles(ID)
 );
 
@@ -153,7 +153,7 @@ INSERT INTO users (id, facebook_id, first_name, last_name, profile_picture_url, 
   (4, 4,'Sandro', 'Jiqia', '', '','','',''),
   (5, 5,'Saba', 'Natroshvili', '', '','','','');
 
-select * from users;
+select * from hikes;
 
 INSERT INTO location_types VALUES
   (1, 'ZGVAAAA');
