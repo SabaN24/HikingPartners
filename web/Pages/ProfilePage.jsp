@@ -13,11 +13,11 @@
 </setTitle>
 
 <div class="profile-content" id="vueapp">
-    <div class="profile-cover">
+    <div class="profile-cover" v-bind:style="{ backgroundImage: 'url(' + profileUser.coverPictureAddress + ')' }">
         <div class="profile-name-block">{{ profileUser.firstName }} {{ profileUser.lastName }} </div>
     </div>
     <div class="user-info-block">
-        <div class="profile-picture">
+        <div class="profile-picture" v-bind:style="{ backgroundImage: 'url(' + profileUser.profilePictureAddress + ')' }">
 
         </div>
         <div class="user-info">
@@ -27,7 +27,7 @@
                 Go To Facebook Profile
             </a>
             <div class="info-item">Gender: {{ profileUser.gender }}</div>
-            <div class="info-item">Birth date: {{ !profileUser.birthdate ? "Hidden" : profileUser.birthdate }}</div>
+            <div class="info-item">Birth date: {{ !profileUser.birthDate ? "Hidden" : profileUser.birthDate }}</div>
             <div class="info-item">Email: {{ profileUser.email }}</div>
         </div>
     </div>

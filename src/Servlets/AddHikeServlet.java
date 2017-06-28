@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * Created by Saba on 27.06.2017.
@@ -28,16 +28,20 @@ public class AddHikeServlet extends HttpServlet {
         HttpSession session = request.getSession();
         Integer creatorId = (Integer) session.getAttribute("userID");
         HikeManager hikeManager = HikeManager.getInstance();
-        DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-        Date start = null;
-        Date end = null;
-        try {
-            start = formatter.parse(startDate);
-            end = formatter.parse(endDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        int newHikeId = hikeManager.addNewHike(name, start, end, description, maxPeople, creatorId);
+
+        Date startDateDate = null;
+        Date endDateDate = null;
+//        if(!startDate.equals("undefined")){
+//            String birthDayArr[] = startDate.split("/");
+//            String birthdaySql = birthDayArr[2] + "-" + birthDayArr[1] + "-" + birthDayArr[0];
+//            startDateDate = Date.valueOf(birthdaySql);
+//        }
+//        if(!endDate.equals("undefined")){
+//            String birthDayArr1[] = endDate.split("/");
+//            String birthdaySql1 = birthDayArr1[2] + "-" + birthDayArr1[1] + "-" + birthDayArr1[0];
+//            endDateDate = Date.valueOf(birthdaySql1);
+//        }
+        int newHikeId = hikeManager.addNewHike(name, new Date(30000), new Date(30000), description, maxPeople, creatorId);
         Helper.servlet("/Home", request, response);
     }
 

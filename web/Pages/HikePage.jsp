@@ -69,7 +69,7 @@
         <div class="main-content">
             <div class="slider-block">
                 <div class="caption">
-                    <%=  defaultModel.getCoverPhotos().get(0).getLocationName() %>
+                    QVABISTAVI
                 </div>
             </div>
 

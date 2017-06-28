@@ -3,7 +3,7 @@ package Database;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * Created by Nodo on 6/27/2017.
@@ -45,8 +45,8 @@ public class HikeManager {
         try {
 
             registerHike.setString(1, hikeName);
-            registerHike.setDate(2, (java.sql.Date) startDate);
-            registerHike.setDate(3, (java.sql.Date) endDate);
+            registerHike.setDate(2, startDate);
+            registerHike.setDate(3,  endDate);
             registerHike.setString(4, description);
             registerHike.setInt(5, maxPeople);
 
@@ -55,7 +55,7 @@ public class HikeManager {
             if (resultSet.next()) {
                 //added creator into hike as as creator
                 int hikeId  = resultSet.getInt(1);
-                addUserToHike(hikeId, creatorId,1 );
+                addUserToHike(hikeId, creatorId, 1 );
                 return hikeId;
             }
         } catch (SQLException e) {
@@ -74,13 +74,18 @@ public class HikeManager {
      * @param roleId
      */
     public void addUserToHike(int hikeId, int userId, int roleId){
-        String query = "insert into hike_to_user (hike_ID ,user_ID,role_ID) values values(?,?,?)";
+        String query = "insert into hike_to_user (hike_ID ,user_ID,role_ID) values (?,?,?)";
         PreparedStatement registerUserIntoHike = databaseConnector.getPreparedStatement(query);
 
         try {
             registerUserIntoHike.setInt(1, hikeId);
             registerUserIntoHike.setInt(2, userId);
             registerUserIntoHike.setInt(3,roleId);
+
+
+            databaseConnector.updateDataWithPreparedStatement(registerUserIntoHike);
+
+
 
         } catch (SQLException e) {
             e.printStackTrace();

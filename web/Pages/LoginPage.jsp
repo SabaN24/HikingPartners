@@ -83,12 +83,12 @@
             FB.login(function (response) {
                 if (response.status === 'connected')
                     loginUser(response.authResponse.accessToken);
-            }, {scope: 'public_profile,email,user_birthday'});
+            }, {scope: 'email,user_birthday'});
         });
     }
 
     function loginUser(accessToken) {
-        FB.api('/me?fields=name,email,link,id,picture,gender,birthday,cover', function (response) {
+        FB.api('/me?fields=name,email,link,id,picture.width(1000).height(1000),gender,birthday,cover', function (response) {
             console.log("----fb data----");
             console.log(response);
             post("/Login", {
