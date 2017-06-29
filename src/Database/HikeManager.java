@@ -3,7 +3,7 @@ package Database;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * Created by Nodo on 6/27/2017.
@@ -45,8 +45,8 @@ public class HikeManager {
         try {
 
             registerHike.setString(1, hikeName);
-            registerHike.setDate(2, startDate);
-            registerHike.setDate(3,  endDate);
+            registerHike.setDate(2, (java.sql.Date) startDate);
+            registerHike.setDate(3, (java.sql.Date) endDate);
             registerHike.setString(4, description);
             registerHike.setInt(5, maxPeople);
 

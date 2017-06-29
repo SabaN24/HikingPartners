@@ -14,6 +14,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <link rel="stylesheet" href="/Content/css/bootstrap-datepicker.min.css">
 <script src="/Scripts/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="/Content/css/common.css">
+<link rel="stylesheet" href="/Content/css/main.css">
 
 <div id="vueapp">
 
@@ -22,7 +24,7 @@
             <li class="hike-item" v-for="hike in hikes">
                 <div class="slider-block">
                     <div class="caption">
-                        QVABISTAVI
+                        {{hike.coverPhotos[0] ? hike.coverPhotos[0].locationName : "sandro"}}
                     </div>
                 </div>
                 <div class="hike-info">
@@ -52,9 +54,9 @@
             </li>
         </ul>
     </div>
-    <button @click="showPopup()" class="btn show-popup-btn">Create New Hike</button>
+    <button @click="showPopup()" class="mybtn show-popup-btn">Create New Hike</button>
 
-    <div class="new-hike-popup">
+    <div class="new-hike-popup" :class="{active : popupIsActive }">
         <div class="new-hike-title">Create Hike</div>
         <div class="new-hike-upper">
             <div class="input-block">
@@ -73,13 +75,13 @@
                 <div class="input-header">
                     Start Date
                 </div>
-                <input type="text" class="new-hike-input datepicker startDateInput" v-model="newHike.startDate"  @blur="readDate('startDateInput', 'startDate')">
+                <input type="text" class="new-hike-input datepicker startDate" v-model="newHike.startDate">
             </div>
             <div class="input-block">
                 <div class="input-header">
                     End Date
                 </div>
-                <input type="text" class="new-hike-input datepicker endDateInput" v-model="newHike.endDate"  @blur="readDate('endDateInput', 'endDate')">
+                <input type="text" class="new-hike-input datepicker endDate" v-model="newHike.endDate">
             </div>
         </div>
         <div class="new-hike-description">
@@ -88,7 +90,7 @@
             </div>
             <textarea type="text" class="new-hike-input descr" v-model="newHike.description"></textarea>
         </div>
-        <button class="btn" style="padding: 10px 100px;" @click="addHike()">Add</button>
+        <button class="mybtn" style="padding: 10px 100px;" @click="addHike()">Add</button>
         <div class="close-block" @click="closePopup()">x</div>
     </div>
 </div>
@@ -108,7 +110,6 @@
     var app = new Vue({
         el: '#vueapp',
         data: {
-            name: "aaa",
             hikes: "",
             newHike: {
                 name: "",
@@ -116,7 +117,8 @@
                 startDate: "",
                 endDate: "",
                 description: ""
-            }
+            },
+            popupIsActive: false
         },
 
         created: function () {
@@ -125,34 +127,40 @@
                 th.hikes = response.data.reverse();
             });
         },
+        mounted: function() {
+            var th = this;
+            $(".datepicker.startDate").datepicker({
+                weekStart: 1,
+                format: "dd/mm/yyyy"
+            }).on("changeDate", (e) => {
+                    th.newHike.startDate = e.target.value;
+                }
+            );
+            $(".datepicker.endDate").datepicker({
+                weekStart: 1,
+                format: "dd/mm/yyyy"
+            }).on("changeDate", (e) => {
+                    th.newHike.endDate = e.target.value;
+                }
+            );
+        },
 
         methods: {
             showPopup: function(){
-                document.querySelectorAll(".new-hike-popup")[0].className += " active";
-            },
-            readDate: function(elem, input){
-                var val = document.getElementsByClassName(elem)[0].value;
-                this.newHike[input] = val;
+                this.popupIsActive = true;
             },
             addHike: function(){
                 var th = this;
-                $.ajax({
-                    url: "/AddHikeServlet",
-                    type: "post",
-                    data: th.newHike,
+                axios({url: "/AddHikeServlet", method: "post", params: th.newHike}).then(function(response){
+                    window.location.reload();
                 });
-                window.location.reload();
 
             },
             closePopup: function(){
-                document.querySelectorAll(".new-hike-popup")[0].classList.remove("active");
+                this.popupIsActive = false;
             }
         }
 
 
-    });
-
-    jQuery(".datepicker").datepicker({
-        weekStart: 1
     });
 </script>

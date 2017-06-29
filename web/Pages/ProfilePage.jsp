@@ -60,10 +60,16 @@
         methods: {
             getProfileUser: function(){
                 var th = this;
-                axios.post("/GetProfileUser?userID=<%= request.getParameter("userID") %>",  {}).then(function(response){
+                var userID = '<%= request.getParameter("userID") %>';
+//                axios.post("/GetProfileUser?userID=" + userID,  {}).then(function(response){
+//                    console.log(response);
+//                    th.profileUser = response.data;
+//                });
+                axios.post("/GetProfileUser", {userID: userID}).then(function (response) {
                     console.log(response);
                     th.profileUser = response.data;
                 });
+
 
             },
             getCreatedHikes: function(){

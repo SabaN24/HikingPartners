@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * Created by Saba on 27.06.2017.
@@ -22,27 +22,24 @@ public class AddHikeServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String name = request.getParameter("name");
         int maxPeople = Integer.parseInt(request.getParameter("maxPeople"));
-        String startDate = request.getParameter("startDate");
-        String endDate = request.getParameter("endDate");
+        String startDateStr = request.getParameter("startDate");
+        String endDateStr = request.getParameter("endDate");
         String description = request.getParameter("description");
         HttpSession session = request.getSession();
         Integer creatorId = (Integer) session.getAttribute("userID");
+        DateFormat dt = new SimpleDateFormat("dd/MM/yyyy");
+        Date startDate = null, endDate = null;
+        try {
+            startDate = dt.parse(startDateStr);
+            endDate = dt.parse(endDateStr);
+            dt = new SimpleDateFormat("yyyy-MM-dd");
+            startDate = dt.parse(dt.format(startDate));
+            endDate = dt.parse(dt.format(endDate));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         HikeManager hikeManager = HikeManager.getInstance();
-
-        Date startDateDate = null;
-        Date endDateDate = null;
-//        if(!startDate.equals("undefined")){
-//            String birthDayArr[] = startDate.split("/");
-//            String birthdaySql = birthDayArr[2] + "-" + birthDayArr[1] + "-" + birthDayArr[0];
-//            startDateDate = Date.valueOf(birthdaySql);
-//        }
-//        if(!endDate.equals("undefined")){
-//            String birthDayArr1[] = endDate.split("/");
-//            String birthdaySql1 = birthDayArr1[2] + "-" + birthDayArr1[1] + "-" + birthDayArr1[0];
-//            endDateDate = Date.valueOf(birthdaySql1);
-//        }
-        int newHikeId = hikeManager.addNewHike(name, new Date(30000), new Date(30000), description, maxPeople, creatorId);
-        Helper.servlet("/Home", request, response);
+        hikeManager.addNewHike(name, startDate, endDate, description, maxPeople, creatorId);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

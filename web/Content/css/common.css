@@ -62,7 +62,7 @@ a, a:visited, a:hover, a:active {
     clear: both;
 }
 
-.btn {
+.mybtn {
     background: teal;
     border: none;
     outline: none;
