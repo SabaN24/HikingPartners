@@ -6,13 +6,11 @@ package Models;
 public class Photo {
     private int ID;
     private String src;
-    private String locationName;
     private String description;
 
-    public Photo(int ID, String src, String locationName, String description) {
+    public Photo(int ID, String src, String description) {
         this.ID = ID;
         this.src = src;
-        this.locationName = locationName;
         this.description = description;
     }
 
@@ -30,12 +28,6 @@ public class Photo {
         return src;
     }
 
-    /**
-     * @return location name
-     */
-    public String getLocationName(){
-        return locationName;
-    }
 
     /**
      * @return photo description

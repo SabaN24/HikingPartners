@@ -55,7 +55,7 @@
                                                                                                  class="nav-link"><i
                         class="fa fa-picture-o fa-pages"></i> Gallery</a>
                 </li>
-                <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Locations' }"><a href="#"
+                <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Locations' }"><a href='<%= "/LocationsServlet?hikeId=" + hikeId%>'
                                                                                                    class="nav-link"><i
                         class="fa fa-map-marker fa-pages"></i>
                     Locations</a></li>
@@ -69,7 +69,7 @@
         <div class="main-content">
             <div class="slider-block">
                 <div class="caption">
-                    <%=  defaultModel.getCoverPhotos().get(0).getLocationName() %>
+                    <%=  defaultModel.getCoverPhotos().get(0).getDescription() %>
                 </div>
             </div>
 

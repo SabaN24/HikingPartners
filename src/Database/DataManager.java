@@ -284,9 +284,8 @@ public class DataManager {
             while (rs.next()) {
                 int id = rs.getInt("ID");
                 String url = rs.getString("img_url");
-                String name = rs.getString("loc_name");
                 String description = rs.getString("description");
-                Photo photo = new Photo(id, url, name, description);
+                Photo photo = new Photo(id, url, description);
                 coverPhotos.add(photo);
             }
         } catch (SQLException e) {

@@ -52,24 +52,15 @@ CREATE TABLE IF NOT EXISTS hike_to_user (
   FOREIGN KEY (role_ID) REFERENCES roles(ID)
 );
 
-CREATE TABLE IF NOT EXISTS locations (
-  ID INT AUTO_INCREMENT NOT NULL,
-  loc_name NVARCHAR(15) NOT NULL,
-  longitude VARCHAR(15) NOT NULL,
-  latitude VARCHAR(15) NOT NULL,
-  location_type_ID INT NOT NULL,
-  PRIMARY KEY(ID),
-  FOREIGN KEY (location_type_ID) REFERENCES location_types(ID)
-);
 
 CREATE TABLE IF NOT EXISTS hike_to_location (
   ID INT AUTO_INCREMENT NOT NULL,
   hike_ID INT NOT NULL,
-  location_ID INT NOT NULL,
-  priority INT NOT NULL,
+  location_lat varchar(50),
+  location_lng varchar(50),
+  location_type_ID INT NOT NULL,
   PRIMARY KEY (ID),
-  FOREIGN KEY (hike_ID) REFERENCES hikes(ID),
-  FOREIGN KEY (location_ID) REFERENCES locations(ID)
+  FOREIGN KEY (hike_ID) REFERENCES hikes(ID)
 );
 
 CREATE TABLE IF NOT EXISTS posts (
@@ -104,13 +95,11 @@ CREATE TABLE IF NOT EXISTS comments (
 
 CREATE TABLE IF NOT EXISTS cover_photos (
   ID INT AUTO_INCREMENT NOT NULL,
-  location_ID INT NOT NULL,
   description TEXT,
   hike_ID INT NOT NULL,
   img_url VARCHAR(40) NOT NULL,
   PRIMARY KEY(ID),
-  FOREIGN KEY (hike_ID) REFERENCES hikes(ID),
-  FOREIGN KEY (location_ID) REFERENCES locations(ID)
+  FOREIGN KEY (hike_ID) REFERENCES hikes(ID)
 );
 
 
@@ -157,6 +146,8 @@ select * from hikes;
 
 INSERT INTO location_types VALUES
   (1, 'ZGVAAAA');
+  
+
 
 INSERT INTO privacy_types VALUES
   (1, 'public'),
@@ -165,8 +156,6 @@ INSERT INTO privacy_types VALUES
 INSERT INTO roles VALUES
   (1, 'Creator');
 
-INSERT INTO locations VALUES
-  (1, 'QVABISTAVI', '45', '45', 1);
 
 INSERT INTO hikes VALUES
   (1, 'KVELAZE MAGARI PAXODE', str_to_date('1989.12.01', '%Y.%m.%d'), str_to_date('1989.12.01', '%Y.%m.%d'), 'MAGARI PAXODI!!! SHEMODIT ALL :***', 5);
@@ -185,7 +174,7 @@ INSERT INTO hike_to_user VALUES
   (1, 1, 1, 1);
 
 INSERT INTO cover_photos VALUES
-  (1, 1, 'მაგარი ლოკაცია დზნ', 1, '');
+  (1, 'მაგარი ლოკაცია დზნ', 1, '');
 
 
 
@@ -207,6 +196,11 @@ values
 
 update hikes set hike_name = "მოლაშქრეთა კლუბი აიეტი", description = "ტურის ორგანიზატორია მოლაშქრეთა კლუბი აიეტი, გასვლის და დაბრუნების თარიღი : 15 ივლისი - 16 ივლისი, მთავარი ლოკაციები : თბილისი, ბათმი, თურქეთი, ყაზბეგი" where id = 1;
 
+
+INSERT INTO hike_to_location (hike_id, location_lat, location_lng, location_type_id) values
+  (1, "41.64228","41.63392", 1);
+
+ select * from hike_to_location where hike_id = 1;
 -- select ID from posts order by ID desc limit 1;
 
 -- insert into posts (hike_id, post_text, user_id, post_time) values(1,"vache", 1, str_to_date('1989.12.01', '%Y.%m.%d'));
@@ -241,9 +235,8 @@ DELIMITER $$
 
 CREATE PROCEDURE get_cover_photos(hike_id INT)
   BEGIN
-    SELECT cover_photos.id as ID, cover_photos.img_url as img_url, locations.loc_name as loc_name, cover_photos.description as description
-    FROM cover_photos INNER JOIN locations
-        ON cover_photos.location_ID = locations.id
+    SELECT cover_photos.id as ID, cover_photos.img_url as img_url, cover_photos.description as description
+    FROM cover_photos
     WHERE cover_photos.hike_ID = hike_id;
 
   END$$

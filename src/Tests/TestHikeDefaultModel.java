@@ -27,8 +27,8 @@ public class TestHikeDefaultModel {
         user = new MiniUser(id, firstName, lastName, profilePictureAddress);
 
         //photos setup
-        Photo photo1 = new Photo(1, "test", "Batumi", "aa");
-        Photo photo2 = new Photo(0, "test1", "Batumi", "aa");
+        Photo photo1 = new Photo(1, "test", "aa");
+        Photo photo2 = new Photo(0, "test1", "aa");
         photos = new ArrayList<>();
         photos.add(photo1);
         photos.add(photo2);
