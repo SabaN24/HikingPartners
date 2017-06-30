@@ -18,9 +18,9 @@
     </div>
     <div class="post-block main-content" v-for="(post, index) in posts" >
         <div class = "post-upper">
-            <div class = "avatar-block post-author-avatar" v-bind:style="{ backgroundImage: 'url(' + post.user.profilePictureAddress + ')' }"></div>
+            <div @click="window.location = '/Profile?userID=' +  post.user.id" class = "avatar-block post-author-avatar" v-bind:style="{ backgroundImage: 'url(' + post.user.profilePictureAddress + ')' }"></div>
             <div class="post-info">
-                    <div class="post-author-name">
+                    <div class="post-author-name comment-author" @click="window.location = '/Profile?userID=' +  post.user.id">
                         <span>{{post.user.firstName}} </span><span>{{post.user.lastName}}</span>
 
                     </div>
@@ -38,12 +38,12 @@
         </div>
         <div class="comments-block">
             <div class="comments-block-inner">
-                <ul class="comments-list" v-for="(comment, index) in post.comments">
-                    <li class="comment">
-                        <div class="avatar-block" v-bind:style="{ backgroundImage: 'url(' + comment.user.profilePictureAddress + ')' }"></div>
+                <ul class="comments-list">
+                    <li class="comment" v-for="(comment, index) in post.comments">
+                        <div @click="window.location = '/Profile?userID=' +  comment.user.id" class="avatar-block" v-bind:style="{ backgroundImage: 'url(' + comment.user.profilePictureAddress + ')' }"></div>
                         <div class="comment-info">
                             <div class="comment-info__upper">
-                                <div class="comment-author">
+                                <div @click="window.location = '/Profile?userID=' +  comment.user.id" class="comment-author">
                                     <span>{{comment.user.firstName}} </span><span>{{comment.user.lastName}}</span>
                                 </div>
                             </div>

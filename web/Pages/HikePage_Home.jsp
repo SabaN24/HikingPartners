@@ -35,12 +35,12 @@
         <div class="comments-count">{{aboutModel.comments.length}} comment<span v-show="aboutModel.comments.length != 1">s</span></div>
         <div class="comments-block">
             <div class="comments-block-inner">
-                <ul class="comments-list" v-for="(comment, index) in aboutModel.comments">
-                    <li class="comment">
-                        <div class="avatar-block" v-bind:style="{ backgroundImage: 'url(' + comment.user.profilePictureAddress + ')' }"></div>
+                <ul class="comments-list">
+                    <li class="comment" v-for="(comment, index) in aboutModel.comments">
+                        <div @click="window.location = '/Profile?userID=' +  comment.user.id" class="avatar-block" v-bind:style="{ backgroundImage: 'url(' + comment.user.profilePictureAddress + ')' }"></div>
                         <div class="comment-info">
                             <div class="comment-info__upper">
-                                <div class="comment-author">
+                                <div class="comment-author" @click="window.location = '/Profile?userID=' +  comment.user.id">
                                     <span>{{comment.user.firstName}} </span><span>{{comment.user.lastName}}</span>
                                 </div>
                             </div>

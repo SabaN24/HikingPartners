@@ -28,8 +28,8 @@
     </setTitle>
 
     <aside>
-        <div class="creator-block">
-            <div class="avatar-block" style="background-image: url(<%= creator.getProfilePictureAddress() %>)">
+        <div class="creator-block" onclick="window.location = '/Profile?userID=<%= creator.getId()%>'">
+            <div class="avatar-block" style="background-image: url(<%= creator.getProfilePictureAddress() %>) " >
 
             </div>
             <div class="name-block">
