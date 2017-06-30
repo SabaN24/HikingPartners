@@ -9,41 +9,67 @@
 
 <div class="hike_feed ">
     <div class="post-block main-content">
-        <div class = "new-post">
-            <div class="avatar-block post-author-avatar" v-bind:style="{ backgroundImage: 'url(' + user.profilePictureAddress + ')' }"></div>
+        <div class="new-post">
+            <div class="avatar-block post-author-avatar"
+                 v-bind:style="{ backgroundImage: 'url(' + user.profilePictureAddress + ')' }"></div>
             <form action="" class="post-form" v-on:submit.prevent="sendPost">
-                <input type="text" placeholder="Write something..." class="new-post-input" autocomplete="off" v-model="newPostText">
+                <input type="text" placeholder="Write something..." class="new-post-input" autocomplete="off"
+                       v-model="newPostText">
+            </form>
+            <button type="button" class="upload-image-button" @click="showImagePopup()"></button>
+            <button type="button" class="add-video-button" @click="showLinkPopup()"></button>
+        </div>
+        <div class="upload-image-popup" :class="{active : imagePopupIsActive }">
+            <form v-bind:action="'/PostPhoto?hikeId=' + hikeId" method="post"
+                  enctype="multipart/form-data">
+                <label class="custom-image-chooser">
+                    Choose an Image
+                    <input type="file" name="pic" accept="image/*" class="image-chooser">
+                </label>
+                <input type="submit" value="Upload Image" class="mybtn" style="margin-top: 10px">
+                <div class="close-block" @click="closeImagePopup()">x</div>
             </form>
         </div>
+        <div class="youtube-link-popup" :class="{active : videoPopupIsActive}">
+            <input type="text" style="margin-bottom: 10px;" v-model="youtubeLink">
+            <button class="mybtn" @click="addYoutubeLink()">Add Link</button>
+            <div class="close-block" @click="closeLinkPopup()">x</div>
+        </div>
     </div>
-    <div class="post-block main-content" v-for="(post, index) in posts" >
-        <div class = "post-upper">
-            <div @click="window.location = '/Profile?userID=' +  post.user.id" class = "avatar-block post-author-avatar" v-bind:style="{ backgroundImage: 'url(' + post.user.profilePictureAddress + ')' }"></div>
+    <div class="post-block main-content" v-for="(post, index) in posts">
+        <div class="post-upper">
+            <div class="avatar-block post-author-avatar"
+                 v-bind:style="{ backgroundImage: 'url(' + post.user.profilePictureAddress + ')' }"></div>
             <div class="post-info">
-                    <div class="post-author-name comment-author" @click="window.location = '/Profile?userID=' +  post.user.id">
-                        <span>{{post.user.firstName}} </span><span>{{post.user.lastName}}</span>
+                <div class="post-author-name">
+                    <span>{{post.user.firstName}} </span><span>{{post.user.lastName}}</span>
 
-                    </div>
-                    <div class="post-time">
-                        {{post.time | cutTime}}
-                    </div>
+                </div>
+                <div class="post-time">
+                    {{post.time | cutTime}}
+                </div>
             </div>
         </div>
 
-        <div class = "post-text">
+        <div class="post-text">
             {{post.text}}
+            <br>
+            <iframe width="420" height="315" v-if="post.link != ''"
+                    :src="post.link">
+            </iframe>
         </div>
         <div class="comments-count">
             {{post.comments.length}} comment<span v-show="post.comments.length != 1">s</span>
         </div>
         <div class="comments-block">
             <div class="comments-block-inner">
-                <ul class="comments-list">
-                    <li class="comment" v-for="(comment, index) in post.comments">
-                        <div @click="window.location = '/Profile?userID=' +  comment.user.id" class="avatar-block" v-bind:style="{ backgroundImage: 'url(' + comment.user.profilePictureAddress + ')' }"></div>
+                <ul class="comments-list" v-for="(comment, index) in post.comments">
+                    <li class="comment">
+                        <div class="avatar-block"
+                             v-bind:style="{ backgroundImage: 'url(' + comment.user.profilePictureAddress + ')' }"></div>
                         <div class="comment-info">
                             <div class="comment-info__upper">
-                                <div @click="window.location = '/Profile?userID=' +  comment.user.id" class="comment-author">
+                                <div class="comment-author">
                                     <span>{{comment.user.firstName}} </span><span>{{comment.user.lastName}}</span>
                                 </div>
                             </div>
@@ -63,17 +89,18 @@
                 </ul>
                 <div class="comment">
                     <div class="add-comment">
-                        <div class="avatar-block"  v-bind:style="{ backgroundImage: 'url(' + user.profilePictureAddress + ')' }">
+                        <div class="avatar-block"
+                             v-bind:style="{ backgroundImage: 'url(' + user.profilePictureAddress + ')' }">
                         </div>
                         <form action="HikePageServlet" v-on:submit.prevent="sendComment(post.id)" method="post">
-                            <input v-model="commentInputs[post.id]" class="comment-input" type="text" autocomplete="off" name="add-comment"
+                            <input v-model="commentInputs[post.id]" class="comment-input" type="text" autocomplete="off"
+                                   name="add-comment"
                                    placeholder="Write a comment...">
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-
 
 
     </div>
@@ -95,7 +122,10 @@
             posts: [],
             commentInputs: {},
             newPostText: "",
-            user: {}
+            user: {},
+            imagePopupIsActive: false,
+            videoPopupIsActive: false,
+            youtubeLink: ""
         },
         //These functions will be called when page loads.
         created: function () {
@@ -110,7 +140,7 @@
         methods: {
             fetchData: function () {
                 var th = this;
-                axios.post("/HikePostPageServlet?hikeId=" + hikeId, {}).then(function(response){
+                axios.post("/HikePostPageServlet?hikeId=" + hikeId, {}).then(function (response) {
                     th.posts = response.data.reverse();
                 });
             },
@@ -138,7 +168,7 @@
                             this.posts.find(x => x.id == data.postID).comments.find(x => x.commentID == data.commentID).isLiked = false;
                         }
                     }
-                }else if(action == "getPost"){
+                } else if (action == "getPost") {
                     this.posts.unshift(data);
                 }
             },
@@ -162,12 +192,12 @@
                     action: "getPost",
                     data: {
                         post: this.newPostText + "",
+                        link: this.youtubeLink
                     }
                 }));
                 this.newPostText = "";
-
+                this.youtubeLink = "";
             },
-
 
 
             //This function is called when like button is clicked.
@@ -179,7 +209,28 @@
                         commentID: "" + commentID,
                     }
                 }));
+            },
+
+            showLinkPopup: function () {
+                this.videoPopupIsActive = true;
+            },
+
+            addYoutubeLink: function () {
+                this.videoPopupIsActive = false;
+            },
+
+            closeLinkPopup: function () {
+                this.videoPopupIsActive = false;
+            },
+
+            showImagePopup: function () {
+                this.imagePopupIsActive = true;
+            },
+
+            closeImagePopup: function () {
+                this.imagePopupIsActive = false;
             }
+
         }
     });
     ws.onmessage = app.getSocketMessage;

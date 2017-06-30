@@ -101,15 +101,15 @@ public class HikeFeedWebSocketServer{
     private void addPost(Map<String, Object> jsonMessage, Session session, @PathParam("hikeId") int hikeId, String action){
         Map<String, Object> data = (Map)(jsonMessage.get("data"));
         String post = (String)data.get("post");
+        String link = (String)data.get("link");
         HttpSession httpSession = connectedSessions.get(hikeId).get(session);
         Integer userID = (Integer) httpSession.getAttribute("userID");
         int hikeID = hikeId;
         Date currDate = calendar.getTime();
         String time = dateFormat.format(currDate);
-        int returnedID = HikeFeedSocketDM.getInstance().writePost(userID, hikeID, post, time);
+        int returnedID = HikeFeedSocketDM.getInstance().writePost(userID, hikeID, post, time, link);
         MiniUser user = DataManager.getInstance().getUserById(userID);
-
-        Post newPost = new Post(returnedID, post, user, currDate, new ArrayList<>(), 0);
+        Post newPost = new Post(returnedID, post, link, user, currDate, new ArrayList<>(), 0);
         webSocketHelper.sendToAllConnectedSessions(newPost, action, hikeId, connectedSessions.get(hikeId).keySet());
     }
 

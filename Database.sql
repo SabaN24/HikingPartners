@@ -65,7 +65,8 @@ CREATE TABLE IF NOT EXISTS hike_to_location (
 
 CREATE TABLE IF NOT EXISTS posts (
   ID INT AUTO_INCREMENT NOT NULL,
-  post_text TEXT NOT NULL,
+  post_text TEXT,
+  link TEXT,
   hike_ID INT NOT NULL,
   user_ID INT NOT NULL,
   post_time DATETIME NOT NULL,
@@ -179,10 +180,10 @@ INSERT INTO cover_photos VALUES
 
 
 insert into posts values
-  (1,"9ზე ოკრიბაშ იყავით ბერლინში მივდივართ", 1, 4, now()),
-  (2,"რუსი ნაშები ჩითავენ? XD XD XD", 1, 3, now()),
-  (3,"ხალვა მომაქ მე", 1, 2, now()),
-  (4, "შავი ქამრები არ დამანახოთ!!! მწვანე კაია", 1, 1, now());
+  (1,"9ზე ოკრიბაშ იყავით ბერლინში მივდივართ", '',  1, 4, now()),
+  (2,"რუსი ნაშები ჩითავენ? XD XD XD", '', 1, 3, now()),
+  (3,"ხალვა მომაქ მე", '', 1, 2, now()),
+  (4, "შავი ქამრები არ დამანახოთ!!! მწვანე კაია", '', 1, 1, now());
 
 insert into comments
 (comment_text, post_ID, hike_ID, user_ID, comment_time, privacy_type)
@@ -316,5 +317,5 @@ CREATE PROCEDURE get_hikes_by_user(user_id INT)
       INNER JOIN hike_to_user ON
                                 hike_to_user.user_ID = user_id AND hike_to_user.role_ID = 1;
   END$$
-
-CALL get_hikes_by_user(1);
+  
+  

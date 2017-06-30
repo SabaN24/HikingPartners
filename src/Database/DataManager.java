@@ -217,6 +217,7 @@ public class DataManager {
             while (rs.next()) {
                 int id = rs.getInt("ID");
                 String text = rs.getString("post_text");
+                String link = rs.getString("link");
                 int authorID = rs.getInt("user_ID");
                 Date postDate = (Date) rs.getObject("post_time");
                 MiniUser user = getUserById(authorID);
@@ -226,7 +227,7 @@ public class DataManager {
                 if (likesSet.next()) {
                     likes = likesSet.getInt("count");
                 }
-                Post p = new Post(id, text, user, postDate, comments, likes);
+                Post p = new Post(id, text, link, user, postDate, comments, likes);
                 posts.add(p);
             }
         } catch (SQLException e) {

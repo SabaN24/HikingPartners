@@ -33,9 +33,10 @@ public class HikeFeedSocketDM {
      * @param post
      * @return ID of currently added post
      */
-    public int writePost(int userID, int hikeID, String post, String time) {
-        StringBuilder query = new StringBuilder("insert into posts (post_text, hike_id, user_id, post_time) values(");
+    public int writePost(int userID, int hikeID, String post, String time, String link) {
+        StringBuilder query = new StringBuilder("insert into posts (post_text, link, hike_id, user_id, post_time) values(");
         query.append("\"" + post + "\",");
+        query.append("\"" + link + "\",");
         query.append(hikeID + ", ");
         query.append(userID + ", ");
         query.append("'" + time + "')");

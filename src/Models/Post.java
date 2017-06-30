@@ -1,5 +1,9 @@
 package Models;
 
+import Database.DataManager;
+import Database.HikeFeedSocketDM;
+
+import java.util.Arrays;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,24 +19,47 @@ public class Post {
     private MiniUser user;
     private Date time;
     private int likes;
+    private String link;
     private List<Comment> comments;
 
     /**
      * Constructor of Post class
      *
-     * @param id   id of post
-     * @param text text of post
-     * @param user author of post
-     * @param time time in the moment when post was created
+     * @param id    id of post
+     * @param text  text of post
+     * @param user  author of post
+     * @param time  time in the moment when post was created
      * @param likes like number
      */
-    public Post(int id, String text, MiniUser user, Date time, List<Comment> comments, int likes) {
+    public Post(int id, String text, String link, MiniUser user, Date time, List<Comment> comments, int likes) {
         this.id = id;
         this.text = text;
         this.user = user;
         this.time = time;
+        this.link = formatLink(link);
         this.comments = comments;
         this.likes = likes;
+    }
+
+    /**
+     * Converts regular youtube link into embed link which will be inserted in HTML.
+     * @param link regular youtube watch link
+     * @return embed link
+     */
+    private static String formatLink(String link) {
+        StringBuilder result = new StringBuilder("");
+        if(link == null || link.length() < "youtube.com/watch?v=".length()){
+            return result.toString();
+        }
+        int i = 0;
+        while (!link.substring(i, i + "watch?v=".length()).equals("watch?v=")) {
+            result.append(link.charAt(i));
+            i++;
+        }
+        i += "watch?v=".length();
+        result.append("embed/");
+        result.append(link.substring(i));
+        return result.toString();
     }
 
     /**
@@ -78,6 +105,13 @@ public class Post {
     }
 
     /**
+     * @return youtube link
+     */
+    public String getLink() {
+        return link;
+    }
+
+    /**
      * @return all comments on this post as an array list
      */
     public List<Comment> seeAllComments() {
@@ -96,8 +130,9 @@ public class Post {
     }
 
     @Override
-    public boolean equals(Object o){
-        Post other = (Post)o;
+    public boolean equals(Object o) {
+        Post other = (Post) o;
         return this.id == other.getID();
     }
+
 }
