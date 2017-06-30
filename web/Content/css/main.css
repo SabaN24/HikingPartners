@@ -5,6 +5,18 @@ header {
     line-height: 80px;
     padding: 0 20px;
     color: white;
+    position: relative;
+    margin-bottom: 20px;
+    z-index: 1;
+}
+
+.header-bg {
+    width: 100%;
+    height: 100%;
+    background: black;
+    position: absolute;
+    left: 0;
+    opacity: .4;
 }
 
 .wrapper {
@@ -48,6 +60,7 @@ footer {
 
 .logo-img {
     height: 100%;
+    vertical-align: initial;
 
 }
 
@@ -447,22 +460,9 @@ main {
 }
 
 .submit-request {
-    background: none;
-    outline: none;
-    font-family: myriad-regular, Helvetica, sans-serif;
-    border: 1px solid black;
-    padding: 7px 14px;
     position: absolute;
     right: 15px;
     top: -5px;
-    cursor: pointer;
-    transition: color .3s, background .3s, border .3s;
-}
-
-.submit-request:hover {
-    color: white;
-    background: darkslategrey;
-    border-color: transparent;
 }
 
 .dates-block {
@@ -476,7 +476,7 @@ main {
 .new-hike-popup {
     width: 70%;
     height: 80%;
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -543,16 +543,21 @@ main {
 }
 
 .close-block {
-    right: 20px;
-    top: 0;
     font-size: 40px;
     position: absolute;
     cursor: pointer;
+    right: 20px;
+    top: 10px;
+    transition: color .15s;
+}
+
+.close-block:hover {
+    color: #999;
 }
 
 .show-popup-btn {
     position: absolute;
-    top: 81px;
-    right: 100px;
+    top: 109px;
+    right: 14px;
 }
 

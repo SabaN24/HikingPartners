@@ -27,14 +27,13 @@ public class AddHikeServlet extends HttpServlet {
         String description = request.getParameter("description");
         HttpSession session = request.getSession();
         Integer creatorId = (Integer) session.getAttribute("userID");
-        DateFormat dt = new SimpleDateFormat("dd/MM/yyyy");
+
+
+        DateFormat dt = new SimpleDateFormat("dd/mm/yyyy");
         Date startDate = null, endDate = null;
         try {
             startDate = dt.parse(startDateStr);
             endDate = dt.parse(endDateStr);
-            dt = new SimpleDateFormat("yyyy-MM-dd");
-            startDate = dt.parse(dt.format(startDate));
-            endDate = dt.parse(dt.format(endDate));
         } catch (ParseException e) {
             e.printStackTrace();
         }

@@ -7,7 +7,6 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <link rel="stylesheet" href="../Content/css/profile.css">
-<link href="https://fonts.googleapis.com/css?family=Montserrat|Quicksand" rel="stylesheet">
 <setTitle>
     Profile
 </setTitle>
@@ -23,7 +22,7 @@
         <div class="user-info">
             <div style="font-size: 18px; margin-bottom: 10px">ABOUT</div>
             <div class="profile-status">{{ profileUser.aboutMe }}</div>
-            <a :href="profileUser.facebookLink" target="_blank" class="facebook-page-btn btn">
+            <a :href="profileUser.facebookLink" target="_blank" class="facebook-page-btn mybtn">
                 Go To Facebook Profile
             </a>
             <div class="info-item">Gender: {{ profileUser.gender }}</div>
@@ -65,9 +64,11 @@
 //                    console.log(response);
 //                    th.profileUser = response.data;
 //                });
-                axios.post("/GetProfileUser", {userID: userID}).then(function (response) {
+                axios({url: "/GetProfileUser", method: "post", params: {userID: userID}}).then(function (response) {
                     console.log(response);
                     th.profileUser = response.data;
+                    if(!th.profileUser.coverPictureAddress)
+                        th.profileUser.coverPictureAddress =  "https://unsplash.it/1920/1080?image=997";
                 });
 
 

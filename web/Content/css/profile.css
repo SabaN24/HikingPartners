@@ -10,6 +10,7 @@
     background-repeat: no-repeat;
     background-position: center;
     position: relative;
+    margin-top: -100px;
 }
 
 .profile-name-block {
@@ -80,7 +81,7 @@
 .created-hikes-block-inner {
     margin-left: 30%;
     width: 50%;
-
+    min-height: 350px;
 }
 
 .profile-title {

@@ -221,12 +221,12 @@ INSERT INTO hike_to_location (hike_id, location_lat, location_lng, location_type
 -- --------------------------------------------------------------------- --
 DELIMITER $$
 
-CREATE PROCEDURE get_creator_info(user_id INT)
+CREATE PROCEDURE get_creator_info(hike_ID INT)
   BEGIN
     SELECT users.id as ID, users.first_name as first_name, users.last_name as last_name, profile_picture_url as profile_picture_url
     FROM hike_to_user INNER JOIN users
         ON users.id = user_id
-    WHERE hike_to_user.user_ID = user_id AND role_id = 1;
+    WHERE hike_to_user.hike_ID = hike_ID AND role_id = 1;
 
   END$$
 

@@ -45,8 +45,8 @@ public class HikeManager {
         try {
 
             registerHike.setString(1, hikeName);
-            registerHike.setDate(2, (java.sql.Date) startDate);
-            registerHike.setDate(3, (java.sql.Date) endDate);
+            registerHike.setDate(2, new java.sql.Date(startDate.getTime()));
+            registerHike.setDate(3, new java.sql.Date(endDate.getTime()));
             registerHike.setString(4, description);
             registerHike.setInt(5, maxPeople);
 
@@ -58,7 +58,7 @@ public class HikeManager {
                 addUserToHike(hikeId, creatorId, 1 );
                 return hikeId;
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

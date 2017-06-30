@@ -49,7 +49,7 @@
                             {{hike.description}}
                         </div>
                     </div>
-                    <button class="submit-request"> Send Request</button>
+                    <button class="mybtn submit-request"> Send Request</button>
                 </div>
             </li>
         </ul>
@@ -91,10 +91,9 @@
             <textarea type="text" class="new-hike-input descr" v-model="newHike.description"></textarea>
         </div>
         <button class="mybtn" style="padding: 10px 100px;" @click="addHike()">Add</button>
-        <div class="close-block" @click="closePopup()">x</div>
+        <div class="close-block" @click="closePopup()"><i class="fa fa-times" aria-hidden="true"></i></div>
     </div>
 </div>
-
 
 <script src="../Scripts/axios.min.js"></script>
 <script src="../Scripts/vue.min.js"></script>

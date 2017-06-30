@@ -69,4 +69,10 @@ a, a:visited, a:hover, a:active {
     padding: 5px 14px;
     cursor: pointer;
     color: white;
+    transition: background .3s;
+    font-family: 'Montserrat', myriad-regular, Helvetica, Arial, sans-serif;
+}
+
+.mybtn:hover {
+    background: darkslategray;
 }

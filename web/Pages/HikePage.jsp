@@ -27,7 +27,6 @@
         %>
     </setTitle>
 
-    </header>
     <aside>
         <div class="creator-block">
             <div class="avatar-block" style="background-image: url(<%= creator.getProfilePictureAddress() %>)">
@@ -55,7 +54,7 @@
                                                                                                  class="nav-link"><i
                         class="fa fa-picture-o fa-pages"></i> Gallery</a>
                 </li>
-                <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Locations' }"><a href='<%= "/LocationsServlet?hikeId=" + hikeId%>'
+                <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Locations' }"><a href="#"
                                                                                                    class="nav-link"><i
                         class="fa fa-map-marker fa-pages"></i>
                     Locations</a></li>
@@ -69,7 +68,7 @@
         <div class="main-content">
             <div class="slider-block">
                 <div class="caption">
-                    <%=  defaultModel.getCoverPhotos().get(0).getDescription() %>
+                    Qvabistavi<%--<%=  defaultModel.getCoverPhotos().get(0).getLocationName() %>--%>
                 </div>
             </div>
 
