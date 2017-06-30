@@ -19,7 +19,7 @@
             <button type="button" class="upload-image-button" @click="showImagePopup()"></button>
             <button type="button" class="add-video-button" @click="showLinkPopup()"></button>
         </div>
-        <div class="upload-image-popup" :class="{active : imagePopupIsActive }">
+        <div class="post-popup" :class="{active : imagePopupIsActive }">
             <form v-bind:action="'/PostPhoto?hikeId=' + hikeId" method="post"
                   enctype="multipart/form-data">
                 <label class="custom-image-chooser">
@@ -30,7 +30,7 @@
                 <div class="close-block" @click="closeImagePopup()">x</div>
             </form>
         </div>
-        <div class="youtube-link-popup" :class="{active : videoPopupIsActive}">
+        <div class="post-popup" :class="{active : videoPopupIsActive}">
             <input type="text" style="margin-bottom: 10px;" v-model="youtubeLink">
             <button class="mybtn" @click="addYoutubeLink()">Add Link</button>
             <div class="close-block" @click="closeLinkPopup()">x</div>

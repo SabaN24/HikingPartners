@@ -587,7 +587,7 @@ main {
     outline: none;
 }
 
-.youtube-link-popup {
+.post-popup {
     width: 300px;
     height: 100px;
     position: absolute;
@@ -601,7 +601,7 @@ main {
     display: none;
 }
 
-.youtube-link-popup.active {
+.post-popup.active {
     display: block;
 }
 
@@ -622,24 +622,6 @@ main {
 
 .upload-image-button:focus {
     outline: none;
-}
-
-.upload-image-popup {
-    width: 300px;
-    height: 100px;
-    position: absolute;
-    top: 35%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    box-shadow: 0 0 1px 1px #ccc;
-    padding: 20px 30px;
-    font-family: 'Montserrat', myriad-regular, Helvetica, Arial, sans-serif;
-    display: none;
-}
-
-.upload-image-popup.active {
-    display: block;
 }
 
 input[type="file"] {
