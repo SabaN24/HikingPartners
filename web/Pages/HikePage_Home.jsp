@@ -99,7 +99,6 @@
         methods: {
             fetchData: function () {
                 var th = this;
-                console.log("fasdadfs")
                 axios.post("/HikeCommentsServlet?hikeId=" + hikeId, {}).then(function (response) {
                     console.log(response);
                     th.aboutModel = response.data;

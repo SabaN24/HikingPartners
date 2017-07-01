@@ -4,7 +4,7 @@ Create Database IF NOT EXISTS Hiking_Partners
 USE Hiking_Partners;
 
 CREATE TABLE IF NOT EXISTS hikes (
-  ID INT NOT NULL auto_increment,
+  ID INT NOT NULL AUTO_INCREMENT,
   hike_name NVARCHAR(50),
   start_date DATETIME NOT NULL,
   end_date DATETIME NOT NULL,
@@ -16,30 +16,29 @@ CREATE TABLE IF NOT EXISTS hikes (
 
 CREATE TABLE IF NOT EXISTS users (
   ID INT AUTO_INCREMENT NOT NULL,
-  facebook_ID bigint NOT NULL,
+  facebook_ID BIGINT NOT NULL,
   first_name NVARCHAR(10) NOT NULL,
   last_name NVARCHAR(20) NOT NULL,
-  profile_picture_url nvarchar(500),
+  profile_picture_url NVARCHAR(500),
   birth_date DATE,
   gender ENUM('male', 'female'),
   email VARCHAR(50) NOT NULL,
   about_me_text NVARCHAR(1000),
-  cover_picture_url nvarchar(500),
-  facebook_link nvarchar(500),
-
-  PRIMARY KEY(ID)
+  cover_picture_url NVARCHAR(500),
+  facebook_link NVARCHAR(500),
+  PRIMARY KEY (ID)
 );
 
 CREATE TABLE IF NOT EXISTS roles (
   ID INT AUTO_INCREMENT NOT NULL,
   role_name NVARCHAR(10) NOT NULL,
-  PRIMARY KEY(ID)
+  PRIMARY KEY (ID)
 );
 
 CREATE TABLE IF NOT EXISTS location_types (
   ID INT AUTO_INCREMENT NOT NULL,
   type_name NVARCHAR(15) NOT NULL,
-  PRIMARY KEY(ID)
+  PRIMARY KEY (ID)
 );
 
 CREATE TABLE IF NOT EXISTS hike_to_user (
@@ -48,19 +47,22 @@ CREATE TABLE IF NOT EXISTS hike_to_user (
   user_ID INT NOT NULL,
   role_ID INT NOT NULL,
   PRIMARY KEY (ID),
-  FOREIGN KEY (hike_ID) REFERENCES hikes(ID),
-  FOREIGN KEY (role_ID) REFERENCES roles(ID)
+  FOREIGN KEY (hike_ID)
+  REFERENCES hikes (ID),
+  FOREIGN KEY (role_ID)
+  REFERENCES roles (ID)
 );
 
 
 CREATE TABLE IF NOT EXISTS hike_to_location (
   ID INT AUTO_INCREMENT NOT NULL,
   hike_ID INT NOT NULL,
-  location_lat varchar(50),
-  location_lng varchar(50),
+  location_lat VARCHAR(50),
+  location_lng VARCHAR(50),
   location_type_ID INT NOT NULL,
   PRIMARY KEY (ID),
-  FOREIGN KEY (hike_ID) REFERENCES hikes(ID)
+  FOREIGN KEY (hike_ID)
+  REFERENCES hikes (ID)
 );
 
 CREATE TABLE IF NOT EXISTS posts (
@@ -70,14 +72,15 @@ CREATE TABLE IF NOT EXISTS posts (
   hike_ID INT NOT NULL,
   user_ID INT NOT NULL,
   post_time DATETIME NOT NULL,
-  PRIMARY KEY(ID),
-  FOREIGN KEY (hike_ID) REFERENCES hikes(ID)
+  PRIMARY KEY (ID),
+  FOREIGN KEY (hike_ID)
+  REFERENCES hikes (ID)
 );
 
 CREATE TABLE IF NOT EXISTS privacy_types (
   ID INT AUTO_INCREMENT NOT NULL,
   type_name NVARCHAR(20) NOT NULL,
-  PRIMARY KEY(ID)
+  PRIMARY KEY (ID)
 );
 
 CREATE TABLE IF NOT EXISTS comments (
@@ -88,10 +91,13 @@ CREATE TABLE IF NOT EXISTS comments (
   user_ID INT NOT NULL,
   comment_time DATETIME NOT NULL,
   privacy_type INT NOT NULL,
-  PRIMARY KEY(ID),
-  FOREIGN KEY (post_ID) REFERENCES posts(ID),
-  FOREIGN KEY (privacy_type) REFERENCES privacy_types(ID),
-  FOREIGN KEY (hike_id) REFERENCES hikes(ID)
+  PRIMARY KEY (ID),
+  FOREIGN KEY (post_ID)
+  REFERENCES posts (ID),
+  FOREIGN KEY (privacy_type)
+  REFERENCES privacy_types (ID),
+  FOREIGN KEY (hike_id)
+  REFERENCES hikes (ID)
 );
 
 CREATE TABLE IF NOT EXISTS cover_photos (
@@ -99,8 +105,9 @@ CREATE TABLE IF NOT EXISTS cover_photos (
   description TEXT,
   hike_ID INT NOT NULL,
   img_url VARCHAR(40) NOT NULL,
-  PRIMARY KEY(ID),
-  FOREIGN KEY (hike_ID) REFERENCES hikes(ID)
+  PRIMARY KEY (ID),
+  FOREIGN KEY (hike_ID)
+  REFERENCES hikes (ID)
 );
 
 
@@ -109,9 +116,11 @@ CREATE TABLE IF NOT EXISTS gallery_photos (
   hike_ID INT NOT NULL,
   img_url VARCHAR(40) NOT NULL,
   user_ID INT NOT NULL,
-  PRIMARY KEY(ID),
-  FOREIGN KEY (hike_ID) REFERENCES hikes(ID),
-  FOREIGN KEY (user_ID) REFERENCES users(ID)
+  PRIMARY KEY (ID),
+  FOREIGN KEY (hike_ID)
+  REFERENCES hikes (ID),
+  FOREIGN KEY (user_ID)
+  REFERENCES users (ID)
 );
 
 
@@ -119,9 +128,11 @@ CREATE TABLE IF NOT EXISTS post_likes (
   ID INT AUTO_INCREMENT NOT NULL,
   post_ID INT NOT NULL,
   user_ID INT NOT NULL,
-  PRIMARY KEY(ID),
-  FOREIGN KEY (user_ID) REFERENCES users(ID),
-  FOREIGN KEY (post_ID) REFERENCES posts(ID)
+  PRIMARY KEY (ID),
+  FOREIGN KEY (user_ID)
+  REFERENCES users (ID),
+  FOREIGN KEY (post_ID)
+  REFERENCES posts (ID)
 );
 
 
@@ -129,9 +140,11 @@ CREATE TABLE IF NOT EXISTS comment_likes (
   ID INT AUTO_INCREMENT NOT NULL,
   comment_ID INT NOT NULL,
   user_ID INT NOT NULL,
-  PRIMARY KEY(ID),
-  FOREIGN KEY (user_ID) REFERENCES users(ID),
-  FOREIGN KEY (comment_ID) REFERENCES comments(ID)
+  PRIMARY KEY (ID),
+  FOREIGN KEY (user_ID)
+  REFERENCES users (ID),
+  FOREIGN KEY (comment_ID)
+  REFERENCES comments (ID)
 );
 
 -- ----------------------------------------------------------------------------- --
@@ -143,11 +156,14 @@ INSERT INTO users (id, facebook_id, first_name, last_name, profile_picture_url, 
   (4, 4,'Sandro', 'Jiqia', '', '','','',''),
   (5, 5,'Saba', 'Natroshvili', '', '','','','');
 
-select * from hikes;
+SELECT
+  *
+FROM
+  hikes;
 
 INSERT INTO location_types VALUES
   (1, 'ZGVAAAA');
-  
+
 
 
 INSERT INTO privacy_types VALUES
@@ -155,7 +171,8 @@ INSERT INTO privacy_types VALUES
   (2, 'private');
 
 INSERT INTO roles VALUES
-  (1, 'Creator');
+  (1, 'Creator'),
+  (2, 'Member');
 
 
 INSERT INTO hikes VALUES
@@ -172,7 +189,11 @@ INSERT INTO comments VALUES
 
 
 INSERT INTO hike_to_user VALUES
-  (1, 1, 1, 1);
+  (1, 1, 6, 1),
+  (2, 1, 1, 2),
+  (3, 1, 2, 2),
+  (4, 1, 3, 2),
+  (5, 1, 4, 2);
 
 INSERT INTO cover_photos VALUES
   (1, 'მაგარი ლოკაცია დზნ', 1, '');
@@ -195,13 +216,23 @@ values
 
 
 
-update hikes set hike_name = "მოლაშქრეთა კლუბი აიეტი", description = "ტურის ორგანიზატორია მოლაშქრეთა კლუბი აიეტი, გასვლის და დაბრუნების თარიღი : 15 ივლისი - 16 ივლისი, მთავარი ლოკაციები : თბილისი, ბათმი, თურქეთი, ყაზბეგი" where id = 1;
+UPDATE hikes
+SET
+  hike_name = 'მოლაშქრეთა კლუბი აიეტი',
+  description = 'ტურის ორგანიზატორია მოლაშქრეთა კლუბი აიეტი, გასვლის და დაბრუნების თარიღი : 15 ივლისი - 16 ივლისი, მთავარი ლოკაციები : თბილისი, ბათმი, თურქეთი, ყაზბეგი'
+WHERE
+  id = 1;
 
 
 INSERT INTO hike_to_location (hike_id, location_lat, location_lng, location_type_id) values
   (1, "41.64228","41.63392", 1);
 
- select * from hike_to_location where hike_id = 1;
+SELECT
+  *
+FROM
+  hike_to_location
+WHERE
+  hike_id = 1;
 -- select ID from posts order by ID desc limit 1;
 
 -- insert into posts (hike_id, post_text, user_id, post_time) values(1,"vache", 1, str_to_date('1989.12.01', '%Y.%m.%d'));
@@ -317,5 +348,16 @@ CREATE PROCEDURE get_hikes_by_user(user_id INT)
       INNER JOIN hike_to_user ON
                                 hike_to_user.user_ID = user_id AND hike_to_user.role_ID = 1;
   END$$
-  
+
+DELIMITER $$
+
+
+CREATE PROCEDURE get_hike_members(hike_id INT)
+  BEGIN
+    SELECT *, (select role_ID roleID from hike_to_user h where h.user_ID = u.ID and h.hike_ID = hike_id) role_ID
+    FROM users u where u.ID in (select user_ID from hike_to_user htu where htu.user_ID = u.ID and htu.hike_ID = hike_id);
+
+  END$$
+
+DELIMITER $$
   

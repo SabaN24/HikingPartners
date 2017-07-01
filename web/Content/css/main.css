@@ -640,3 +640,7 @@ input[type="file"] {
 .custom-image-chooser:hover {
     background: darkslategray;
 }
+
+.members-block {
+    margin-top: 20px;
+}

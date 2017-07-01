@@ -41,25 +41,35 @@
         </div>
         <nav>
             <ul class="nav-list">
-                <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Home' }"><a href='<%= "/HikePage/Home?hikeId=" + hikeId%>' class="nav-link"><i
-                        class="fa fa-home fa-pages"></i> Hike
-                    Page</a></li>
-                <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Items' }"><a href="#"
-                                                                                               class="nav-link"><i
-                        class="fa fa-list-ul fa-pages"></i> Items</a></li>
-                <li class="nav-item" v-bind:class="{ active: '<%= subPage %>'== 'Members' }"><a href="#"
-                                                                                                class="nav-link"><i
-                        class="fa fa-users fa-pages"></i> Members</a></li>
-                <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Gallery' }"><a href="#"
-                                                                                                 class="nav-link"><i
-                        class="fa fa-picture-o fa-pages"></i> Gallery</a>
+                <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Home' }">
+                    <a href='<%= "/HikePage/Home?hikeId=" + hikeId%>' class="nav-link">
+                        <i class="fa fa-home fa-pages"></i> HikePage
+                    </a>
                 </li>
-                <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Locations' }"><a href="#"
-                                                                                                   class="nav-link"><i
-                        class="fa fa-map-marker fa-pages"></i>
-                    Locations</a></li>
-                <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Feed' }"><a href='<%= "/HikePage/Feed?hikeId=" + hikeId%>' class="nav-link"><i
-                        class="fa fa-rss-square fa-pages"></i> Feed</a>
+                <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Items' }">
+                    <a href="#" class="nav-link">
+                        <i class="fa fa-list-ul fa-pages"></i> Items
+                    </a>
+                </li>
+                <li class="nav-item" v-bind:class="{ active: '<%= subPage %>'== 'Members' }">
+                    <a href="<%= "/HikePage/Members?hikeId=" + hikeId%>" class="nav-link">
+                        <i class="fa fa-users fa-pages"></i> Members
+                    </a>
+                </li>
+                <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Gallery' }">
+                    <a href="#" class="nav-link">
+                        <i class="fa fa-picture-o fa-pages"></i> Gallery
+                    </a>
+                </li>
+                <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Locations' }">
+                    <a href="#" class="nav-link">
+                        <i class="fa fa-map-marker fa-pages"></i>Locations
+                    </a>
+                </li>
+                <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Feed' }">
+                    <a href='<%= "/HikePage/Feed?hikeId=" + hikeId%>' class="nav-link">
+                        <i class="fa fa-rss-square fa-pages"></i> Feed
+                    </a>
                 </li>
             </ul>
         </nav>

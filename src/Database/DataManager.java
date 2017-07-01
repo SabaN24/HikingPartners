@@ -237,6 +237,34 @@ public class DataManager {
     }
 
     /**
+     * Returns hike members depending on hikeID.
+     */
+    public List<Member> getHikeMembers(int hikeID){
+        ResultSet rs = databaseConnector.callProcedure("get_hike_members", Arrays.asList("" + hikeID));
+        List<Member> res = new ArrayList<>();
+        try {
+            while (rs.next()) {
+                int id = rs.getInt("ID");
+                long fbID = rs.getLong("facebook_ID");
+                String firstName = rs.getString("first_name");
+                String lastName = rs.getString("last_name");
+                String imgUrl = rs.getString("profile_picture_url");
+                Date birthdate = (Date)rs.getObject("birth_date");
+                String gender = rs.getString("gender");
+                String email = rs.getString("email");
+                String aboutMe = rs.getString("about_me_text");
+                String coverPicUrl = rs.getString("cover_picture_url");
+                String fbLink = rs.getString("facebook_link");
+                int roleID = rs.getInt("role_ID");
+                res.add(new Member(id, firstName, lastName, imgUrl, fbID, birthdate, gender, email, aboutMe, coverPicUrl, fbLink, roleID));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+    /**
      * Gets information about creator of given hike from database, using callProcedure
      * method of databaseConnnector class which calls given procedure in database.
      *
@@ -294,6 +322,7 @@ public class DataManager {
         }
         return coverPhotos;
     }
+
 
     /**
      * method decorates given parameters for sql query syntax
