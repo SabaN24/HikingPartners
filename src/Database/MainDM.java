@@ -13,22 +13,22 @@ import java.util.Date;
 import java.util.List;
 
 
-public class DataManager {
+public class MainDM {
 
 
     private DatabaseConnector databaseConnector;
 
     public static final String ATTR = "DatabaseManager";
 
-    private static DataManager dm = null;
+    private static MainDM dm = null;
 
-    private DataManager() {
+    private MainDM() {
         databaseConnector = DatabaseConnector.getInstance();
     }
 
-    public static DataManager getInstance() {
+    public static MainDM getInstance() {
         if (dm == null) {
-            dm = new DataManager();
+            dm = new MainDM();
         }
         return dm;
     }
@@ -227,7 +227,9 @@ public class DataManager {
                 if (likesSet.next()) {
                     likes = likesSet.getInt("count");
                 }
-                Post p = new Post(id, text, link, user, postDate, comments, likes);
+                int photoID = rs.getInt("photo_ID");
+                Photo photo = GalleryDM.getInstance().getGalleryPhoto(photoID);
+                Post p = new Post(id, text, link, user, postDate, comments, likes, photo);
                 posts.add(p);
             }
         } catch (SQLException e) {

@@ -2,9 +2,6 @@ package Listeners; /**
  * Created by vache on 6/12/2017.
  */
 
-import Database.DataManager;
-
-import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
@@ -25,7 +22,7 @@ public class ListenerServlet implements ServletContextListener,
     // ServletContextListener implementation
     // -------------------------------------------------------
     public void contextInitialized(ServletContextEvent sce) {
-        //DataManager dm = new DataManager();
+        //MainDM dm = new MainDM();
         //ServletContext sc = (ServletContext)sce.getServletContext();
         //sc.setAttribute(dm.ATTR, dm);
     }

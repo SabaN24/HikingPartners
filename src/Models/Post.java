@@ -1,9 +1,5 @@
 package Models;
 
-import Database.DataManager;
-import Database.HikeFeedSocketDM;
-
-import java.util.Arrays;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +16,12 @@ public class Post {
     private Date time;
     private int likes;
     private String link;
+
+    public Photo getPhoto() {
+        return photo;
+    }
+
+    private Photo photo;
     private List<Comment> comments;
 
     /**
@@ -31,7 +33,7 @@ public class Post {
      * @param time  time in the moment when post was created
      * @param likes like number
      */
-    public Post(int id, String text, String link, MiniUser user, Date time, List<Comment> comments, int likes) {
+    public Post(int id, String text, String link, MiniUser user, Date time, List<Comment> comments, int likes, Photo photo) {
         this.id = id;
         this.text = text;
         this.user = user;
@@ -39,6 +41,7 @@ public class Post {
         this.link = formatLink(link);
         this.comments = comments;
         this.likes = likes;
+        this.photo = photo;
     }
 
     /**

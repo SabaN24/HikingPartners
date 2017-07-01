@@ -19,8 +19,7 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             String accessToken = request.getParameter("accessToken");
-            String answer = Helper.sendGet("https://graph.facebook.com/oauth/access_token_info?access_token=" + accessToken);
-            //aqamde tu movida eseigi sheidzleba useris sheshveba an daregistrireba
+            Helper.sendGet("https://graph.facebook.com/oauth/access_token_info?access_token=" + accessToken);
             UserInfoDM dm = UserInfoDM.getInstance();
             String[] nameArr = request.getParameter("name").split(" ");
             String firstname = nameArr[0];

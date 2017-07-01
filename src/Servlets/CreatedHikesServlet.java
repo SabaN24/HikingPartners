@@ -1,7 +1,6 @@
 package Servlets;
 
-import Database.DataManager;
-import Database.HikeManager;
+import Database.MainDM;
 import Models.Hike.HikeInfo;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,14 +19,14 @@ import java.util.List;
 @WebServlet("/CreatedHikesServlet")
 public class CreatedHikesServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        DataManager dataManager = DataManager.getInstance();
+        MainDM mainDM = MainDM.getInstance();
         String userId = request.getParameter("userID");
         if(userId == null){
             Helper.servlet("/Home", request, response);
             return;
         }
         int id = Integer.parseInt(userId);
-        List<HikeInfo> hikes = dataManager.getHikes(id);
+        List<HikeInfo> hikes = mainDM.getHikes(id);
         Gson gson = new GsonBuilder().setDateFormat("MMM, d, yyyy HH:mm:ss").create();
         String createdHikes = gson.toJson(hikes);
         response.setContentType("text/html; charset=UTF-8");

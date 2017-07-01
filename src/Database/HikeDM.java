@@ -8,25 +8,25 @@ import java.util.Date;
 /**
  * Created by Nodo on 6/27/2017.
  */
-public class HikeManager {
+public class HikeDM {
 
 
 
     private DatabaseConnector databaseConnector;
 
-    public static final String ATTR = "HikeManager";
+    public static final String ATTR = "HikeDM";
 
-    private static HikeManager hikeManager = null;
+    private static HikeDM hikeDM = null;
 
-    private HikeManager() {
+    private HikeDM() {
         databaseConnector = DatabaseConnector.getInstance();
     }
 
-    public static HikeManager getInstance() {
-        if (hikeManager == null) {
-            hikeManager = new HikeManager();
+    public static HikeDM getInstance() {
+        if (hikeDM == null) {
+            hikeDM = new HikeDM();
         }
-        return hikeManager;
+        return hikeDM;
     }
 
     /**

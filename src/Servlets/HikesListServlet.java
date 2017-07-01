@@ -1,17 +1,15 @@
 package Servlets;
 
-import Database.DataManager;
+import Database.MainDM;
 import Models.Hike.HikeInfo;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.util.List;
 
@@ -21,8 +19,8 @@ import java.util.List;
 @WebServlet("/HikesListServlet")
 public class HikesListServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        DataManager dataManager = DataManager.getInstance();
-        List<HikeInfo> hikes = dataManager.getHikes(-1);
+        MainDM mainDM = MainDM.getInstance();
+        List<HikeInfo> hikes = mainDM.getHikes(-1);
         Gson gson = new GsonBuilder().setDateFormat("MMM, d, yyyy HH:mm:ss").create();
         String hikesList = gson.toJson(hikes);
         response.setContentType("text/html; charset=UTF-8");

@@ -3,8 +3,9 @@ package WebSockets;
 /**
  * Created by Levani on 14.06.2017.
  */
-import Database.DataManager;
-import Database.HikeFeedSocketDM;
+import Database.GalleryDM;
+import Database.MainDM;
+import Database.HikeFeedDM;
 import Listeners.GetHttpSessionConfigurator;
 import Models.*;
 import com.google.gson.Gson;
@@ -80,8 +81,8 @@ public class HikeFeedWebSocketServer{
         int privacyType = 2;
         Date currDate = calendar.getTime();
         String time = dateFormat.format(currDate);
-        int returnedID = HikeFeedSocketDM.getInstance().addComment(userID, postID, hikeID, comment, privacyType, time);
-        MiniUser user = DataManager.getInstance().getUserById(userID);
+        int returnedID = HikeFeedDM.getInstance().addComment(userID, postID, hikeID, comment, privacyType, time);
+        MiniUser user = MainDM.getInstance().getUserById(userID);
         Comment com = new Comment(returnedID, comment, postID, user, currDate, 0);
         webSocketHelper.sendToAllConnectedSessions(com, action, hikeId, connectedSessions.get(hikeId).keySet());
     }
@@ -92,7 +93,7 @@ public class HikeFeedWebSocketServer{
         Integer userID = (Integer) httpSession.getAttribute("userID");
         Integer commentID = Integer.parseInt((String)data.get("commentID"));
         int postID = Integer.parseInt((String)data.get("postID"));
-        int returnedID = HikeFeedSocketDM.getInstance().likeComment(userID, commentID);
+        int returnedID = HikeFeedDM.getInstance().likeComment(userID, commentID);
         Like like;
         like = new Like(postID, commentID, userID, returnedID != -1);
         webSocketHelper.sendToAllConnectedSessions(like, action, hikeId, connectedSessions.get(hikeId).keySet());
@@ -102,14 +103,20 @@ public class HikeFeedWebSocketServer{
         Map<String, Object> data = (Map)(jsonMessage.get("data"));
         String post = (String)data.get("post");
         String link = (String)data.get("link");
+        String photoPath = (String)data.get("photoPath");
         HttpSession httpSession = connectedSessions.get(hikeId).get(session);
         Integer userID = (Integer) httpSession.getAttribute("userID");
         int hikeID = hikeId;
         Date currDate = calendar.getTime();
         String time = dateFormat.format(currDate);
-        int returnedID = HikeFeedSocketDM.getInstance().writePost(userID, hikeID, post, time, link);
-        MiniUser user = DataManager.getInstance().getUserById(userID);
-        Post newPost = new Post(returnedID, post, link, user, currDate, new ArrayList<>(), 0);
+        int photoID = -1;
+        if(!photoPath.equals("null")){
+            photoID = GalleryDM.getInstance().savePhoto(hikeID, userID, photoPath);
+        }
+        int returnedID = HikeFeedDM.getInstance().writePost(userID, hikeID, post, time, link, photoID);
+        MiniUser user = MainDM.getInstance().getUserById(userID);
+        Photo photo = new Photo(photoID, photoPath, "");
+        Post newPost = new Post(returnedID, post, link, user, currDate, new ArrayList<>(), 0, photo);
         webSocketHelper.sendToAllConnectedSessions(newPost, action, hikeId, connectedSessions.get(hikeId).keySet());
     }
 
@@ -118,7 +125,7 @@ public class HikeFeedWebSocketServer{
         HttpSession httpSession = connectedSessions.get(hikeId).get(session);
         Integer userID = (Integer) httpSession.getAttribute("userID");
         Integer postID = Integer.parseInt((String)data.get("postID"));
-        int returnedID = HikeFeedSocketDM.getInstance().likePost(userID, postID);
+        int returnedID = HikeFeedDM.getInstance().likePost(userID, postID);
         if(returnedID == -1){
             data.put("likeResult", "unlike");
         } else{

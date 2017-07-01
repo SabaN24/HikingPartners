@@ -5,14 +5,11 @@ import java.sql.SQLException;
 import java.util.*;
 
 import Database.DatabaseConnector;
-import Database.HikeFeedSocketDM;
+import Database.HikeFeedDM;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.text.DateFormat;
-import java.util.Date;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import Models.Comment;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -21,12 +18,12 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
  * Created by vache on 6/15/2017.
  */
 public class TestSocketDM {
-    private HikeFeedSocketDM socketDM;
+    private HikeFeedDM socketDM;
     private DatabaseConnector dbConnector;
 
     @BeforeEach
     public void testSetup(){
-        socketDM = HikeFeedSocketDM.getInstance();
+        socketDM = HikeFeedDM.getInstance();
         dbConnector = DatabaseConnector.getInstance();
     }
 
@@ -38,7 +35,7 @@ public class TestSocketDM {
         DateFormat df =  new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Calendar calendar = Calendar.getInstance();
         String time = df.format(calendar.getTime());
-        int returnedID = socketDM.writePost(userID, hikeID, post, time, "bla");
+        int returnedID = socketDM.writePost(userID, hikeID, post, time, "bla", 0);
         assertNotEquals(-1, returnedID);
 
         ResultSet resultSet = dbConnector.getData("select * from posts order by ID desc limit 1");
@@ -86,7 +83,7 @@ public class TestSocketDM {
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
 
-        int returnedID2 = socketDM.writePost(1, 1, "Test", time, "bla");
+        int returnedID2 = socketDM.writePost(1, 1, "Test", time, "bla", 0);
         int returnedID1 = socketDM.addComment(userID, returnedID2, hikeID, comment+"1", privacyType + 1, time);
         assertNotEquals(-1, returnedID1);
 
@@ -112,7 +109,7 @@ public class TestSocketDM {
         DateFormat df =  new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Calendar calendar = Calendar.getInstance();
         String time = df.format(calendar.getTime());
-        int returnedID = socketDM.writePost(1, 1, "Test", time, "bla");
+        int returnedID = socketDM.writePost(1, 1, "Test", time, "bla", 0);
         int userID = 1;
         int returnedID1 = socketDM.likePost(userID, returnedID);
         assertNotEquals(-1, returnedID1);
@@ -136,7 +133,7 @@ public class TestSocketDM {
         DateFormat df =  new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Calendar calendar = Calendar.getInstance();
         String time = df.format(calendar.getTime());
-        int returnedID = socketDM.writePost(1, 1, "Test", time, "bla");
+        int returnedID = socketDM.writePost(1, 1, "Test", time, "bla", 0);
         int returnedID1 = socketDM.addComment(1, 1, 1, "test", 1, time);
         int userID = 1;
         int returnedID2 = socketDM.likeComment(userID, returnedID1);

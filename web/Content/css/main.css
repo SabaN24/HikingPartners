@@ -405,6 +405,14 @@ main {
     color: #aaa;
 }
 
+.post-photo{
+    max-width: 100%;
+}
+
+.post-photo img{
+    max-width: 100%;
+}
+
 .post-text {
     padding: 0 10px;
     margin-bottom: 10px;
@@ -422,6 +430,45 @@ main {
     border: none;
     border-left: 1px solid #ccc;
     transition: .3s outline;
+}
+
+.new-post-input-div{
+    width:auto;
+    overflow:hidden;
+}
+
+.new-post-img{
+    background:#ccc;
+    width:53px;
+    height:53px;
+    float:right;
+}
+
+.new-post-img img{
+    width:100%;
+    height:100%;
+}
+
+.new-post .post-author-avatar{
+    vertical-align: top;
+}
+
+.photo-remove-button{
+    cursor: pointer;
+    position: absolute;
+    background: white;
+    width:14px;
+    height:14px;
+    top:7px;
+    right:9px;
+}
+
+.photo-remove-button .fa{
+    font-size: 15px;
+}
+
+.photo-remove-button:hover .fa{
+    color: #ccc;
 }
 
 .new-post-input:focus {
@@ -573,8 +620,9 @@ main {
 }
 
 .add-video-button {
+    cursor: pointer;
     background: none;
-    background-image: url("../img/youtube-logo.png");;
+    background-image: url("../img/youtube-logo.png");
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
@@ -610,8 +658,9 @@ main {
 }
 
 .upload-image-button {
+    cursor: pointer;
     background: none;
-    background-image: url("../img/picture-logo.png");;
+    background-image: url("../img/picture-logo.png");
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;

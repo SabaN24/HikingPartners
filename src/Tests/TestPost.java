@@ -43,8 +43,8 @@ public class TestPost {
         comments.add(c3);
         comments.add(c4);
         empty = new ArrayList<Comment>();
-        p1 = new Post(1, "bla1", "bla", user1, date, comments, 10);
-        p2 = new Post(2, "bla2", "bla", user2, date, empty, 9);
+        p1 = new Post(1, "bla1", "bla", user1, date, comments, 10, null);
+        p2 = new Post(2, "bla2", "bla", user2, date, empty, 9, null);
     }
 
     @Test

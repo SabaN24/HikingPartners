@@ -13,21 +13,22 @@
             <div class="avatar-block post-author-avatar"
                  v-bind:style="{ backgroundImage: 'url(' + user.profilePictureAddress + ')' }"></div>
             <form action="" class="post-form" v-on:submit.prevent="sendPost">
-                <input type="text" placeholder="Write something..." class="new-post-input" autocomplete="off"
-                       v-model="newPostText">
+                <div class="new-post-img" v-if="uploadingPicture">
+                    <img v-bind:src="imageLink" alt="">
+                    <div class="photo-remove-button" @click="cancelPicture()"><i class="fa fa-window-close"></i></div>
+                </div>
+                <div class="new-post-input-div">
+                    <input type="text" placeholder="Write something..." class="new-post-input" autocomplete="off"
+                           v-model="newPostText">
+                </div>
             </form>
-            <button type="button" class="upload-image-button" @click="showImagePopup()"></button>
+            <button type="button" class="upload-image-button" @click="document.querySelectorAll('.image-chooser')[0].click()"></button>
             <button type="button" class="add-video-button" @click="showLinkPopup()"></button>
         </div>
         <div class="post-popup" :class="{active : imagePopupIsActive }">
-            <form v-bind:action="'/PostPhoto?hikeId=' + hikeId" method="post"
-                  enctype="multipart/form-data">
-                <label class="custom-image-chooser">
-                    Choose an Image
-                    <input type="file" name="pic" accept="image/*" class="image-chooser">
-                </label>
-                <input type="submit" value="Upload Image" class="mybtn" style="margin-top: 10px">
-                <div class="close-block" @click="closeImagePopup()">x</div>
+            <form v-on:submit.prevent="uploadPicture" method="post"
+                  enctype="multipart/form-data" class="img-form">
+                <input type="file" name="pic" accept="image/*" v-on:change="uploadPicture" class="image-chooser">
             </form>
         </div>
         <div class="post-popup" :class="{active : videoPopupIsActive}">
@@ -52,6 +53,9 @@
         </div>
 
         <div class="post-text">
+            <div class="post-photo" v-if="post.photo && post.photo.src != 'null' && post.photo.src != ''">
+                <img v-bind:src="post.photo.src" alt="">
+            </div>
             {{post.text}}
             <br>
             <iframe width="420" height="315" v-if="post.link != ''"
@@ -119,13 +123,17 @@
         //it will use these to bind element data and
         //modify them.
         data: {
+            hikeID: hikeId,
             posts: [],
             commentInputs: {},
             newPostText: "",
             user: {},
             imagePopupIsActive: false,
             videoPopupIsActive: false,
-            youtubeLink: ""
+            youtubeLink: "",
+            uploadingPicture: false,
+            uploadProgress: false,
+            imageLink: "/Content/img/loading.gif"
         },
         //These functions will be called when page loads.
         created: function () {
@@ -142,6 +150,36 @@
                 var th = this;
                 axios.post("/HikePostPageServlet?hikeId=" + hikeId, {}).then(function (response) {
                     th.posts = response.data.reverse();
+                });
+            },
+
+            uploadPicture: function(){
+                if(this.uploadProgress){
+                    return;
+                }
+                var self = this;
+                self.uploadProgress = true;
+                self.uploadingPicture = true;
+                self.imageLink = "/Content/img/loading.gif";
+                axios.post('/PostPhoto?hikeId=' + hikeId, new FormData(document.querySelector(".img-form"))).then(function(response){
+                    if(response.status == 200){
+                        self.imageLink  = response.data.imgUrl;
+                    }else{
+                        self.uploadingPicture = false;
+                    }
+                    self.uploadProgress = false;
+                });
+            },
+
+            cancelPicture: function(){
+                if(this.uploadProgress){
+                    return;
+                }
+                var self = this;
+                axios.post('/CancelPhoto?photoPath=' + self.imageLink, {}).then(function(response){
+                    document.querySelector(".image-chooser").value = "";
+                    self.imageLink = "";
+                    self.uploadingPicture = false;
                 });
             },
 
@@ -188,15 +226,21 @@
             },
 
             sendPost: function () {
+                if(this.uploadProgress){
+                    return;
+                }
                 ws.send(JSON.stringify({
                     action: "getPost",
                     data: {
                         post: this.newPostText + "",
-                        link: this.youtubeLink
+                        link: this.youtubeLink,
+                        photoPath: this.imageLink == "/Content/img/loading.gif" || this.imageLink == "" ? "null" : this.imageLink
                     }
                 }));
                 this.newPostText = "";
                 this.youtubeLink = "";
+                this.imageLink = "";
+                this.uploadingPicture = false;
             },
 
 

@@ -1,18 +1,22 @@
 package Servlets;
 
-import Database.DataManager;
+import Database.MainDM;
 import Models.Hike.DefaultModel;
+import org.imgscalr.Scalr;
 
+import javax.imageio.ImageIO;
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.xml.crypto.Data;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLDecoder;
 
 /*
 * Gets name of jsp file, request, response and redirects request and response.
@@ -20,7 +24,7 @@ import java.net.URL;
 public class Helper {
     public static void view(String page, HttpServletRequest request, HttpServletResponse response)  {
         HttpSession session = request.getSession();
-        DataManager dataManager = DataManager.getInstance();
+        MainDM mainDM = MainDM.getInstance();
 
         Integer userID = (Integer)session.getAttribute("userID");
 
@@ -29,7 +33,7 @@ public class Helper {
                 servlet("/Login", request, response);
                 return;
             }
-            request.setAttribute("loggedInUser", dataManager.getUserById(userID));
+            request.setAttribute("loggedInUser", mainDM.getUserById(userID));
         }
 
         request.setAttribute("page", page + ".jsp");
@@ -46,12 +50,12 @@ public class Helper {
     public static void view(String page, String subPage, HttpServletRequest request, HttpServletResponse response)  {
         request.setAttribute("subPage", page + "_" + subPage + ".jsp");
         if(page.equals("HikePage")) {
-            DataManager dataManager = DataManager.getInstance();
+            MainDM mainDM = MainDM.getInstance();
             int hikeId = 1;
             if(request.getParameter("hikeId") != null) {
                 hikeId = Integer.parseInt(request.getParameter("hikeId"));
             }
-            DefaultModel defaultModel = dataManager.getDefaultModel(hikeId);
+            DefaultModel defaultModel = mainDM.getDefaultModel(hikeId);
             request.setAttribute(DefaultModel.ATTR, defaultModel);
             view(page, request, response);
         }else{
@@ -81,5 +85,37 @@ public class Helper {
         }
         in.close();
         return response.toString();
+    }
+
+    public static String root(Object o) {
+        String path = o.getClass().getClassLoader().getResource("").getPath();
+        String fullPath = null;
+        try {
+            fullPath = URLDecoder.decode(path, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String pathArr[] = fullPath.split("/WEB-INF/classes/");
+        fullPath = pathArr[0];
+        String reponsePath = new File(fullPath).getPath() + File.separatorChar;
+        return reponsePath;
+    }
+
+    public static void savePrefferedSize(File file){
+        try{
+            BufferedImage img = ImageIO.read(file);
+            int originalHeight = img.getHeight();
+            int originalWidth = img.getWidth();
+            if(originalHeight > 1200 || originalWidth > 1200) {
+                img = Scalr.resize(img, 1200);
+            }
+            String type = file.getAbsolutePath();
+            type = type.substring(file.getAbsolutePath().indexOf('.') + 1);
+            ImageIO.write(img, type, file);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
     }
 }

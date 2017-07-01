@@ -1,7 +1,7 @@
 package Tests;
 
 import Models.Hike.AboutModel;
-import Database.DataManager;
+import Database.MainDM;
 import Models.Hike.DefaultModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,11 +16,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 public class TestDataManager {
 
-    private DataManager dataManager;
+    private MainDM mainDM;
 
     @BeforeEach
     public void testSetup(){
-        dataManager = DataManager.getInstance();
+        mainDM = MainDM.getInstance();
     }
 
     /**
@@ -30,8 +30,8 @@ public class TestDataManager {
     @Test
     public void testGetAboutModel()throws SQLException{
 
-        DefaultModel defaultModel = dataManager.getDefaultModel(1);
-        AboutModel aboutModel = dataManager.getAboutModel(1, 1);
+        DefaultModel defaultModel = mainDM.getDefaultModel(1);
+        AboutModel aboutModel = mainDM.getAboutModel(1, 1);
 
         assertEquals("MAGARI PAXODI!!! SHEMODIT ALL :***", defaultModel.getName());
         assertEquals(5, aboutModel.getMaxPeople());

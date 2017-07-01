@@ -1,18 +1,16 @@
 package Servlets;
 
-import Database.DataManager;
+import Database.MainDM;
 import Models.Post;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -23,11 +21,11 @@ import java.util.List;
 @WebServlet("/HikePostPageServlet")
 public class HikePostPageServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        DataManager dataManager = DataManager.getInstance();
+        MainDM mainDM = MainDM.getInstance();
         HttpSession httpSession = request.getSession();
         int loggedInUser = (Integer)httpSession.getAttribute("userID");
         Integer id = Integer.parseInt(request.getParameter("hikeId"));
-        List<Post> posts = dataManager.getPosts(id, loggedInUser);
+        List<Post> posts = mainDM.getPosts(id, loggedInUser);
         Gson gson = new GsonBuilder().setDateFormat("MMM, d, yyyy HH:mm:ss").create();
         String result = gson.toJson(posts);
         response.setContentType("text/html; charset=UTF-8");

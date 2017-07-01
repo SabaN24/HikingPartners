@@ -1,6 +1,6 @@
 package Servlets;
 
-import Database.HikeManager;
+import Database.HikeDM;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -37,8 +37,8 @@ public class AddHikeServlet extends HttpServlet {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        HikeManager hikeManager = HikeManager.getInstance();
-        hikeManager.addNewHike(name, startDate, endDate, description, maxPeople, creatorId);
+        HikeDM hikeDM = HikeDM.getInstance();
+        hikeDM.addNewHike(name, startDate, endDate, description, maxPeople, creatorId);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

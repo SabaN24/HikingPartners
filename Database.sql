@@ -1,3 +1,4 @@
+drop schema Hiking_Partners;
 Create Database IF NOT EXISTS Hiking_Partners
   Default Character set UTF8;
 
@@ -65,6 +66,19 @@ CREATE TABLE IF NOT EXISTS hike_to_location (
   REFERENCES hikes (ID)
 );
 
+
+CREATE TABLE IF NOT EXISTS gallery_photos (
+  ID INT AUTO_INCREMENT NOT NULL,
+  hike_ID INT NOT NULL,
+  img_url VARCHAR(256) NOT NULL,
+  user_ID INT NOT NULL,
+  PRIMARY KEY (ID),
+  FOREIGN KEY (hike_ID)
+  REFERENCES hikes (ID),
+  FOREIGN KEY (user_ID)
+  REFERENCES users (ID)
+);
+
 CREATE TABLE IF NOT EXISTS posts (
   ID INT AUTO_INCREMENT NOT NULL,
   post_text TEXT,
@@ -72,9 +86,12 @@ CREATE TABLE IF NOT EXISTS posts (
   hike_ID INT NOT NULL,
   user_ID INT NOT NULL,
   post_time DATETIME NOT NULL,
+  photo_ID int null,
   PRIMARY KEY (ID),
   FOREIGN KEY (hike_ID)
-  REFERENCES hikes (ID)
+  REFERENCES hikes (ID),
+  FOREIGN KEY (photo_ID)
+  REFERENCES gallery_photos(ID)
 );
 
 CREATE TABLE IF NOT EXISTS privacy_types (
@@ -104,23 +121,10 @@ CREATE TABLE IF NOT EXISTS cover_photos (
   ID INT AUTO_INCREMENT NOT NULL,
   description TEXT,
   hike_ID INT NOT NULL,
-  img_url VARCHAR(40) NOT NULL,
+  img_url VARCHAR(256) NOT NULL,
   PRIMARY KEY (ID),
   FOREIGN KEY (hike_ID)
   REFERENCES hikes (ID)
-);
-
-
-CREATE TABLE IF NOT EXISTS gallery_photos (
-  ID INT AUTO_INCREMENT NOT NULL,
-  hike_ID INT NOT NULL,
-  img_url VARCHAR(40) NOT NULL,
-  user_ID INT NOT NULL,
-  PRIMARY KEY (ID),
-  FOREIGN KEY (hike_ID)
-  REFERENCES hikes (ID),
-  FOREIGN KEY (user_ID)
-  REFERENCES users (ID)
 );
 
 
@@ -201,10 +205,10 @@ INSERT INTO cover_photos VALUES
 
 
 insert into posts values
-  (1,"9ზე ოკრიბაშ იყავით ბერლინში მივდივართ", '',  1, 4, now()),
-  (2,"რუსი ნაშები ჩითავენ? XD XD XD", '', 1, 3, now()),
-  (3,"ხალვა მომაქ მე", '', 1, 2, now()),
-  (4, "შავი ქამრები არ დამანახოთ!!! მწვანე კაია", '', 1, 1, now());
+  (1,"9ზე ოკრიბაშ იყავით ბერლინში მივდივართ", '',  1, 4, now(), null),
+  (2,"რუსი ნაშები ჩითავენ? XD XD XD", '', 1, 3, now(), null),
+  (3,"ხალვა მომაქ მე", '', 1, 2, now(), NULL ),
+  (4, "შავი ქამრები არ დამანახოთ!!! მწვანე კაია", '', 1, 1, now(), null);
 
 insert into comments
 (comment_text, post_ID, hike_ID, user_ID, comment_time, privacy_type)

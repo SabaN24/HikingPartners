@@ -2,26 +2,24 @@ package Database;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.UUID;
 
 /**
  * Created by vache on 6/15/2017.
  */
-public class HikeFeedSocketDM {
+public class HikeFeedDM {
     private DatabaseConnector databaseConnector;
 
     /* Constants */
     public static final String ATTR = "SocketDM";
 
-    private static HikeFeedSocketDM socketDM = null;
+    private static HikeFeedDM socketDM = null;
 
-    private HikeFeedSocketDM() {databaseConnector = DatabaseConnector.getInstance();}
+    private HikeFeedDM() {databaseConnector = DatabaseConnector.getInstance();}
 
-    public static HikeFeedSocketDM getInstance(){
+    public static HikeFeedDM getInstance(){
         if(socketDM == null){
-            socketDM = new HikeFeedSocketDM();
+            socketDM = new HikeFeedDM();
         }
         return socketDM;
     }
@@ -33,13 +31,15 @@ public class HikeFeedSocketDM {
      * @param post
      * @return ID of currently added post
      */
-    public int writePost(int userID, int hikeID, String post, String time, String link) {
-        StringBuilder query = new StringBuilder("insert into posts (post_text, link, hike_id, user_id, post_time) values(");
+    public int writePost(int userID, int hikeID, String post, String time, String link, int photoID) {
+        StringBuilder query = new StringBuilder("insert into posts (post_text, link, hike_id, user_id, post_time, photo_ID) values(");
         query.append("\"" + post + "\",");
         query.append("\"" + link + "\",");
         query.append(hikeID + ", ");
         query.append(userID + ", ");
-        query.append("'" + time + "')");
+        query.append("'" + time + "',");
+        String photo = photoID == -1 ? "null" : photoID + "";
+        query.append("" + photo + ")");
         databaseConnector.updateData(query.toString());
         ResultSet resultSet = databaseConnector.getData("select ID from posts order by ID desc limit 1");
         try {

@@ -10,8 +10,8 @@
 <script> document.querySelectorAll('title')[0].innerHTML = 'Home'; </script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="/Content/css/bootstrap-datepicker.min.css">
 <script src="/Scripts/bootstrap-datepicker.min.js"></script>
 <link rel="stylesheet" href="/Content/css/common.css">
@@ -24,7 +24,7 @@
             <li class="hike-item" v-for="hike in hikes">
                 <div class="slider-block">
                     <div class="caption">
-                        {{hike.coverPhotos[0] ? hike.coverPhotos[0].locationName : "sandro"}}
+                        {{hike.coverPhotos[0].description}}
                     </div>
                 </div>
                 <div class="hike-info">
