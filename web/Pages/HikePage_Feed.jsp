@@ -53,10 +53,10 @@
         </div>
 
         <div class="post-text">
+            {{post.text}}
             <div class="post-photo" v-if="post.photo && post.photo.src != 'null' && post.photo.src != ''">
                 <img v-bind:src="post.photo.src" alt="">
             </div>
-            {{post.text}}
             <br>
             <iframe width="420" height="315" v-if="post.link != ''"
                     :src="post.link">
