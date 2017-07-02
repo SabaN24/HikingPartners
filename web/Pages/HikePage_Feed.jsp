@@ -214,6 +214,9 @@
             //Sends new comment to socket server, called when enter is hit on comment.
             sendComment: function (postId) {
                 var newCommentText = this.commentInputs[postId];
+                if(newCommentText == ""){
+                    return;
+                }
                 ws.send(JSON.stringify({
                     action: "getComment",
                     data: {
@@ -226,7 +229,8 @@
             },
 
             sendPost: function () {
-                if(this.uploadProgress){
+                if(this.uploadProgress || this.link == "" && (this.imageLink == "/Content/img/loading.gif"
+                    || this.imageLink == "") && this.newPostText == ""){
                     return;
                 }
                 ws.send(JSON.stringify({

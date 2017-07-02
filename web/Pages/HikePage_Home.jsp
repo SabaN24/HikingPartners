@@ -129,6 +129,9 @@
             },
             //Sends new comment to socket server, called when enter is hit on comment.
             sendComment: function () {
+                if(this.newCommentInput == ""){
+                    return;
+                }
                 ws.send(JSON.stringify({
                     action: "getComment",
                     data: {
