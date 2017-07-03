@@ -36,6 +36,7 @@
         lastName: '<%= loggedInUser.getLastName() %>',
         profilePictureAddress: '<%= loggedInUser.getProfilePictureAddress() %>'
     };
+
 </script>
 <% } %>
 <div class="wrapper clearfix">
@@ -76,43 +77,31 @@
 
     <% if (!pageName.equals("LoginPage.jsp")) { %>
 
-
-
     <div id="chatVue">
-
-        <div class="chats-block" v-for="(chat, index) in chats">
-            <div class="messages-block">
-                <div class="chat-header" style="color: red" >
-                    <span> <b> {{chat.userTo.firstName}} </b> </span> <span> <b> {{chat.userTo.lastName}} </b> </span>
+        <div class="chats">
+            <div class="chat" v-for="(chat, index) in chats">
+                <div class="chat-upper">
+                    <div class="chat-user-name" @click="window.location = '/Profile?userID=' + chat.userTo.id">{{chat.userTo.firstName}} {{chat.userTo.lastName}}</div>
+                    <div class="chat-close-btn" @click="closeChat(chat.toUserId)"><i class="fa fa-minus" aria-hidden="true"></i></div>
                 </div>
-                <button  v-on:click="closeChat(chat.toUserId)"> close </button>
-
-
-                <div class="messages-block-inner">
-                    <ul class="messages-list"
-                        v-for="(message, index) in chat.messages"
-                    >
-                        <li class="message">
-                            <div class="avatar-block"
-                                 v-bind:style="{ backgroundImage: 'url(' + message.userFrom.profilePictureAddress + ')' }"></div>
-                            <div class="message-text" style="color: cyan">
-                                {{message.message}}
+                <div class="messages-block">
+                    <ul class="messages-list">
+                        <li v-for="(message, index) in chat.messages" class="message">
+                            <div class="avatar-block" @click="window.location = '/Profile?userID=' + message.userFrom.id" v-if="loggedInUser.id != message.userFrom.id" :style="{ backgroundImage: 'url(' + message.userFrom.profilePictureAddress + ')' }"></div>
+                            <div class="message-text-wrapper" :class="{ 'self-message' : loggedInUser.id == message.userFrom.id }">
+                                <div class="message-text" >
+                                    {{message.message}}
+                                </div>
                             </div>
                         </li>
                     </ul>
-
-
-                    <div class="message">
-
-                        <form action="HikePageServlet" v-on:submit.prevent="sendMessage(chat.toUserId)" method="post">
-                            <input v-model="newMessage" class="message-input" type="text" autocomplete="off"
-                                   name="add-message"
-                                   placeholder="Send Message...">
-                        </form>
-
-                    </div>
-
-
+                </div>
+                <div class="chat-add-message">
+                    <form action="HikePageServlet" @submit.prevent="sendMessage(chat.toUserId)" method="post">
+                        <input class="new-message-input" v-model="newMessage" type="text" autocomplete="off"
+                               name="add-message"
+                                  placeholder="Send Message...">
+                    </form>
                 </div>
             </div>
         </div>
@@ -142,7 +131,8 @@
         //modify them.
         data: {
             chats: [],
-            newMessage: ""
+            newMessage: "",
+            loggedInUser: user
 
         },
         //These functions will be called when page loads.
@@ -157,15 +147,16 @@
             fetchChats: function () {
                 var th = this;
                 axios.post("/OpenChatsServlet?userId=" + <%= loggedInUser.getId() %>, {}).then(function(response){
-                    th.chats = response.data;
+                    th.chats = response.data.reverse();
+                    th.updateChatScroll();
                 });
             },
 
             fetchChat: function(toUserId){
                 var th = this;
                 axios.post("/OpenChatServlet?toUserId=" + toUserId, {}).then(function(response){
-                    //console.log(response.data);
-                    th.chats.push(response.data);
+                    th.chats.unshift(response.data);
+                    th.updateChatScroll(0);
                 });
 
             },
@@ -220,7 +211,6 @@
                 mws.send(JSON.stringify({
                     action: "openChat",
                     toUserId: toUserId + "",
-
                 }));
 
             },
@@ -248,9 +238,30 @@
                 }));
                 this.newMessage = "";
 
-            }
+            },
+            updateChatScroll : function (idx) {
+                setTimeout(function () {
+                    if(idx !== undefined){
+                        var elem = document.getElementsByClassName("messages-block")[0];
+                        elem.scrollTop = elem.scrollHeight;
+                    }else {
+                        var elements = document.getElementsByClassName("messages-block");
+                        Array.prototype.forEach.call(elements, function(elem) {
+                            elem.scrollTop = elem.scrollHeight;
+                        });
+                    }
+                }, 0);
 
-
+            },
+//            textAreaAdjust : function(e, idx) {
+//                var o = e.target;
+//                o.style.height = "1px";
+//                o.style.height = (o.scrollHeight)+"px";
+//                var el = document.querySelectorAll(".messages-block")[idx];
+//                el.style.height = 274 - o.scrollHeight + 'px';
+//
+//
+//            }
         }
 
 

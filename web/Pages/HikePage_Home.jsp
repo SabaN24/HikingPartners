@@ -108,7 +108,6 @@
             fetchData: function () {
                 var th = this;
                 axios.post("/HikeCommentsServlet?hikeId=" + hikeId, {}).then(function (response) {
-                    console.log(response);
                     th.aboutModel = response.data;
                 });
             },
@@ -159,7 +158,6 @@
             },
             hoverUser: function(user, e){
                 if(this.profPopupActive) return;
-                console.log(e);
                 this.hoveredUser = user;
                 this.profPopupActive = true;
                 var popup = document.getElementsByClassName('profile-popup-wrapper')[0];

@@ -1,4 +1,4 @@
-drop schema Hiking_Partners;
+drop schema if exists Hiking_Partners;
 Create Database IF NOT EXISTS Hiking_Partners
   Default Character set UTF8;
 
@@ -51,7 +51,9 @@ CREATE TABLE IF NOT EXISTS hike_to_user (
   FOREIGN KEY (hike_ID)
   REFERENCES hikes (ID),
   FOREIGN KEY (role_ID)
-  REFERENCES roles (ID)
+  REFERENCES roles (ID),
+  foreign key (user_ID)
+  references users(ID)
 );
 
 
@@ -91,7 +93,9 @@ CREATE TABLE IF NOT EXISTS posts (
   FOREIGN KEY (hike_ID)
   REFERENCES hikes (ID),
   FOREIGN KEY (photo_ID)
-  REFERENCES gallery_photos(ID)
+  REFERENCES gallery_photos(ID),
+  foreign key (user_ID)
+  references users(ID)
 );
 
 CREATE TABLE IF NOT EXISTS privacy_types (
@@ -114,7 +118,9 @@ CREATE TABLE IF NOT EXISTS comments (
   FOREIGN KEY (privacy_type)
   REFERENCES privacy_types (ID),
   FOREIGN KEY (hike_id)
-  REFERENCES hikes (ID)
+  REFERENCES hikes (ID),
+  foreign key (user_ID)
+  references users(ID)
 );
 
 CREATE TABLE IF NOT EXISTS cover_photos (
@@ -152,14 +158,14 @@ CREATE TABLE IF NOT EXISTS comment_likes (
 );
 
 CREATE TABLE IF NOT EXISTS requests (
-    ID INT AUTO_INCREMENT NOT NULL,
-	sender_ID INT NOT NULL,
-    receiver_ID INT NOT NULL,
-    hike_ID INT NOT NULL,
-    PRIMARY KEY(ID),
-    FOREIGN KEY (sender_ID) REFERENCES users(ID),
-	FOREIGN KEY (receiver_ID) REFERENCES users(ID),
-    FOREIGN KEY (hike_ID) REFERENCES hikes(ID)
+  ID INT AUTO_INCREMENT NOT NULL,
+  sender_ID INT NOT NULL,
+  receiver_ID INT NOT NULL,
+  hike_ID INT NOT NULL,
+  PRIMARY KEY(ID),
+  FOREIGN KEY (sender_ID) REFERENCES users(ID),
+  FOREIGN KEY (receiver_ID) REFERENCES users(ID),
+  FOREIGN KEY (hike_ID) REFERENCES hikes(ID)
 );
 
 create table if not exists messages (
@@ -189,12 +195,42 @@ create table if not exists open_chats(
 
 -- ----------------------------------------------------------------------------- --
 
-INSERT INTO users (id, facebook_id, first_name, last_name, profile_picture_url, email, about_me_text,cover_picture_url,facebook_link ) VALUES
-  (1, 1,'Nodo', 'Sairmeli', '', '','','',''),
-  (2, 2,'Vache', 'Katsadze', '', '','','',''),
-  (3, 3,'Levaniko', 'Beroshvili', '', '','','',''),
-  (4, 4,'Sandro', 'Jiqia', '', '','','',''),
-  (5, 5,'Saba', 'Natroshvili', '', '','','','');
+insert into users (facebook_ID, first_name, last_name, profile_picture_url, birth_date, gender, email, about_me_text, cover_picture_url, facebook_link)
+values
+  ('1399903786758940', 'Sandro', 'Jikia', 'https://fb-s-c-a.akamaihd.net/h-ak-fbx/v/t1.0-1/12687968_963509663731690_303512796493540735_n.jpg?oh=ed9cd4b5eedc5f69c8eee5dc0d4ea08f&oe=59CAC61E&__gda__=1506912407_633aa37b5a527f13626b1276f44f5f00', NULL, 'male', 'sandro@post.com', 'Hello! I am new Hiker!', NULL, 'https://www.facebook.com/app_scoped_user_id/1399903786758940/'
+  ),
+  ('1297368127029077',
+   'Vache',
+   'Katsadze',
+   'https://fb-s-a-a.akamaihd.net/h-ak-fbx/v/t31.0-1/17635142_1218461468253077_6870905881472586478_o.jpg?oh=39ab588fd93f8d3c8b5c1dc7146d4e93&oe=59D74422&__gda__=1510811644_df8d1b98f172aaca7c40e91057722a18',
+   '1997-11-11',
+   'male',
+   'vache.vk@gmail.com',
+   'Hello! I am new Hiker!',
+   'https://scontent.xx.fbcdn.net/v/t1.0-9/q84/s720x720/13613_625017010930862_8045229606211891650_n.jpg?oh=a98d0adb6944671152045ebf5d951492&oe=59CFFA21',
+   'https://www.facebook.com/app_scoped_user_id/1297368127029077/'
+  ),
+  ('10209073007213123',
+   'Saba',
+   'Natroshvili',
+   'https://fb-s-c-a.akamaihd.net/h-ak-fbx/v/t1.0-1/12308736_10205094390590194_7418540499813895437_n.jpg?oh=e204555956efa5b5444301dd56f9f94d&oe=59D91AAD&__gda__=1506812275_76fb45e06235001aa6401e372276f0d2',
+   NULL,
+   'male',
+   'sabanatroshvili@yahoo.com',
+   'Hello! I am new Hiker!',
+   'https://scontent.xx.fbcdn.net/v/t1.0-9/s720x720/13417545_10206253488526918_2372119789953736284_n.jpg?oh=24c863192b37a0973f1e3759a2b8f46f&oe=5A054DD9',
+   'https://www.facebook.com/app_scoped_user_id/10209073007213123/'
+  ),
+  ('1530047160352334',
+   'Levan',
+   'Beroshvili',
+   'https://fb-s-b-a.akamaihd.net/h-ak-fbx/v/t31.0-1/c379.0.1290.1290/10506738_10150004552801856_220367501106153455_o.jpg?oh=6c57c27cdd7087bbb3fe212a121df59e&oe=5A08697C&__gda__=1506545431_ea3ffe79d57caf91de854335c028bd24',
+   NULL,
+   'male',
+   'lberoshvili9@gmail.com',
+   'Hello! I am new Hiker!',
+   NULL,
+   'https://www.facebook.com/app_scoped_user_id/1530047160352334/');
 
 SELECT
   *
@@ -224,16 +260,15 @@ INSERT INTO comments VALUES
   (1, 'რა დაგვჭირდება?', NULL, 1, 1, str_to_date('1999.12.01', '%Y.%m.%d'), 1),
   (2, 'ადგილები არის?', NULL, 1, 2, str_to_date('1999.08.01', '%Y.%m.%d'), 1),
   (3, 'წასვლის დროს ვერ გადმოვწევთ?', NULL, 1, 3, str_to_date('1999.09.01', '%Y.%m.%d'), 1),
-  (4, 'ანი როგორ ხარ მთავარანგელოზობა ვერ მოგილოცე', NULL, 1, 4, str_to_date('1999.10.01', '%Y.%m.%d'), 1),
-  (5, 'უკაცრავად მაინტერესებს პატარა ბავშვის პამპერსები თუ გაქვთ, 3 ზომა შავ პარკში რო ჩამიდოთ, მადლობა', NULL, 1, 5, str_to_date('1999.11.01', '%Y.%m.%d'), 1);
+  (4, 'ანი როგორ ხარ მთავარანგელოზობა ვერ მოგილოცე', NULL, 1, 1, str_to_date('1999.10.01', '%Y.%m.%d'), 1),
+  (5, 'უკაცრავად მაინტერესებს პატარა ბავშვის პამპერსები თუ გაქვთ, 3 ზომა შავ პარკში რო ჩამიდოთ, მადლობა', NULL, 1, 4, str_to_date('1999.11.01', '%Y.%m.%d'), 1);
 
 
 INSERT INTO hike_to_user VALUES
-  (1, 1, 6, 1),
-  (2, 1, 1, 2),
-  (3, 1, 2, 2),
-  (4, 1, 3, 2),
-  (5, 1, 4, 2);
+  (1, 1, 1, 1),
+  (2, 1, 2, 2),
+  (3, 1, 3, 2),
+  (4, 1, 4, 2);
 
 INSERT INTO cover_photos VALUES
   (1, 'მაგარი ლოკაცია დზნ', 1, '');
@@ -241,16 +276,16 @@ INSERT INTO cover_photos VALUES
 
 
 insert into posts values
-  (1,"9ზე ოკრიბაშ იყავით ბერლინში მივდივართ", '',  1, 4, now(), null),
+  (1,"9ზე ოკრიბაშ იყავით ბერლინში მივდივართ", '',  1, 1, now(), null),
   (2,"რუსი ნაშები ჩითავენ? XD XD XD", '', 1, 3, now(), null),
   (3,"ხალვა მომაქ მე", '', 1, 2, now(), NULL ),
-  (4, "შავი ქამრები არ დამანახოთ!!! მწვანე კაია", '', 1, 1, now(), null);
+  (4, "შავი ქამრები არ დამანახოთ!!! მწვანე კაია", '', 1, 4, now(), null);
 
 insert into comments
 (comment_text, post_ID, hike_ID, user_ID, comment_time, privacy_type)
 values
   ( "9ზე ვერ ვასწრებ 10იის ნახზე მანდ ვარ", 1, 1, 2, now(), 2),
-  ( "ე ვერ მოვასწრებთ !!! ", 1, 1, 4, now(), 2),
+  ( "ე ვერ მოვასწრებთ !!! ", 1, 1, 3, now(), 2),
   ( "კაია", 2, 1, 2, now(), 2);
 
 
@@ -402,26 +437,26 @@ CREATE PROCEDURE get_hike_members(hike_id INT)
 
 DELIMITER $$
 CREATE PROCEDURE request_response(request_id INT, accept BOOLEAN)
-BEGIN
-DECLARE desired_hike INT;
-DECLARE user_ID INT;
-SELECT
-    hike_ID
-INTO desired_hike FROM
-    requests
-WHERE
-    ID = request_id;
-SELECT
-    sender_ID
-INTO user_ID FROM
-    requests
-WHERE
-    ID = request_id;
-DELETE FROM requests
-WHERE
-    id = request_id;
-IF(accept = TRUE) THEN
-INSERT INTO hike_to_user (hike_ID, user_ID, role_ID) VALUES (desired_hike, user_ID, 2);
-END IF;
+  BEGIN
+    DECLARE desired_hike INT;
+    DECLARE user_ID INT;
+    SELECT
+      hike_ID
+    INTO desired_hike FROM
+      requests
+    WHERE
+      ID = request_id;
+    SELECT
+      sender_ID
+    INTO user_ID FROM
+      requests
+    WHERE
+      ID = request_id;
+    DELETE FROM requests
+    WHERE
+      id = request_id;
+    IF(accept = TRUE) THEN
+      INSERT INTO hike_to_user (hike_ID, user_ID, role_ID) VALUES (desired_hike, user_ID, 2);
+    END IF;
 
-END $$
+  END $$
