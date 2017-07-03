@@ -910,6 +910,7 @@ input[type="file"] {
     padding: 10px 5px;
     overflow-x: hidden;
     overflow-y: scroll;
+    padding-bottom: 40px;
 }
 
 .chat-add-message {

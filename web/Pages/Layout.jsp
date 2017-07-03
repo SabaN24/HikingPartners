@@ -97,8 +97,8 @@
                     </ul>
                 </div>
                 <div class="chat-add-message">
-                    <form action="HikePageServlet" @submit.prevent="sendMessage(chat.toUserId)" method="post">
-                        <input class="new-message-input" v-model="newMessage" type="text" autocomplete="off"
+                    <form action="HikePageServlet" @submit.prevent="sendMessage(chat.toUserId, index)" method="post">
+                        <input class="new-message-input" v-model="chat.newMessageInput" type="text" autocomplete="off"
                                name="add-message"
                                   placeholder="Send Message...">
                     </form>
@@ -148,6 +148,9 @@
                 var th = this;
                 axios.post("/OpenChatsServlet?userId=" + <%= loggedInUser.getId() %>, {}).then(function(response){
                     th.chats = response.data.reverse();
+                    th.chats.forEach(function (elem) {
+                       elem.newMessageInput = "";
+                    });
                     th.updateChatScroll();
                 });
             },
@@ -155,7 +158,9 @@
             fetchChat: function(toUserId){
                 var th = this;
                 axios.post("/OpenChatServlet?toUserId=" + toUserId, {}).then(function(response){
-                    th.chats.unshift(response.data);
+                    var chat = response.data;
+                    chat.newMessageInput = "";
+                    th.chats.unshift(chat);
                     th.updateChatScroll(0);
                 });
 
@@ -227,23 +232,24 @@
                 axios.post("/CloseChatServlet?toUserId=" +  toUserId, {});
             },
 
-            sendMessage: function (toUserId) {
-
+            sendMessage: function (toUserId, idx) {
+                var msg = this.chats.find(function(chat){return chat.toUserId == toUserId}).newMessageInput;
                 mws.send(JSON.stringify({
                     action: "getMessage",
                     data: {
                         toUserId: toUserId + "",
-                        message: this.newMessage + "",
+                        message: msg + "",
                     }
                 }));
-                this.newMessage = "";
-
+                this.chats.find(function(chat){return chat.toUserId == toUserId}).newMessageInput = "";
+                this.updateChatScroll(idx);
             },
             updateChatScroll : function (idx) {
                 setTimeout(function () {
                     if(idx !== undefined){
-                        var elem = document.getElementsByClassName("messages-block")[0];
+                        var elem = document.getElementsByClassName("messages-block")[idx];
                         elem.scrollTop = elem.scrollHeight;
+                        console.log(elem.scrollTop);
                     }else {
                         var elements = document.getElementsByClassName("messages-block");
                         Array.prototype.forEach.call(elements, function(elem) {
