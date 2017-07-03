@@ -18,13 +18,11 @@ public class LocationsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int size = Integer.parseInt(request.getParameter("LocationsListSize"));
         LocationsDM locationsDM = LocationsDM.getInstance();
-        int hikeID = 1; // Integer.parseInt(request.getParameter("hikeId"));
+        int hikeID = Integer.parseInt(request.getParameter("hikeId"));
         for(int i=0; i<size; i++){
             String eachLoc = request.getParameter(i+"");
             String lat = eachLoc.substring(7, eachLoc.indexOf(','));
-            System.out.println(lat);
             String lng = eachLoc.substring(eachLoc.indexOf("lng")+5, eachLoc.length()-1);
-            System.out.println(lng);
             locationsDM.connectHikeAndLocation(hikeID, lat, lng, 1);
         }
     }

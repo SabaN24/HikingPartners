@@ -78,7 +78,7 @@
                     </a>
                 </li>
                 <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Locations' }">
-                    <a href="#" class="nav-link">
+                    <a href="<%= "/LocationsServlet?hikeId=" + hikeId%>" class="nav-link">
                         <i class="fa fa-map-marker fa-pages"></i> Locations
                     </a>
                 </li>
