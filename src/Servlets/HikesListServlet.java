@@ -21,7 +21,7 @@ public class HikesListServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         MainDM mainDM = MainDM.getInstance();
         List<HikeInfo> hikes = mainDM.getHikes(-1);
-        Gson gson = new GsonBuilder().setDateFormat("MMM, d, yyyy HH:mm:ss").create();
+        Gson gson = new GsonBuilder().serializeNulls().create();
         String hikesList = gson.toJson(hikes);
         response.setContentType("text/html; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");

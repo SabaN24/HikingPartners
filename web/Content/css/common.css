@@ -76,3 +76,26 @@ a, a:visited, a:hover, a:active {
 .mybtn:hover {
     background: darkslategray;
 }
+
+.bg {
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-color: #444;
+}
+
+.title {
+    font-family: 'Montserrat', myriad-regular, Helvetica, Arial, sans-serif;
+    display: block;
+    text-align: center;
+}
+
+.title-small {
+    font-size: 18px;
+    margin: 15px 0;
+}
+
+.title-medium {
+    font-size: 22px;
+    margin: 20px 0;
+}

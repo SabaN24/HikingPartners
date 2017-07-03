@@ -82,7 +82,7 @@ public class HikeFeedWebSocketServer{
         Date currDate = calendar.getTime();
         String time = dateFormat.format(currDate);
         int returnedID = HikeFeedDM.getInstance().addComment(userID, postID, hikeID, comment, privacyType, time);
-        MiniUser user = MainDM.getInstance().getUserById(userID);
+        User user = MainDM.getInstance().getUserById(userID);
         Comment com = new Comment(returnedID, comment, postID, user, currDate, 0);
         webSocketHelper.sendToAllConnectedSessions(com, action, hikeId, connectedSessions.get(hikeId).keySet());
     }
@@ -114,7 +114,7 @@ public class HikeFeedWebSocketServer{
             photoID = GalleryDM.getInstance().savePhoto(hikeID, userID, photoPath);
         }
         int returnedID = HikeFeedDM.getInstance().writePost(userID, hikeID, post, time, link, photoID);
-        MiniUser user = MainDM.getInstance().getUserById(userID);
+        User user = MainDM.getInstance().getUserById(userID);
         Photo photo = new Photo(photoID, photoPath, "");
         Post newPost = new Post(returnedID, post, link, user, currDate, new ArrayList<>(), 0, photo);
         webSocketHelper.sendToAllConnectedSessions(newPost, action, hikeId, connectedSessions.get(hikeId).keySet());

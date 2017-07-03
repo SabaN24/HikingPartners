@@ -1,7 +1,7 @@
 package Models.Hike;
 
-import Models.MiniUser;
 import Models.Photo;
+import Models.User;
 
 import java.util.Date;
 import java.util.List;
@@ -27,7 +27,7 @@ public class HikeInfo extends DefaultModel {
      * @param creator     User
      * @param coverPhotos List<Photo>
      */
-    public HikeInfo(int id, String name, MiniUser creator, List<Photo> coverPhotos,
+    public HikeInfo(int id, String name, User creator, List<Photo> coverPhotos,
                     int maxPeople, int joinedPeople, Date start, Date end, String description) {
         super(id, name, creator, coverPhotos);
         this.maxPeople = maxPeople;

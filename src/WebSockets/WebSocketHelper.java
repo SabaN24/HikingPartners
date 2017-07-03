@@ -1,16 +1,9 @@
 package WebSockets;
-import Models.Comment;
 import Models.HikeResponse;
-import Models.MiniUser;
-import Models.Post;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import javafx.util.Pair;
 
-import javax.servlet.http.HttpSession;
 import javax.websocket.*;
-import javax.websocket.server.*;
 import java.io.*;
 import java.util.*;
 /**
@@ -18,7 +11,7 @@ import java.util.*;
  */
 public class WebSocketHelper {
     public void sendToAllConnectedSessions(Object data, String action, int hikeId, Set<Session> currentSessions) {
-        Gson gson = new GsonBuilder().setDateFormat("MMM, d, yyyy HH:mm:ss").create();
+        Gson gson = new GsonBuilder().serializeNulls().create();
         HikeResponse response = new HikeResponse(data, action);
         String message = gson.toJson(response);
         for (Session session : currentSessions) {

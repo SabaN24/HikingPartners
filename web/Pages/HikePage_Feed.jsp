@@ -12,7 +12,7 @@
         <div class="new-post">
             <div class="avatar-block post-author-avatar"
                  v-bind:style="{ backgroundImage: 'url(' + user.profilePictureAddress + ')' }"></div>
-            <form action="" class="post-form" v-on:submit.prevent="sendPost">
+            <form action="" class="post-form" v-on:submit.prevent="submitPost">
                 <div class="new-post-img" v-if="uploadingPicture">
                     <img v-bind:src="imageLink" alt="">
                     <div class="photo-remove-button" @click="cancelPicture()"><i class="fa fa-window-close"></i></div>
@@ -26,9 +26,9 @@
             <button type="button" class="add-video-button" @click="showLinkPopup()"></button>
         </div>
         <div class="post-popup" :class="{active : imagePopupIsActive }">
-            <form v-on:submit.prevent="uploadPicture" method="post"
+            <form v-on:submit.prevent="choosePicture" method="post"
                   enctype="multipart/form-data" class="img-form">
-                <input type="file" name="pic" accept="image/*" v-on:change="uploadPicture" class="image-chooser">
+                <input type="file" name="pic" accept="image/*" v-on:change="choosePicture" class="image-chooser">
             </form>
         </div>
         <div class="post-popup" :class="{active : videoPopupIsActive}">
@@ -40,9 +40,13 @@
     <div class="post-block main-content" v-for="(post, index) in posts">
         <div class="post-upper">
             <div class="avatar-block post-author-avatar"
+                 @mouseenter="hoverUser(post.user, event)" @mouseleave="hoverOutUser(event)"
+                 @click="window.location = '/Profile?userID=' +  post.user.id"
                  v-bind:style="{ backgroundImage: 'url(' + post.user.profilePictureAddress + ')' }"></div>
             <div class="post-info">
-                <div class="post-author-name">
+                <div class="post-author-name"
+                     @mouseenter="hoverUser(post.user, event)" @mouseleave="hoverOutUser(event)"
+                     @click="window.location = '/Profile?userID=' +  post.user.id">
                     <span>{{post.user.firstName}} </span><span>{{post.user.lastName}}</span>
 
                 </div>
@@ -70,10 +74,15 @@
                 <ul class="comments-list" v-for="(comment, index) in post.comments">
                     <li class="comment">
                         <div class="avatar-block"
-                             v-bind:style="{ backgroundImage: 'url(' + comment.user.profilePictureAddress + ')' }"></div>
+                             @mouseenter="hoverUser(comment.user, event)" @mouseleave="hoverOutUser(event)"
+                             @click="window.location = '/Profile?userID=' +  comment.user.id"
+                             :style="{ backgroundImage: 'url(' + comment.user.profilePictureAddress + ')' }">
+                        </div>
                         <div class="comment-info">
                             <div class="comment-info__upper">
-                                <div class="comment-author">
+                                <div class="comment-author"
+                                     @mouseenter="hoverUser(comment.user, event)" @mouseleave="hoverOutUser(event)"
+                                     @click="window.location = '/Profile?userID=' +  comment.user.id">
                                     <span>{{comment.user.firstName}} </span><span>{{comment.user.lastName}}</span>
                                 </div>
                             </div>
@@ -112,7 +121,7 @@
 
 <script>
     Vue.filter('cutTime', function (value) {
-        return value.substr(0, value.length - 3);
+        return value.substr(0, value.length - 6);
     });
 
     var ws = new WebSocket("ws://localhost:8080/HikeFeedSocket/" + hikeId);
@@ -132,8 +141,9 @@
             videoPopupIsActive: false,
             youtubeLink: "",
             uploadingPicture: false,
-            uploadProgress: false,
-            imageLink: "/Content/img/loading.gif"
+            imageLink: "",
+            profPopupActive: false,
+            hoveredUser: {}
         },
         //These functions will be called when page loads.
         created: function () {
@@ -153,33 +163,45 @@
                 });
             },
 
-            uploadPicture: function(){
-                if(this.uploadProgress){
-                    return;
-                }
+            choosePicture: function(event){
                 var self = this;
-                self.uploadProgress = true;
+                var input = event.target;
+                self.uploadingPicture = true;
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        self.imageLink = e.target.result;
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            },
+
+            cancelPicture: function(){
+                document.querySelector(".image-chooser").value = "";
+                this.imageLink = "";
+                this.uploadingPicture = false;
+            },
+
+            submitPost: function(){
+                if(!this.uploadingPicture){
+                    this.sendPost();
+                }
+                else{
+                    this.uploadPicture(this.sendPost);
+                }
+            },
+
+            uploadPicture: function(callBack){
+                var self = this;
                 self.uploadingPicture = true;
                 self.imageLink = "/Content/img/loading.gif";
                 axios.post('/PostPhoto?hikeId=' + hikeId, new FormData(document.querySelector(".img-form"))).then(function(response){
                     if(response.status == 200){
-                        self.imageLink  = response.data.imgUrl;
+                        callBack(response.data.imgUrl);
+                        document.querySelector(".image-chooser").value = "";
                     }else{
                         self.uploadingPicture = false;
                     }
-                    self.uploadProgress = false;
-                });
-            },
-
-            cancelPicture: function(){
-                if(this.uploadProgress){
-                    return;
-                }
-                var self = this;
-                axios.post('/CancelPhoto?photoPath=' + self.imageLink, {}).then(function(response){
-                    document.querySelector(".image-chooser").value = "";
-                    self.imageLink = "";
-                    self.uploadingPicture = false;
                 });
             },
 
@@ -228,7 +250,8 @@
 
             },
 
-            sendPost: function () {
+            sendPost: function (photoPath) {
+                photoPath = photoPath || "null";
                 if(this.uploadProgress || this.link == "" && (this.imageLink == "/Content/img/loading.gif"
                     || this.imageLink == "") && this.newPostText == ""){
                     return;
@@ -238,7 +261,7 @@
                     data: {
                         post: this.newPostText + "",
                         link: this.youtubeLink,
-                        photoPath: this.imageLink == "/Content/img/loading.gif" || this.imageLink == "" ? "null" : this.imageLink
+                        photoPath: photoPath
                     }
                 }));
                 this.newPostText = "";
@@ -277,6 +300,21 @@
 
             closeImagePopup: function () {
                 this.imagePopupIsActive = false;
+            },
+            hoverUser: function(user, e){
+                if(this.profPopupActive) return;
+                this.hoveredUser = user;
+                this.profPopupActive = true;
+                var popup = document.getElementsByClassName('profile-popup-wrapper')[0];
+                var rect = e.target.getBoundingClientRect();
+                popup.style.left = rect.left + pageXOffset +'px';
+                popup.style.top = rect.top + pageYOffset + e.target.clientHeight - 5 +'px';
+            },
+            hoverOutUser: function (e) {
+                if(!this.profPopupActive) return;
+                if(document.querySelectorAll(".profile-popup-wrapper:hover").length) return;
+                this.profPopupActive = false;
+
             }
 
         }

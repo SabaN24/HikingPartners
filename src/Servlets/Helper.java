@@ -2,6 +2,7 @@ package Servlets;
 
 import Database.MainDM;
 import Models.Hike.DefaultModel;
+import Models.User;
 import org.imgscalr.Scalr;
 
 import javax.imageio.ImageIO;

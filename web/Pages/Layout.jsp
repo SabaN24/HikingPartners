@@ -1,5 +1,5 @@
-<%@ page import="Models.MiniUser" %>
-<%@ page import="Servlets.Helper" %><%--
+<%@ page import="Servlets.Helper" %>
+<%@ page import="Models.User" %><%--
   Created by IntelliJ IDEA.
   User: Levani
   Date: 13.06.2017
@@ -26,7 +26,7 @@
 <body>
 <%
     String pageName = (String)request.getAttribute("page");
-    MiniUser loggedInUser = (MiniUser)request.getAttribute("loggedInUser");
+    User loggedInUser = (User)request.getAttribute("loggedInUser");
 %>
 <% if(!pageName.equals("LoginPage.jsp")){ %>
 <script>
@@ -41,7 +41,6 @@
 <div class="wrapper clearfix">
     <% if(!pageName.equals("LoginPage.jsp")){ %>
     <header>
-        <div class="header-bg"></div>
         <div class="header-left">
             <div class="logo-block">
                 <a class="logo-link" href="/Home">

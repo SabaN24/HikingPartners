@@ -1,8 +1,8 @@
 <%@ page import="Models.Comment" %>
 <%@ page import="Models.Hike.AboutModel" %>
 <%@ page import="Models.Hike.DefaultModel" %>
-<%@ page import="Models.MiniUser" %>
 <%@ page import="java.util.List" %>
+<%@ page import="Models.User" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%--
   Created by IntelliJ IDEA.
@@ -11,21 +11,37 @@
   Time: 01:18
   To change this template use File | Settings | File Templates.
 --%>
+<script>
+    var hikeId = <%= Integer.parseInt(request.getParameter("hikeId"))%>;
+</script>
 <div id="vueapp">
-    <script>
-        var hikeId = <%= Integer.parseInt(request.getParameter("hikeId"))%>;
-    </script>
     <setTitle>
         <%
             DefaultModel defaultModel = (DefaultModel) request.getAttribute(DefaultModel.ATTR);
             int hikeId = defaultModel.getId();
             String fullSubPage = (String) request.getAttribute("subPage");
             String subPage = fullSubPage.substring(9, fullSubPage.length() - 4);
-            MiniUser creator = defaultModel.getCreator();
-
+            User creator = defaultModel.getCreator();
             out.print(defaultModel.getName());
         %>
     </setTitle>
+    <div v-if=" '<%= subPage %>' == 'Feed' || '<%= subPage %>' == 'Home' || '<%= subPage %>' == 'Members' " class="profile-popup-wrapper" :class="{ active : profPopupActive }" @mouseleave="profPopupActive = false" >
+        <div class="profile-popup">
+            <div class="profile-popup-cover bg" :style="{ backgroundImage: 'url(' + hoveredUser.coverPictureAddress + ')' }">
+                <div class="profile-popup-name">{{hoveredUser.firstName}} {{hoveredUser.lastName}}</div>
+            </div>
+            <div class="profile-popup-prof-pic bg" :style="{ backgroundImage: 'url(' + hoveredUser.profilePictureAddress + ')' }"></div>
+            <div class="profile-popup-info">
+                <div><i class="fa fa-birthday-cake" aria-hidden="true"></i>Birthday: {{hoveredUser.birthDate ? hoveredUser.birthDate : "hidden"}} </div>
+                <div><i class="fa fa-envelope" aria-hidden="true"></i>Email: {{hoveredUser.email}} </div>
+            </div>
+            <div class="profile-popup-nav" v-if="hoveredUser.id != <%= ((User)request.getAttribute("loggedInUser")).getId() %>">
+                <a  class="mybtn profile-popup-btn" :href="'/Profile?userID=' + hoveredUser.id"><i class="fa fa-user" aria-hidden="true" ></i>Go To Profile</a>
+                <button class="mybtn profile-popup-btn"><i class="fa fa-commenting" aria-hidden="true"></i>Message</button>
+            </div>
+        </div>
+    </div>
+
 
     <aside>
         <div class="creator-block" onclick="window.location = '/Profile?userID=<%= creator.getId()%>'">
@@ -63,7 +79,7 @@
                 </li>
                 <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Locations' }">
                     <a href="#" class="nav-link">
-                        <i class="fa fa-map-marker fa-pages"></i>Locations
+                        <i class="fa fa-map-marker fa-pages"></i> Locations
                     </a>
                 </li>
                 <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Feed' }">
@@ -82,12 +98,11 @@
                 </div>
             </div>
 
-
         </div>
 
         <script src="../Scripts/axios.min.js"></script>
         <script src="../Scripts/vue.min.js"></script>
         <jsp:include page='<%= fullSubPage %>'/>
-
     </main>
+
 </div>

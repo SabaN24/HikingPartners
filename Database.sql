@@ -259,7 +259,8 @@ DELIMITER $$
 
 CREATE PROCEDURE get_creator_info(hike_ID INT)
   BEGIN
-    SELECT users.id as ID, users.first_name as first_name, users.last_name as last_name, profile_picture_url as profile_picture_url
+    SELECT users.id as ID, users.first_name as first_name, users.last_name as last_name, profile_picture_url as profile_picture_url,
+      facebook_ID, birth_date, gender, email, "" as about_me_text, cover_picture_url, facebook_link
     FROM hike_to_user INNER JOIN users
         ON users.id = user_id
     WHERE hike_to_user.hike_ID = hike_ID AND role_id = 1;
