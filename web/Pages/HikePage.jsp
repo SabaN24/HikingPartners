@@ -37,7 +37,7 @@
             </div>
             <div class="profile-popup-nav" v-if="hoveredUser.id != <%= ((User)request.getAttribute("loggedInUser")).getId() %>">
                 <a  class="mybtn profile-popup-btn" :href="'/Profile?userID=' + hoveredUser.id"><i class="fa fa-user" aria-hidden="true" ></i>Go To Profile</a>
-                <button class="mybtn profile-popup-btn"><i class="fa fa-commenting" aria-hidden="true"></i>Message</button>
+                <button class="mybtn profile-popup-btn"  v-on:click="openConversation(hoveredUser.id)" ><i class="fa fa-commenting" aria-hidden="true"></i>Message</button>
             </div>
         </div>
     </div>

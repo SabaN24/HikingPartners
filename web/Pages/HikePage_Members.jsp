@@ -74,7 +74,13 @@
                 if(document.querySelectorAll(".profile-popup-wrapper:hover").length) return;
                 this.profPopupActive = false;
 
+            },
+
+
+            openConversation: function (userId) {
+                appChat.openChat(userId);
             }
+
         }
     });
 </script>

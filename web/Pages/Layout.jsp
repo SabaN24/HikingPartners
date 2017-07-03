@@ -66,12 +66,205 @@
 
     </header>
     <% } %>
-    <jsp:include page='<%= pageName %>' />
-    <script>document.querySelectorAll("title")[0].innerHTML = document.querySelectorAll("setTitle")[0].innerHTML;</script>
+
+
+    <%--<% if(pageName.equals("LoginPage.jsp")){ %>--%>
+    <jsp:include page='<%= pageName %>'/>
+    <%--<script>document.querySelectorAll("title")[0].innerHTML = document.querySelectorAll("setTitle")[0].innerHTML;</script>--%>
+    <%--<% } %>--%>
+
+
+    <% if (!pageName.equals("LoginPage.jsp")) { %>
+
+
+
+    <div id="chatVue">
+
+        <div class="chats-block" v-for="(chat, index) in chats">
+            <div class="messages-block">
+                <div class="chat-header" style="color: red" >
+                    <span> <b> {{chat.userTo.firstName}} </b> </span> <span> <b> {{chat.userTo.lastName}} </b> </span>
+                </div>
+                <button  v-on:click="closeChat(chat.toUserId)"> close </button>
+
+
+                <div class="messages-block-inner">
+                    <ul class="messages-list"
+                        v-for="(message, index) in chat.messages"
+                    >
+                        <li class="message">
+                            <div class="avatar-block"
+                                 v-bind:style="{ backgroundImage: 'url(' + message.userFrom.profilePictureAddress + ')' }"></div>
+                            <div class="message-text" style="color: cyan">
+                                {{message.message}}
+                            </div>
+                        </li>
+                    </ul>
+
+
+                    <div class="message">
+
+                        <form action="HikePageServlet" v-on:submit.prevent="sendMessage(chat.toUserId)" method="post">
+                            <input v-model="newMessage" class="message-input" type="text" autocomplete="off"
+                                   name="add-message"
+                                   placeholder="Send Message...">
+                        </form>
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <% } %>
+
+
 </div>
 <footer>
     <div class="footer-info"> All Rights Reserved  © HikingPartners.ge  2017</div>
 </footer>
 
+
+<% if (!pageName.equals("LoginPage.jsp")) { %>
+
+<script>
+    Vue.filter('cutTime', function (value) {
+        return value.substr(0, value.length - 3);
+    });
+
+    var mws = new WebSocket("ws://localhost:8080/MessagesSocket/<%= loggedInUser.getId() %>");
+
+    var appChat = new Vue({
+        el: '#chatVue',
+        //These are stored instance variables for vue,
+        //it will use these to bind element data ands
+        //modify them.
+        data: {
+            chats: [],
+            newMessage: ""
+
+        },
+        //These functions will be called when page loads.
+        created: function () {
+            this.fetchChats();
+        },
+        updated: function () {
+        },
+        //These are stored methods that vue will be able to use.
+        methods: {
+
+            fetchChats: function () {
+                var th = this;
+                axios.post("/OpenChatsServlet?userId=" + <%= loggedInUser.getId() %>, {}).then(function(response){
+                    th.chats = response.data;
+                });
+            },
+
+            fetchChat: function(toUserId){
+                var th = this;
+                axios.post("/OpenChatServlet?toUserId=" + toUserId, {}).then(function(response){
+                    //console.log(response.data);
+                    th.chats.push(response.data);
+                });
+
+            },
+
+            //This method is invoked automatically when socket
+            //server sends message to this session.
+            getSocketMessage: function (data) {
+                var jsonData = JSON.parse(data.data);
+                var action = jsonData.action;
+                data = jsonData.data;
+
+                var th = this;
+
+                if (action === "getMessage") {
+                    var idx = th.chats.findIndex(x => x.toUserId == data.userFrom.id);
+
+                    if (idx == -1) {
+                        this.fetchChat(data.userFrom.id);
+                    }
+
+                    th.chats.find(x => x.toUserId == data.userFrom.id).messages.push(data);
+
+                    console.log("getshia");
+
+                }
+
+
+                if (action === "sendMessage") {
+
+                    th.chats.find(x => x.toUserId == data.userTo.id).messages.push(data);
+
+                    console.log("sendshia");
+
+                }
+
+
+                if(action === "openChat"){
+
+                    var idx = th.chats.findIndex(x => x.toUserId === data.id);
+
+                    if (idx == -1) {
+                        this.fetchChat(data.id);
+                    }
+
+                }
+
+
+            },
+
+            openChat: function (toUserId) {
+
+                mws.send(JSON.stringify({
+                    action: "openChat",
+                    toUserId: toUserId + "",
+
+                }));
+
+            },
+
+            closeChat: function (toUserId){
+
+                //delete from chats in vue app
+                var th = this;
+                var idx = th.chats.findIndex(x => x.toUserId === toUserId);
+                th.chats.splice(idx, 1);
+
+
+                //delete from database;
+                axios.post("/CloseChatServlet?toUserId=" +  toUserId, {});
+            },
+
+            sendMessage: function (toUserId) {
+
+                mws.send(JSON.stringify({
+                    action: "getMessage",
+                    data: {
+                        toUserId: toUserId + "",
+                        message: this.newMessage + "",
+                    }
+                }));
+                this.newMessage = "";
+
+            }
+
+
+        }
+
+
+    });
+
+    mws.onmessage = appChat.getSocketMessage;
+
+
+</script>
+
+
+<% } %>
+
 </body>
 </html>
+
+

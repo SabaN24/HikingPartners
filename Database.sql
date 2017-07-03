@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS hikes (
   PRIMARY KEY (ID)
 );
 
+
 CREATE TABLE IF NOT EXISTS users (
   ID INT AUTO_INCREMENT NOT NULL,
   facebook_ID BIGINT NOT NULL,
@@ -160,6 +161,31 @@ CREATE TABLE IF NOT EXISTS requests (
 	FOREIGN KEY (receiver_ID) REFERENCES users(ID),
     FOREIGN KEY (hike_ID) REFERENCES hikes(ID)
 );
+
+create table if not exists messages (
+  ID int auto_increment not null,
+  from_user_id int not null,
+  to_user_id int not null,
+  message TEXT NOT NULL,
+  message_date DATETIME NOT NULL,
+  PRIMARY KEY(ID),
+  FOREIGN KEY (from_user_id) REFERENCES users(ID),
+  foreign key (to_user_id) references users(ID)
+
+);
+
+create table if not exists open_chats(
+  ID int auto_increment not null,
+  from_user_id int not null,
+  to_user_id int not null,
+  PRIMARY KEY(ID),
+  FOREIGN KEY (from_user_id) REFERENCES users(ID),
+  foreign key (to_user_id) references users(ID)
+
+
+);
+
+
 
 -- ----------------------------------------------------------------------------- --
 
@@ -379,19 +405,19 @@ CREATE PROCEDURE request_response(request_id INT, accept BOOLEAN)
 BEGIN
 DECLARE desired_hike INT;
 DECLARE user_ID INT;
-SELECT 
+SELECT
     hike_ID
 INTO desired_hike FROM
     requests
 WHERE
     ID = request_id;
-SELECT 
+SELECT
     sender_ID
 INTO user_ID FROM
     requests
 WHERE
     ID = request_id;
-DELETE FROM requests 
+DELETE FROM requests
 WHERE
     id = request_id;
 IF(accept = TRUE) THEN
