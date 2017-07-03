@@ -14,7 +14,6 @@ CREATE TABLE IF NOT EXISTS hikes (
   PRIMARY KEY (ID)
 );
 
-
 CREATE TABLE IF NOT EXISTS users (
   ID INT AUTO_INCREMENT NOT NULL,
   facebook_ID BIGINT NOT NULL,
@@ -149,6 +148,17 @@ CREATE TABLE IF NOT EXISTS comment_likes (
   REFERENCES users (ID),
   FOREIGN KEY (comment_ID)
   REFERENCES comments (ID)
+);
+
+CREATE TABLE IF NOT EXISTS requests (
+    ID INT AUTO_INCREMENT NOT NULL,
+	sender_ID INT NOT NULL,
+    receiver_ID INT NOT NULL,
+    hike_ID INT NOT NULL,
+    PRIMARY KEY(ID),
+    FOREIGN KEY (sender_ID) REFERENCES users(ID),
+	FOREIGN KEY (receiver_ID) REFERENCES users(ID),
+    FOREIGN KEY (hike_ID) REFERENCES hikes(ID)
 );
 
 -- ----------------------------------------------------------------------------- --
@@ -365,4 +375,27 @@ CREATE PROCEDURE get_hike_members(hike_id INT)
   END$$
 
 DELIMITER $$
-  
+CREATE PROCEDURE request_response(request_id INT, accept BOOLEAN)
+BEGIN
+DECLARE desired_hike INT;
+DECLARE user_ID INT;
+SELECT 
+    hike_ID
+INTO desired_hike FROM
+    requests
+WHERE
+    ID = request_id;
+SELECT 
+    sender_ID
+INTO user_ID FROM
+    requests
+WHERE
+    ID = request_id;
+DELETE FROM requests 
+WHERE
+    id = request_id;
+IF(accept = TRUE) THEN
+INSERT INTO hike_to_user (hike_ID, user_ID, role_ID) VALUES (desired_hike, user_ID, 2);
+END IF;
+
+END $$

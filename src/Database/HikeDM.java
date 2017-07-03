@@ -93,5 +93,31 @@ public class HikeDM {
 
     }
 
+    /**
+     * Adds new request to database.
+     * @param senderId id of user who sent request
+     * @param receiverId id of creator of hike
+     * @param hikeId id of hike, in which user wishes to be added
+     * @return id of newly created request
+     */
+    public int addRequest(int senderId, int receiverId, int hikeId) {
+        String query = "insert into requests (sender_ID, receiver_ID, hike_ID) values (?,?,?)";
+        PreparedStatement addRequest = databaseConnector.getPreparedStatement(query);
+        try {
+            addRequest.setInt(1, senderId);
+            addRequest.setInt(2, receiverId);
+            addRequest.setInt(3, hikeId);
+            databaseConnector.updateDataWithPreparedStatement(addRequest);
+            ResultSet resultSet = databaseConnector.getData("select ID from requests order by ID desc limit 1");
+            if (resultSet.next()) {
+                int requestId = resultSet.getInt("ID");
+                return requestId;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
 
 }

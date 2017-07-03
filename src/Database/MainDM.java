@@ -273,7 +273,7 @@ public class MainDM {
      * @param hikeId id of demanded hike
      * @return DefaultMode.User class object built from information of creator of given hike
      */
-    private User getCreator(int hikeId) {
+    public User getCreator(int hikeId) {
         ResultSet rs = databaseConnector.callProcedure("get_creator_info", Arrays.asList("" + hikeId));
         User creator = createUserFromResultSet(rs);
         return creator;

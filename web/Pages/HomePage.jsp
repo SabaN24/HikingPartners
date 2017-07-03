@@ -49,7 +49,8 @@
                             {{hike.description}}
                         </div>
                     </div>
-                    <button class="mybtn submit-request"> Send Request</button>
+                    <button v-if="hike.joinedPeople < hike.maxPeople" class="mybtn submit-request"
+                            @click="sendRequest(hike.id)" onsubmit="return false;"> Send Request </button>
                 </div>
             </li>
         </ul>
@@ -158,7 +159,12 @@
             },
             closePopup: function(){
                 this.popupIsActive = false;
+            },
+
+            sendRequest: function(hikeId){
+                axios.post("/SendRequest?hikeId=" + hikeId, {});
             }
+
         }
 
 
