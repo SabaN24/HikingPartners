@@ -48,8 +48,8 @@ public class MainDM {
         try {
             while (allHikes.next()) {
                 int id = allHikes.getInt("ID");
-                Date startDate = allHikes.getDate("start_date");
-                Date endDate = allHikes.getDate("end_date");
+                Date startDate = (Date)allHikes.getObject("start_date");
+                Date endDate = (Date)allHikes.getObject("end_date");
                 String description = allHikes.getString("description");
                 int maxPeople = allHikes.getInt("max_people");
                 ResultSet joinedPeopleRS = databaseConnector.callProcedure("get_joined_people",
@@ -84,8 +84,8 @@ public class MainDM {
         ResultSet hikeResultSet = databaseConnector.getData(hikeQuery);
         try {
             while (hikeResultSet.next()) {
-                Date startDate = hikeResultSet.getDate("start_date");
-                Date endDate = hikeResultSet.getDate("end_date");
+                Date startDate = (Date)hikeResultSet.getObject("start_date");
+                Date endDate = (Date)hikeResultSet.getObject("end_date");
                 String description = hikeResultSet.getString("description");
                 int maxPeople = hikeResultSet.getInt("max_people");
                 List<Comment> comments = getComments("-1", "" + id, 1, userID);
@@ -135,7 +135,7 @@ public class MainDM {
                 int commentId = commentsResultSet.getInt("ID");
                 String comment = commentsResultSet.getString("comment_text");
                 int authorID = commentsResultSet.getInt("user_ID");
-                MiniUser author = getUserById(authorID);
+                User author = getUserById(authorID);
 
                 Date date = (Date) commentsResultSet.getObject("comment_time");
 
@@ -173,10 +173,10 @@ public class MainDM {
      * @param userID id of required user
      * @return MiniUser class built on information from database
      */
-    public MiniUser getUserById(int userID) {
+    public User getUserById(int userID) {
         String query = constructQuery("users", "id", "" + userID);
         ResultSet rs = databaseConnector.getData(query);
-        MiniUser user = createUserFromResultSet(rs);
+        User user = createUserFromResultSet(rs);
         return user;
     }
 
@@ -197,7 +197,7 @@ public class MainDM {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        MiniUser creator = getCreator(hikeId);
+        User creator = getCreator(hikeId);
         List<Photo> coverPhotos = getCoverPhotos(hikeId);
         DefaultModel defaultModel = new DefaultModel(hikeId, name, creator, coverPhotos);
         return defaultModel;
@@ -220,7 +220,7 @@ public class MainDM {
                 String link = rs.getString("link");
                 int authorID = rs.getInt("user_ID");
                 Date postDate = (Date) rs.getObject("post_time");
-                MiniUser user = getUserById(authorID);
+                User user = getUserById(authorID);
                 List<Comment> comments = getComments("" + id, "" + hikeID, 2, userID);
                 ResultSet likesSet = databaseConnector.callProcedure("get_post_likes", Arrays.asList("" + id));
                 int likes = 0;
@@ -273,9 +273,9 @@ public class MainDM {
      * @param hikeId id of demanded hike
      * @return DefaultMode.User class object built from information of creator of given hike
      */
-    private MiniUser getCreator(int hikeId) {
+    private User getCreator(int hikeId) {
         ResultSet rs = databaseConnector.callProcedure("get_creator_info", Arrays.asList("" + hikeId));
-        MiniUser creator = createUserFromResultSet(rs);
+        User creator = createUserFromResultSet(rs);
         return creator;
     }
 
@@ -285,22 +285,28 @@ public class MainDM {
      * @param rs data which needs to be processed
      * @return MiniUser object
      */
-    private MiniUser createUserFromResultSet(ResultSet rs) {
-        MiniUser creator = null;
+    private User createUserFromResultSet(ResultSet rs) {
+        User user = null;
         try {
             while (rs.next()) {
                 int id = rs.getInt("ID");
+                long fbID = rs.getLong("facebook_ID");
                 String firstName = rs.getString("first_name");
                 String lastName = rs.getString("last_name");
                 String imgUrl = rs.getString("profile_picture_url");
-                creator = new MiniUser(id, firstName, lastName, imgUrl);
+                Date birthdate = (Date)rs.getObject("birth_date");
+                String gender = rs.getString("gender");
+                String email = rs.getString("email");
+                String aboutMe = rs.getString("about_me_text");
+                String coverPicUrl = rs.getString("cover_picture_url");
+                String fbLink = rs.getString("facebook_link");
+                user = new User(id, firstName, lastName, imgUrl, fbID,  birthdate, gender, email, aboutMe, coverPicUrl, fbLink);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return creator;
+        return user;
     }
-
     /**
      * Gets cover photos of given hike from database, using callProcedure
      * method of databaseConnnector class which calls given procedure in database.

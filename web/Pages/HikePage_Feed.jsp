@@ -40,9 +40,13 @@
     <div class="post-block main-content" v-for="(post, index) in posts">
         <div class="post-upper">
             <div class="avatar-block post-author-avatar"
+                 @mouseenter="hoverUser(post.user, event)" @mouseleave="hoverOutUser(event)"
+                 @click="window.location = '/Profile?userID=' +  post.user.id"
                  v-bind:style="{ backgroundImage: 'url(' + post.user.profilePictureAddress + ')' }"></div>
             <div class="post-info">
-                <div class="post-author-name">
+                <div class="post-author-name"
+                     @mouseenter="hoverUser(post.user, event)" @mouseleave="hoverOutUser(event)"
+                     @click="window.location = '/Profile?userID=' +  post.user.id">
                     <span>{{post.user.firstName}} </span><span>{{post.user.lastName}}</span>
 
                 </div>
@@ -70,10 +74,15 @@
                 <ul class="comments-list" v-for="(comment, index) in post.comments">
                     <li class="comment">
                         <div class="avatar-block"
-                             v-bind:style="{ backgroundImage: 'url(' + comment.user.profilePictureAddress + ')' }"></div>
+                             @mouseenter="hoverUser(comment.user, event)" @mouseleave="hoverOutUser(event)"
+                             @click="window.location = '/Profile?userID=' +  comment.user.id"
+                             :style="{ backgroundImage: 'url(' + comment.user.profilePictureAddress + ')' }">
+                        </div>
                         <div class="comment-info">
                             <div class="comment-info__upper">
-                                <div class="comment-author">
+                                <div class="comment-author"
+                                     @mouseenter="hoverUser(comment.user, event)" @mouseleave="hoverOutUser(event)"
+                                     @click="window.location = '/Profile?userID=' +  comment.user.id">
                                     <span>{{comment.user.firstName}} </span><span>{{comment.user.lastName}}</span>
                                 </div>
                             </div>
@@ -112,7 +121,7 @@
 
 <script>
     Vue.filter('cutTime', function (value) {
-        return value.substr(0, value.length - 3);
+        return value.substr(0, value.length - 6);
     });
 
     var ws = new WebSocket("ws://localhost:8080/HikeFeedSocket/" + hikeId);
@@ -132,7 +141,9 @@
             videoPopupIsActive: false,
             youtubeLink: "",
             uploadingPicture: false,
-            imageLink: ""
+            imageLink: "",
+            profPopupActive: false,
+            hoveredUser: {}
         },
         //These functions will be called when page loads.
         created: function () {
@@ -289,6 +300,21 @@
 
             closeImagePopup: function () {
                 this.imagePopupIsActive = false;
+            },
+            hoverUser: function(user, e){
+                if(this.profPopupActive) return;
+                this.hoveredUser = user;
+                this.profPopupActive = true;
+                var popup = document.getElementsByClassName('profile-popup-wrapper')[0];
+                var rect = e.target.getBoundingClientRect();
+                popup.style.left = rect.left + pageXOffset +'px';
+                popup.style.top = rect.top + pageYOffset + e.target.clientHeight - 5 +'px';
+            },
+            hoverOutUser: function (e) {
+                if(!this.profPopupActive) return;
+                if(document.querySelectorAll(".profile-popup-wrapper:hover").length) return;
+                this.profPopupActive = false;
+
             }
 
         }

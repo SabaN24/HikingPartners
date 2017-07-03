@@ -1,7 +1,7 @@
 package Models.Hike;
 
 import Models.Photo;
-import Models.MiniUser;
+import Models.User;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public class DefaultModel {
      */
     private int id;
     private String name;
-    private MiniUser creator;
+    private User creator;
     private List<Photo> coverPhotos;
 
     /**
@@ -25,7 +25,7 @@ public class DefaultModel {
      * @param creator User
      * @param coverPhotos List<Photo>
      */
-    public DefaultModel(int id, String name, MiniUser creator, List<Photo> coverPhotos) {
+    public DefaultModel(int id, String name, User creator, List<Photo> coverPhotos) {
         this.id = id;
         this.name = name;
         this.creator = creator;
@@ -50,7 +50,7 @@ public class DefaultModel {
      * Returns creator of hike.
      * @return User
      */
-    public MiniUser getCreator() {
+    public User getCreator() {
         return creator;
     }
 

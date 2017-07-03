@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * Created by Saba on 10.06.2017.
  */
-public class User extends MiniUser{
+public class User {
 
     /* Constants. */
     public static String ATTR = "User";
@@ -13,6 +13,10 @@ public class User extends MiniUser{
     /**
      * private instance variables
      */
+    private int id;
+    private String firstName;
+    private String lastName;
+    private String profilePictureAddress;
     private long facebookID;
     private Date birthDate;
     private String gender;
@@ -38,7 +42,10 @@ public class User extends MiniUser{
      * @param facebookLink
      */
     public User(int id, String firstName, String lastName, String profilePictureAddress, long facebookID, Date birthDate, String gender, String email, String aboutMe, String coverPictureAddress , String facebookLink) {
-        super(id, firstName, lastName, profilePictureAddress);
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.profilePictureAddress = profilePictureAddress;
         this.facebookID = facebookID;
         this.birthDate = birthDate;
         this.gender = gender;
@@ -46,6 +53,49 @@ public class User extends MiniUser{
         this.aboutMe = aboutMe;
         this.coverPictureAddress  = coverPictureAddress;
         this.facebookLink = facebookLink;
+    }
+
+    public void setBd(Date dt){
+        this.birthDate = dt;
+    }
+
+    public User(int id, String firstName, String lastName, String profilePictureAddress) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.profilePictureAddress = profilePictureAddress;
+    }
+
+    /**
+     * Returns database id of this user.
+     * @return String
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * Returns first name of user.
+     * @return String
+     */
+    public String getFirstName() {
+        return firstName;
+    }
+
+    /**
+     * Returns last name of  user.
+     * @return String
+     */
+    public String getLastName() {
+        return lastName;
+    }
+
+    /**
+     * Returns profile picture address of  user.
+     * @return String
+     */
+    public String getProfilePictureAddress() {
+        return profilePictureAddress;
     }
 
 

@@ -9,7 +9,7 @@ public class Comment {
     private int commentID;
     private int postID;
     private String comment;
-    private MiniUser user;
+    private User user;
     private Date date;
     private int likeNumber;
     private boolean isLiked;
@@ -22,7 +22,7 @@ public class Comment {
      * @param date
      * @param likeNumber
      */
-    public Comment(int commentID, String comment, int postID, MiniUser user, Date date, int likeNumber){
+    public Comment(int commentID, String comment, int postID, User user, Date date, int likeNumber){
         this.commentID = commentID;
         this.comment = comment;
         this.user = user;
@@ -32,7 +32,7 @@ public class Comment {
         this.isLiked = false;
     }
 
-    public Comment(int commentID, String comment, int postID, MiniUser user, Date date, int likeNumber, boolean isLiked){
+    public Comment(int commentID, String comment, int postID, User user, Date date, int likeNumber, boolean isLiked){
         this(commentID, comment, postID, user, date, likeNumber);
         this.isLiked = isLiked;
     }
@@ -70,7 +70,7 @@ public class Comment {
     /**
      * @return Commenter User
      */
-    public MiniUser getUser(){
+    public User getUser(){
         return user;
     }
 

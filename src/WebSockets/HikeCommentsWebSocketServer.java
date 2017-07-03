@@ -39,7 +39,7 @@ public class HikeCommentsWebSocketServer {
         dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         calendar = Calendar.getInstance();
         gson = new Gson();
-        frontGson = new GsonBuilder().setDateFormat("MMM, d, yyyy HH:mm:ss").create();
+        frontGson = new GsonBuilder().serializeNulls().create();
     }
 
     @OnClose
@@ -72,7 +72,7 @@ public class HikeCommentsWebSocketServer {
         Date currDate = calendar.getTime();
         String time = dateFormat.format(currDate);
         int returnedID = HikeFeedDM.getInstance().addComment(userID, postID, hikeID, comment, privacyType, time);
-        MiniUser user = MainDM.getInstance().getUserById(userID);
+        User user = MainDM.getInstance().getUserById(userID);
         Comment comm = new Comment(returnedID, comment, postID, user, currDate, 0);
         webSocketHelper.sendToAllConnectedSessions(comm, action, hikeId, connectedSessions.get(hikeId).keySet());
     }

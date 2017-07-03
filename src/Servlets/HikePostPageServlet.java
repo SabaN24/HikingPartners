@@ -26,7 +26,7 @@ public class HikePostPageServlet extends HttpServlet {
         int loggedInUser = (Integer)httpSession.getAttribute("userID");
         Integer id = Integer.parseInt(request.getParameter("hikeId"));
         List<Post> posts = mainDM.getPosts(id, loggedInUser);
-        Gson gson = new GsonBuilder().setDateFormat("MMM, d, yyyy HH:mm:ss").create();
+        Gson gson = new GsonBuilder().serializeNulls().create();
         String result = gson.toJson(posts);
         response.setContentType("text/html; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");

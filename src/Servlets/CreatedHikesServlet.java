@@ -27,7 +27,7 @@ public class CreatedHikesServlet extends HttpServlet {
         }
         int id = Integer.parseInt(userId);
         List<HikeInfo> hikes = mainDM.getHikes(id);
-        Gson gson = new GsonBuilder().setDateFormat("MMM, d, yyyy HH:mm:ss").create();
+        Gson gson = new GsonBuilder().serializeNulls().create();
         String createdHikes = gson.toJson(hikes);
         response.setContentType("text/html; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");

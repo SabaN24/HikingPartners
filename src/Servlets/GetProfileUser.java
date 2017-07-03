@@ -3,6 +3,7 @@ package Servlets;
 import Database.UserInfoDM;
 import Models.User;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -28,7 +29,7 @@ public class GetProfileUser extends HttpServlet {
             Helper.servlet("/Home", request, response);
             return;
         }
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().serializeNulls().create();
         String userMessage = gson.toJson(profileUser);
         response.setContentType("text/html; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");

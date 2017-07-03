@@ -24,7 +24,7 @@ public class HikeCommentsServlet extends HttpServlet {
         int loggedInUserId = (Integer)httpSession.getAttribute("userID");
         int hikeId = Integer.parseInt(request.getParameter("hikeId"));
         AboutModel aboutModel = mainDM.getAboutModel(hikeId, loggedInUserId);
-        Gson gson = new GsonBuilder().setDateFormat("MMM, d, yyyy HH:mm:ss").create();
+        Gson gson = new GsonBuilder().serializeNulls().create();
         String jsonAboutModel = gson.toJson(aboutModel);
         response.setContentType("text/html; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
