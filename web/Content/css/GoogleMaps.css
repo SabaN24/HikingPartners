@@ -7,7 +7,6 @@
     width: 100%;
 }
 #description {
-    font-family: Roboto;
     font-size: 15px;
     font-weight: 300;
 }
@@ -68,13 +67,6 @@
     border-color: #4d90fe;
 }
 
-#title {
-    color: #fff;
-    background-color: #4d90fe;
-    font-size: 25px;
-    font-weight: 500;
-    padding: 6px 12px;
-}
 #target {
     width: 345px;
 }
