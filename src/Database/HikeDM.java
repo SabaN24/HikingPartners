@@ -199,6 +199,12 @@ public class HikeDM {
     public void respondToRequest(int requestId, String response) {
         databaseConnector.callProcedure("request_response", Arrays.asList("" + requestId, "\"" + response + "\""));
     }
+
+    /**
+     * Gets ids of requested hikes for given user.
+     * @param userId user whose requested hikes need to be fetcher
+     * @return ids as list
+     */
     public List<Integer> getRequestedHikeIds(int userId){
         String query = "select id from hikes where id in (select hike_ID from requests where sender_ID = ?)";
         PreparedStatement st = databaseConnector.getPreparedStatement(query);
