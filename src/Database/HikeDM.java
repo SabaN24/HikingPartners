@@ -199,7 +199,7 @@ public class HikeDM {
      * @param response  type of response (accept or reject)
      */
     public void respondToRequest(int requestId, String response) {
-        databaseConnector.callProcedure("request_response", Arrays.asList("" + requestId, response));
+        databaseConnector.callProcedure("request_response", Arrays.asList("" + requestId, "\"" + response + "\""));
     }
 
 }

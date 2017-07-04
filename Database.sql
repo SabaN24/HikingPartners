@@ -462,6 +462,3 @@ CREATE PROCEDURE request_response(request_id INT, response VARCHAR(20))
     END IF;
 
   END $$
-  
-  
-

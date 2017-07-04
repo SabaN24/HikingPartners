@@ -22,6 +22,7 @@ public class Request {
      * @param hike
      */
     public Request(int id, User sender, User receiver, HikeInfo hike) {
+        this.id = id;
         this.sender = sender;
         this.receiver = receiver;
         this.hike = hike;
