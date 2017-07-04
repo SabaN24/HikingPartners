@@ -21,7 +21,6 @@
     <link rel="stylesheet" href="../Content/css/main.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat|Quicksand" rel="stylesheet">
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAN41T3N0B5Tx61omm8n9ZX6quK4FvG1jk" type="text/javascript"></script>
 </head>
 <body>
 <%

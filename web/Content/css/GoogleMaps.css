@@ -1,13 +1,10 @@
-
+.map-container{
+    height:100%;
+    width:100%;
+}
 #map {
     height: 70%;
-    width: 70%;
-}
-/* Optional: Makes the sample page fill the window. */
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
+    width: 100%;
 }
 #description {
     font-family: Roboto;
@@ -59,10 +56,12 @@ html, body {
     font-family: Roboto;
     font-size: 15px;
     font-weight: 300;
-    margin-left: 12px;
     padding: 0 11px 0 13px;
+    margin: 10px 0;
     text-overflow: ellipsis;
     width: 400px;
+    left: 50% !important;
+    transform: translateX(-50%);
 }
 
 #pac-input:focus {
