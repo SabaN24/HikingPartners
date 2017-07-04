@@ -24,7 +24,7 @@
             <li class="hike-item" v-for="hike in hikes">
                 <div class="slider-block">
                     <div class="caption">
-                        {{hike.coverPhotos[0].description}}
+                        Qvabistavi <%-- {{hike.coverPhotos[0].description}}--%>
                     </div>
                 </div>
                 <div class="hike-info">
@@ -49,8 +49,12 @@
                             {{hike.description}}
                         </div>
                     </div>
-                    <button v-if="hike.joinedPeople < hike.maxPeople" class="mybtn submit-request"
+
+                    <button v-if="hike.joinedPeople < hike.maxPeople && !requestedHikeIds.includes(hike.id)" class="mybtn submit-request"
                             @click="sendRequest(hike.id)" onsubmit="return false;"> Send Request </button>
+                    <div  v-if="hike.joinedPeople > hike.maxPeople" class="mybtn submit-request">Hike is full</div>
+                    <div v-if="requestedHikeIds.includes(hike.id)" class="mybtn submit-request">Request sent</div>
+
                 </div>
             </li>
         </ul>
@@ -119,6 +123,7 @@
                 endDate: "",
                 description: ""
             },
+            requestedHikeIds: [],
             popupIsActive: false
         },
 
@@ -126,6 +131,9 @@
             var th = this;
             axios.post("/HikesListServlet", {}).then(function (response) {
                 th.hikes = response.data.reverse();
+            });
+            axios.post("/GetRequestedHikeIds", {}).then(function (response) {
+                th.requestedHikeIds = response.data;
             });
         },
         mounted: function() {
@@ -163,6 +171,7 @@
 
             sendRequest: function(hikeId){
                 axios.post("/SendRequest?hikeId=" + hikeId, {});
+                this.requestedHikeIds.push(hikeId);
             }
 
         }

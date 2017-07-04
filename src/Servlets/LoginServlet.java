@@ -47,7 +47,7 @@ public class LoginServlet extends HttpServlet {
             }
             HttpSession session = request.getSession();
             session.setAttribute("userID", userID);
-            Helper.servlet("/RequestListServlet", request, response);
+            Helper.servlet("/Home", request, response);
         }catch(Exception e){
             int x = 5;
             doGet(request, response);

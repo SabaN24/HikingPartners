@@ -63,6 +63,8 @@ footer {
 }
 
 .profile-block {
+    display: inline-block;
+    vertical-align: middle;
     position: relative;
 }
 
@@ -974,17 +976,44 @@ input[type="file"] {
     /*bottom:0;*/
 /*}*/
 
+
+.mynav {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 100px;
+}
+
+.mynav-link.mynav-link {
+    color: white;
+    font-family: 'Montserrat', myriad-regular, Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    transition: .2s color;
+}
+
+.mynav-link:hover {
+    color: #bbb;
+}
 .request-container {
     width: 50%;
     position: relative;
-    left: 50%;
-    transform: translateX(-50%);
+    margin: 0 auto;
+    padding: 40px;
 }
 
 .request-item {
     position: relative;
     display: block;
-    margin-bottom: 10px;
+    padding: 20px 0;
+    border-bottom: 1px solid #bbb;
+}
+
+.request-item:first-child {
+    border-top: 1px solid #bbb;
+}
+
+.request-item .avatar-block {
+    width: 50px;
+    height: 50px;
 }
 
 .request-text {
@@ -992,23 +1021,40 @@ input[type="file"] {
     margin-left: 10px;
 }
 
-.accept-button {
-    display: inline-block;
-    margin-left: 10px;
-    margin-right: 10px;border: none;
-    outline: none;
-    padding: 5px 14px;
-    cursor: pointer;
-    color: green;
-    transition: background .3s;
+.mybtn.reject {
+    background: crimson;
 }
 
-.reject-button {
-    display: inline-block;
-    background: none;
-    outline: none;
-    padding: 5px 14px;
+.mybtn.reject:hover {
+    background: darkred;
+}
+
+.request-btns {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%)
+}
+
+.request-btns button {
+    margin-right: 10px;
+}
+.request-btns button:last-child {
+    margin-right: 0;
+}
+
+.request-user-name {
     cursor: pointer;
-    color: red;
-    transition: background .3s;
+}
+
+.request-user-name:hover {
+    color: #444444;
+}
+
+.request-hike-name {
+    cursor: pointer;
+}
+
+.request-hike-name:hover {
+    color: #444444;
 }

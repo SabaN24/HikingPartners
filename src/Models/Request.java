@@ -26,6 +26,7 @@ public class Request {
         this.sender = sender;
         this.receiver = receiver;
         this.hike = hike;
+        this.id = id;
     }
 
     /**

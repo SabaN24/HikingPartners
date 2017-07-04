@@ -3,9 +3,7 @@ package Database;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
 
 import Models.Hike.DefaultModel;
@@ -17,6 +15,7 @@ import Models.User;
  * Created by Nodo on 6/27/2017.
  */
 public class HikeDM {
+
 
 
     private DatabaseConnector databaseConnector;
@@ -47,7 +46,7 @@ public class HikeDM {
      * @param creatorId
      * @return lately added hike ID
      */
-    public int addNewHike(String hikeName, Date startDate, Date endDate, String description, int maxPeople, int creatorId) {
+    public int addNewHike(String hikeName, Date startDate, Date endDate, String description, int maxPeople, int creatorId){
         String query = "insert into hikes (hike_name, start_date , end_date, description, max_people) values (?,?,?,?,?)";
         PreparedStatement registerHike = databaseConnector.getPreparedStatement(query);
         try {
@@ -62,8 +61,8 @@ public class HikeDM {
             ResultSet resultSet = databaseConnector.getData("select ID from hikes order by ID desc limit 1");
             if (resultSet.next()) {
                 //added creator into hike as as creator
-                int hikeId = resultSet.getInt(1);
-                addUserToHike(hikeId, creatorId, 1);
+                int hikeId  = resultSet.getInt(1);
+                addUserToHike(hikeId, creatorId, 1 );
                 return hikeId;
             }
         } catch (Exception e) {
@@ -111,22 +110,22 @@ public class HikeDM {
 
     /**
      * registers user to hike with these params
-     *
      * @param hikeId
      * @param userId
      * @param roleId
      */
-    public void addUserToHike(int hikeId, int userId, int roleId) {
+    public void addUserToHike(int hikeId, int userId, int roleId){
         String query = "insert into hike_to_user (hike_ID ,user_ID,role_ID) values (?,?,?)";
         PreparedStatement registerUserIntoHike = databaseConnector.getPreparedStatement(query);
 
         try {
             registerUserIntoHike.setInt(1, hikeId);
             registerUserIntoHike.setInt(2, userId);
-            registerUserIntoHike.setInt(3, roleId);
+            registerUserIntoHike.setInt(3,roleId);
 
 
             databaseConnector.updateDataWithPreparedStatement(registerUserIntoHike);
+
 
 
         } catch (SQLException e) {
@@ -137,10 +136,9 @@ public class HikeDM {
 
     /**
      * Adds new request to database.
-     *
-     * @param senderId   id of user who sent request
+     * @param senderId id of user who sent request
      * @param receiverId id of creator of hike
-     * @param hikeId     id of hike, in which user wishes to be added
+     * @param hikeId id of hike, in which user wishes to be added
      * @return id of newly created request
      */
     public int addRequest(int senderId, int receiverId, int hikeId) {
@@ -201,5 +199,21 @@ public class HikeDM {
     public void respondToRequest(int requestId, String response) {
         databaseConnector.callProcedure("request_response", Arrays.asList("" + requestId, "\"" + response + "\""));
     }
+    public List<Integer> getRequestedHikeIds(int userId){
+        String query = "select id from hikes where id in (select hike_ID from requests where sender_ID = ?)";
+        PreparedStatement st = databaseConnector.getPreparedStatement(query);
+        List<Integer> res = new ArrayList<>();
+        try {
+            st.setInt(1, userId);
+            ResultSet rs = databaseConnector.getDataWithPreparedStatement(st);
+            if (rs.next()) {
+                res.add(rs.getInt("ID"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+
 
 }

@@ -12,12 +12,20 @@
 <div class="main-content request-container">
     <ul class="request-list">
         <li class="request-item" v-for="(request, index) in requests">
-            <div class="avatar-block"></div>
+            <div class="avatar-block" @mouseenter="hoverUser(request.sender, event)" @mouseleave="hoverOutUser(event)"
+                 @click="window.location = '/Profile?userID=' +  request.sender.id"
+                 :style="{ backgroundImage: 'url(' + request.sender.profilePictureAddress + ')' }"></div>
             <div class="request-text">
-                {{request.sender.firstName}} {{request.sender.lastName}} wants to join {{request.hike.name}}
+                <span  class="request-user-name"
+                       @mouseenter="hoverUser(request.sender, event)" @mouseleave="hoverOutUser(event)"
+                       @click="window.location = '/Profile?userID=' +  request.sender.id">
+                    {{request.sender.firstName}} {{request.sender.lastName}}</span> wants to join
+                <span class="request-hike-name" @click="window.location = '/HikePage/Home?hikeId=' +  request.hike.id">{{request.hike.name}}</span>
             </div>
-            <button class="accept-button" @click="respondToRequest(request.id, 'accept', index)" onsubmit="return false;"> Accept </button>
-            <button class="reject-button" @click="respondToRequest(request.id, 'reject', index)" onsubmit="return false;"> Reject </button>
+            <div class="request-btns">
+                <button class="mybtn accept" @click="respondToRequest(request.id, 'accept', index)" onsubmit="return false;"> Accept </button>
+                <button class="mybtn reject"  @click="respondToRequest(request.id, 'reject', index)" onsubmit="return false;"> Reject </button>
+            </div>
         </li>
     </ul>
 </div>
@@ -41,7 +49,9 @@
             requests: {
                 sender: "",
                 receiver: "",
-                hike: ""
+                hike: "",
+                profPopupActive: false,
+                hoveredUser: {}
             },
         },
 
@@ -49,6 +59,7 @@
             var th = this;
             axios.post("/GetRequests", {}).then(function (response) {
                 th.requests = response.data.reverse();
+                console.log(th.requests);
             });
         },
 
@@ -57,6 +68,21 @@
             respondToRequest: function(requestId, response, index) {
                 axios({url: "/RespondToRequest", method:"post", params:{requestId: requestId, response: response}});
                 this.requests.splice(index, 1);
+            },
+            hoverUser: function(user, e){
+                if(this.profPopupActive) return;
+                this.hoveredUser = user;
+                this.profPopupActive = true;
+                var popup = document.getElementsByClassName('profile-popup-wrapper')[0];
+                var rect = e.target.getBoundingClientRect();
+                popup.style.left = rect.left + pageXOffset +'px';
+                popup.style.top = rect.top + pageYOffset + e.target.clientHeight - 5 +'px';
+            },
+            hoverOutUser: function (e) {
+                if(!this.profPopupActive) return;
+                if(document.querySelectorAll(".profile-popup-wrapper:hover").length) return;
+                this.profPopupActive = false;
+
             }
 
         }

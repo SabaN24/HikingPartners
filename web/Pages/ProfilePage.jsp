@@ -25,6 +25,9 @@
             <a :href="profileUser.facebookLink" target="_blank" class="facebook-page-btn mybtn">
                 Go To Facebook Profile
             </a>
+            <button v-if="profileUser.id != user.id" @click="openConversation(profileUser.id)" class="facebook-page-btn mybtn">
+                <i class="fa fa-commenting" aria-hidden="true"></i> Message
+            </button>
             <div class="info-item">Gender: {{ profileUser.gender }}</div>
             <div class="info-item">Birth date: {{ !profileUser.birthDate ? "Hidden" : profileUser.birthDate }}</div>
             <div class="info-item">Email: {{ profileUser.email }}</div>
@@ -34,7 +37,7 @@
         <div class="created-hikes-block-inner">
             <div class="profile-title">Created Hikes</div>
             <ul class="created-hikes-list">
-                <li class="created-hike" v-for="hike in createdHikes">
+                <li class="created-hike bg" v-for="hike in createdHikes" @click="window.location = '/HikePage/Home?hikeId=' + hike.id" :style="{ backgroundImage: 'url(' + '../Content/img/pic1.jpg' + ')' }">
                     {{ hike.name }}
                 </li>
             </ul>
@@ -79,6 +82,9 @@
                     console.log(response);
                     th.createdHikes = response.data;
                 });
+            },
+            openConversation: function (userId) {
+                appChat.openChat(userId);
             }
         }
     });

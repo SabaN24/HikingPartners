@@ -50,6 +50,9 @@
             </div>
         </div>
         <div class="header-right">
+            <div class="mynav">
+                <div class="mynav-item"><a href="/RequestListServlet" class="mynav-link">Notifications</a></div>
+            </div>
             <div class="profile-block">
 
                 <a href="/Profile?userID=<%=loggedInUser.getId()%>" class="profile-link">
@@ -119,7 +122,7 @@
 
 <script>
     Vue.filter('cutTime', function (value) {
-        return value.substr(0, value.length - 3);
+        return value.substr(0, value.length - 6);
     });
 
     var mws = new WebSocket("ws://localhost:8080/MessagesSocket/<%= loggedInUser.getId() %>");
@@ -161,9 +164,8 @@
                     var chat = response.data;
                     chat.newMessageInput = "";
                     th.chats.unshift(chat);
-                    th.updateChatScroll(0);
+                    th.updateChatScroll();
                 });
-
             },
 
             //This method is invoked automatically when socket
@@ -172,43 +174,23 @@
                 var jsonData = JSON.parse(data.data);
                 var action = jsonData.action;
                 data = jsonData.data;
-
                 var th = this;
-
                 if (action === "getMessage") {
                     var idx = th.chats.findIndex(x => x.toUserId == data.userFrom.id);
-
                     if (idx == -1) {
                         this.fetchChat(data.userFrom.id);
                     }
-
                     th.chats.find(x => x.toUserId == data.userFrom.id).messages.push(data);
-
-                    console.log("getshia");
-
                 }
-
-
                 if (action === "sendMessage") {
-
                     th.chats.find(x => x.toUserId == data.userTo.id).messages.push(data);
-
-                    console.log("sendshia");
-
                 }
-
-
                 if(action === "openChat"){
-
                     var idx = th.chats.findIndex(x => x.toUserId === data.id);
-
                     if (idx == -1) {
                         this.fetchChat(data.id);
                     }
-
                 }
-
-
             },
 
             openChat: function (toUserId) {
@@ -227,13 +209,15 @@
                 var idx = th.chats.findIndex(x => x.toUserId === toUserId);
                 th.chats.splice(idx, 1);
 
-
                 //delete from database;
-                axios.post("/CloseChatServlet?toUserId=" +  toUserId, {});
+                axios.post("/CloseChatServlet?toUserId=" +  toUserId, {}).then(function () {
+                    th.updateChatScroll();
+                });
             },
 
             sendMessage: function (toUserId, idx) {
                 var msg = this.chats.find(function(chat){return chat.toUserId == toUserId}).newMessageInput;
+                if(!msg) return;
                 mws.send(JSON.stringify({
                     action: "getMessage",
                     data: {
@@ -244,12 +228,12 @@
                 this.chats.find(function(chat){return chat.toUserId == toUserId}).newMessageInput = "";
                 this.updateChatScroll(idx);
             },
+
             updateChatScroll : function (idx) {
                 setTimeout(function () {
                     if(idx !== undefined){
                         var elem = document.getElementsByClassName("messages-block")[idx];
                         elem.scrollTop = elem.scrollHeight;
-                        console.log(elem.scrollTop);
                     }else {
                         var elements = document.getElementsByClassName("messages-block");
                         Array.prototype.forEach.call(elements, function(elem) {
@@ -269,6 +253,8 @@
 //
 //            }
         }
+
+
 
 
     });

@@ -423,11 +423,11 @@ CREATE PROCEDURE get_hikes_by_user(user_id INT)
   BEGIN
     SELECT hikes.id, hikes.hike_name, hikes.start_date,
       hikes.end_date, hikes.description, hikes.max_people FROM hikes
-      INNER JOIN hike_to_user ON
-                                hike_to_user.user_ID = user_id AND hike_to_user.role_ID = 1;
+      INNER JOIN hike_to_user ON hike_to_user.user_ID = user_id and hike_to_user.hike_ID = hikes.ID where hike_to_user.role_ID = 1;
   END$$
 
 DELIMITER $$
+
 
 
 CREATE PROCEDURE get_hike_members(hike_id INT)
