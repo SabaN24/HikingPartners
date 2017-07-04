@@ -183,7 +183,9 @@
                     th.chats.find(x => x.toUserId == data.userFrom.id).messages.push(data);
                 }
                 if (action === "sendMessage") {
-                    th.chats.find(x => x.toUserId == data.userTo.id).messages.push(data);
+                    var idx = th.chats.map(function(e) { return e.toUserId; }).indexOf(data.userTo.id);
+                    th.chats[idx].messages.push(data);
+                    th.updateChatScroll(idx);
                 }
                 if(action === "openChat"){
                     var idx = th.chats.findIndex(x => x.toUserId === data.id);
@@ -215,7 +217,7 @@
                 });
             },
 
-            sendMessage: function (toUserId, idx) {
+            sendMessage: function (toUserId) {
                 var msg = this.chats.find(function(chat){return chat.toUserId == toUserId}).newMessageInput;
                 if(!msg) return;
                 mws.send(JSON.stringify({
@@ -226,7 +228,6 @@
                     }
                 }));
                 this.chats.find(function(chat){return chat.toUserId == toUserId}).newMessageInput = "";
-                this.updateChatScroll(idx);
             },
 
             updateChatScroll : function (idx) {
