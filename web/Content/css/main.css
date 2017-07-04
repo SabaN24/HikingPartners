@@ -973,3 +973,42 @@ input[type="file"] {
     /*position: absolute;*/
     /*bottom:0;*/
 /*}*/
+
+.request-container {
+    width: 50%;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.request-item {
+    position: relative;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.request-text {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.accept-button {
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;border: none;
+    outline: none;
+    padding: 5px 14px;
+    cursor: pointer;
+    color: green;
+    transition: background .3s;
+}
+
+.reject-button {
+    display: inline-block;
+    background: none;
+    outline: none;
+    padding: 5px 14px;
+    cursor: pointer;
+    color: red;
+    transition: background .3s;
+}

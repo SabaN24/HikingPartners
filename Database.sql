@@ -14,7 +14,6 @@ CREATE TABLE IF NOT EXISTS hikes (
   PRIMARY KEY (ID)
 );
 
-
 CREATE TABLE IF NOT EXISTS users (
   ID INT AUTO_INCREMENT NOT NULL,
   facebook_ID BIGINT NOT NULL,
@@ -324,7 +323,10 @@ WHERE
 -- delete from comments where ID = 100;
 -- delete from post_likes where ID = 5;
 -- delete from comment_likes where ID = 12;
-
+INSERT INTO REQUESTS (sender_id, receiver_id, hike_id) values
+(1, 3, 1),
+(2, 3, 1),
+(4, 3, 1);
 -- --------------------------------------------------------------------- --
 DELIMITER $$
 
@@ -436,7 +438,7 @@ CREATE PROCEDURE get_hike_members(hike_id INT)
   END$$
 
 DELIMITER $$
-CREATE PROCEDURE request_response(request_id INT, accept BOOLEAN)
+CREATE PROCEDURE request_response(request_id INT, response VARCHAR(20))
   BEGIN
     DECLARE desired_hike INT;
     DECLARE user_ID INT;
@@ -455,8 +457,11 @@ CREATE PROCEDURE request_response(request_id INT, accept BOOLEAN)
     DELETE FROM requests
     WHERE
       id = request_id;
-    IF(accept = TRUE) THEN
+    IF(response = 'accept') THEN
       INSERT INTO hike_to_user (hike_ID, user_ID, role_ID) VALUES (desired_hike, user_ID, 2);
     END IF;
 
   END $$
+  
+  
+
