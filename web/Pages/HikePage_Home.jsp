@@ -37,7 +37,7 @@
                 <ul class="comments-list">
                     <li class="comment" v-for="(comment, index) in aboutModel.comments">
                         <div class="avatar-block"
-                             @mouseenter="hoverUser(comment.user, event)" @mouseleave="hoverOutUser(event)"
+                             @mouseenter="profilePopupVue.hoverUser(comment.user, event)" @mouseleave="profilePopupVue.hoverOutUser(event)"
                              @click="window.location = '/Profile?userID=' +  comment.user.id"
                              :style="{ backgroundImage: 'url(' + comment.user.profilePictureAddress + ')' }">
 
@@ -45,7 +45,7 @@
                         <div class="comment-info">
                             <div class="comment-info__upper">
                                 <div class="comment-author"
-                                     @mouseenter="hoverUser(comment.user, event)" @mouseleave="hoverOutUser(event)"
+                                     @mouseenter="profilePopupVue.hoverUser(comment.user, event)" @mouseleave="profilePopupVue.hoverOutUser(event)"
                                      @click="window.location = '/Profile?userID=' +  comment.user.id">
                                     <span>{{comment.user.firstName}} </span><span>{{comment.user.lastName}}</span>
                                 </div>
@@ -80,10 +80,7 @@
 </div>
 
 <script>
-    Vue.filter('cutTime', function (value) {
-        if (!value) return "";
-        return value.substr(0, value.length - 6);
-    });
+
     var ws = new WebSocket("ws://localhost:8080/HikeCommentsSocket/" + hikeId);
     var app = new Vue({
         el: '#vueapp',
@@ -93,16 +90,13 @@
         data: {
             aboutModel: {},
             newCommentInput: "",
-            hoveredUser: {},
-            profPopupActive: false
+            profilePopupVue: profilePopupVue
         },
         //These functions will be called when page loads.
         created: function () {
             this.fetchData()
         },
-        updated: function () {
-            document.getElementsByTagName("title")[0].innerHTML = document.getElementsByTagName("setTitle")[0].innerHTML;
-        },
+
         //These are stored methods that vue will be able to use.
         methods: {
             fetchData: function () {
@@ -155,25 +149,6 @@
                         commentID: commentId + "",
                     }
                 }));
-            },
-            hoverUser: function(user, e){
-                if(this.profPopupActive) return;
-                this.hoveredUser = user;
-                this.profPopupActive = true;
-                var popup = document.getElementsByClassName('profile-popup-wrapper')[0];
-                var rect = e.target.getBoundingClientRect();
-                popup.style.left = rect.left + pageXOffset +'px';
-                popup.style.top = rect.top + pageYOffset + e.target.clientHeight - 5 +'px';
-            },
-            hoverOutUser: function (e) {
-                if(!this.profPopupActive) return;
-                if(document.querySelectorAll(".profile-popup-wrapper:hover").length) return;
-                this.profPopupActive = false;
-
-            },
-
-            openConversation: function (userId) {
-                appChat.openChat(userId);
             }
         }
     });

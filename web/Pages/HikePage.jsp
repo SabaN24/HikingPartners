@@ -14,33 +14,39 @@
 <script>
     var hikeId = <%= Integer.parseInt(request.getParameter("hikeId"))%>;
 </script>
-<div id="vueapp">
-    <setTitle>
-        <%
-            DefaultModel defaultModel = (DefaultModel) request.getAttribute(DefaultModel.ATTR);
-            int hikeId = defaultModel.getId();
-            String fullSubPage = (String) request.getAttribute("subPage");
-            String subPage = fullSubPage.substring(9, fullSubPage.length() - 4);
-            User creator = defaultModel.getCreator();
-            out.print(defaultModel.getName());
-        %>
-    </setTitle>
-    <div v-if=" '<%= subPage %>' == 'Feed' || '<%= subPage %>' == 'Home' || '<%= subPage %>' == 'Members' " class="profile-popup-wrapper" :class="{ active : profPopupActive }" @mouseleave="profPopupActive = false" >
-        <div class="profile-popup">
-            <div class="profile-popup-cover bg" :style="{ backgroundImage: 'url(' + hoveredUser.coverPictureAddress + ')' }">
-                <div class="profile-popup-name">{{hoveredUser.firstName}} {{hoveredUser.lastName}}</div>
-            </div>
-            <div class="profile-popup-prof-pic bg" :style="{ backgroundImage: 'url(' + hoveredUser.profilePictureAddress + ')' }"></div>
-            <div class="profile-popup-info">
-                <div><i class="fa fa-birthday-cake" aria-hidden="true"></i>Birthday: {{hoveredUser.birthDate ? hoveredUser.birthDate : "hidden"}} </div>
-                <div><i class="fa fa-envelope" aria-hidden="true"></i>Email: {{hoveredUser.email}} </div>
-            </div>
-            <div class="profile-popup-nav" v-if="hoveredUser.id != <%= ((User)request.getAttribute("loggedInUser")).getId() %>">
-                <a  class="mybtn profile-popup-btn" :href="'/Profile?userID=' + hoveredUser.id"><i class="fa fa-user" aria-hidden="true" ></i>Go To Profile</a>
-                <button class="mybtn profile-popup-btn"  v-on:click="openConversation(hoveredUser.id)" ><i class="fa fa-commenting" aria-hidden="true"></i>Message</button>
-            </div>
+<setTitle>
+    <%
+        DefaultModel defaultModel = (DefaultModel) request.getAttribute(DefaultModel.ATTR);
+        int hikeId = defaultModel.getId();
+        String fullSubPage = (String) request.getAttribute("subPage");
+        String subPage = fullSubPage.substring(9, fullSubPage.length() - 4);
+        User creator = defaultModel.getCreator();
+        out.print(defaultModel.getName());
+    %>
+</setTitle>
+<script>
+    document.getElementsByTagName("title")[0].innerHTML = document.getElementsByTagName("setTitle")[0].innerHTML;
+</script>
+
+<div id="profilePopupVue" v-if=" '<%= subPage %>' == 'Feed' || '<%= subPage %>' == 'Home' || '<%= subPage %>' == 'Members' " class="profile-popup-wrapper" :class="{ active : profPopupActive, up : popupUp }" @mouseleave="profPopupActive = false" >
+    <div class="profile-popup">
+        <div class="profile-popup-cover bg" :style="{ backgroundImage: 'url(' + hoveredUser.coverPictureAddress + ')' }">
+            <div class="profile-popup-name">{{hoveredUser.firstName}} {{hoveredUser.lastName}}</div>
+        </div>
+        <div class="profile-popup-prof-pic bg" :style="{ backgroundImage: 'url(' + hoveredUser.profilePictureAddress + ')' }"></div>
+        <div class="profile-popup-info">
+            <div><i class="fa fa-birthday-cake" aria-hidden="true"></i>Birthday: {{hoveredUser.birthDate ? hoveredUser.birthDate : "hidden"}} </div>
+            <div><i class="fa fa-envelope" aria-hidden="true"></i>Email: {{hoveredUser.email}} </div>
+        </div>
+        <div class="profile-popup-nav" v-show="hoveredUser.id != <%= ((User)request.getAttribute("loggedInUser")).getId() %>">
+            <a  class="mybtn profile-popup-btn" :href="'/Profile?userID=' + hoveredUser.id"><i class="fa fa-user" aria-hidden="true" ></i>Go To Profile</a>
+            <button class="mybtn profile-popup-btn"  v-on:click="openConversation(hoveredUser.id)" ><i class="fa fa-commenting" aria-hidden="true"></i>Message</button>
         </div>
     </div>
+</div>
+
+<div id="vueapp">
+
 
 
     <aside>
@@ -100,9 +106,48 @@
 
         </div>
 
-        <script src="../Scripts/axios.min.js"></script>
-        <script src="../Scripts/vue.min.js"></script>
+        <script>
+            var profilePopupVue = new Vue({
+                el: "#profilePopupVue",
+                data: {
+                    profPopupActive: false,
+                    popupUp : false,
+                    hoveredUser: {}
+                },
+                methods: {
+                    hoverUser: function(user, e){
+                        if(this.profPopupActive) return;
+                        this.hoveredUser = user;
+                        this.profPopupActive = true;
+                        var rect = e.target.getBoundingClientRect();
+                        var popup = document.querySelector('.profile-popup-wrapper');
+                        popup.style.left = rect.left + pageXOffset +'px';
+                        popup.style.top = rect.top + pageYOffset + e.target.clientHeight - 5 +'px';
+                        console.log(e);
+                        console.log(window.innerHeight);
+                        this.popupUp = false;
+                        if(window.innerHeight - e.clientY < 300){
+                            this.popupUp = true;
+                            popup.style.top = rect.top + pageYOffset - 275 +'px';
+                        }
+                    },
+                    hoverOutUser: function (e) {
+                        if(!this.profPopupActive) return;
+                        if(document.querySelectorAll(".profile-popup-wrapper:hover").length) return;
+                        this.profPopupActive = false;
+
+                    },
+                    openConversation: function (userId) {
+                        appChat.openChat(userId);
+                    }
+
+                }
+            });
+
+        </script>
+
         <jsp:include page='<%= fullSubPage %>'/>
+
     </main>
 
 </div>

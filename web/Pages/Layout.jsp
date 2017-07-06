@@ -14,13 +14,15 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <title></title>
     <link rel="stylesheet" href="../Content/css/normalize.css">
     <link rel="stylesheet" href="../Content/css/font-awesome.min.css">
     <link rel="stylesheet" href="../Content/css/common.css">
     <link rel="stylesheet" href="../Content/css/main.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat|Quicksand" rel="stylesheet">
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="../Scripts/axios.min.js"></script>
+    <script src="../Scripts/vue.min.js"></script>
 </head>
 <body>
 <%
@@ -84,7 +86,7 @@
             <div class="chat" v-for="(chat, index) in chats">
                 <div class="chat-upper">
                     <div class="chat-user-name" @click="window.location = '/Profile?userID=' + chat.userTo.id">{{chat.userTo.firstName}} {{chat.userTo.lastName}}</div>
-                    <div class="chat-close-btn" @click="closeChat(chat.toUserId)"><i class="fa fa-minus" aria-hidden="true"></i></div>
+                    <div class="chat-close-btn" @click="closeChat(chat.toUserId)"><i class="fa fa-times" aria-hidden="true"></i></div>
                 </div>
                 <div class="messages-block">
                     <ul class="messages-list">
@@ -108,141 +110,133 @@
             </div>
         </div>
     </div>
-    <% } %>
 
+    <script>
+        Vue.filter('cutTime', function (value) {
+            return value.substr(0, value.length - 6);
+        });
 
-</div>
-<footer>
-    <div class="footer-info"> All Rights Reserved  © HikingPartners.ge  2017</div>
-</footer>
+        var mws = new WebSocket("ws://localhost:8080/MessagesSocket/<%= loggedInUser.getId() %>");
 
-
-<% if (!pageName.equals("LoginPage.jsp")) { %>
-
-<script>
-    Vue.filter('cutTime', function (value) {
-        return value.substr(0, value.length - 6);
-    });
-
-    var mws = new WebSocket("ws://localhost:8080/MessagesSocket/<%= loggedInUser.getId() %>");
-
-    var appChat = new Vue({
-        el: '#chatVue',
-        //These are stored instance variables for vue,
-        //it will use these to bind element data ands
-        //modify them.
-        data: {
-            chats: [],
-            newMessage: "",
-            loggedInUser: user
-
-        },
-        //These functions will be called when page loads.
-        created: function () {
-            this.fetchChats();
-        },
-        updated: function () {
-        },
-        //These are stored methods that vue will be able to use.
-        methods: {
-
-            fetchChats: function () {
-                var th = this;
-                axios.post("/OpenChatsServlet?userId=" + <%= loggedInUser.getId() %>, {}).then(function(response){
-                    th.chats = response.data.reverse();
-                    th.chats.forEach(function (elem) {
-                       elem.newMessageInput = "";
-                    });
-                    th.updateChatScroll();
-                });
-            },
-
-            fetchChat: function(toUserId){
-                var th = this;
-                axios.post("/OpenChatServlet?toUserId=" + toUserId, {}).then(function(response){
-                    var chat = response.data;
-                    chat.newMessageInput = "";
-                    th.chats.unshift(chat);
-                    th.updateChatScroll();
-                });
-            },
-
-            //This method is invoked automatically when socket
-            //server sends message to this session.
-            getSocketMessage: function (data) {
-                var jsonData = JSON.parse(data.data);
-                var action = jsonData.action;
-                data = jsonData.data;
-                var th = this;
-                if (action === "getMessage") {
-                    var idx = th.chats.findIndex(x => x.toUserId == data.userFrom.id);
-                    if (idx == -1) {
-                        this.fetchChat(data.userFrom.id);
-                    }
-                    th.chats.find(x => x.toUserId == data.userFrom.id).messages.push(data);
-                }
-                if (action === "sendMessage") {
-                    var idx = th.chats.map(function(e) { return e.toUserId; }).indexOf(data.userTo.id);
-                    th.chats[idx].messages.push(data);
-                    th.updateChatScroll(idx);
-                }
-                if(action === "openChat"){
-                    var idx = th.chats.findIndex(x => x.toUserId === data.id);
-                    if (idx == -1) {
-                        this.fetchChat(data.id);
-                    }
-                }
-            },
-
-            openChat: function (toUserId) {
-
-                mws.send(JSON.stringify({
-                    action: "openChat",
-                    toUserId: toUserId + "",
-                }));
+        var appChat = new Vue({
+            el: '#chatVue',
+            //These are stored instance variables for vue,
+            //it will use these to bind element data ands
+            //modify them.
+            data: {
+                chats: [],
+                newMessage: "",
+                loggedInUser: user
 
             },
-
-            closeChat: function (toUserId){
-
-                //delete from chats in vue app
-                var th = this;
-                var idx = th.chats.findIndex(x => x.toUserId === toUserId);
-                th.chats.splice(idx, 1);
-
-                //delete from database;
-                axios.post("/CloseChatServlet?toUserId=" +  toUserId, {}).then(function () {
-                    th.updateChatScroll();
-                });
+            //These functions will be called when page loads.
+            created: function () {
+                this.fetchChats();
             },
-
-            sendMessage: function (toUserId) {
-                var msg = this.chats.find(function(chat){return chat.toUserId == toUserId}).newMessageInput;
-                if(!msg) return;
-                mws.send(JSON.stringify({
-                    action: "getMessage",
-                    data: {
-                        toUserId: toUserId + "",
-                        message: msg + "",
-                    }
-                }));
-                this.chats.find(function(chat){return chat.toUserId == toUserId}).newMessageInput = "";
+            updated: function () {
             },
+            //These are stored methods that vue will be able to use.
+            methods: {
 
-            updateChatScroll : function (idx) {
-                setTimeout(function () {
-                    if(idx !== undefined){
-                        var elem = document.getElementsByClassName("messages-block")[idx];
-                        elem.scrollTop = elem.scrollHeight;
-                    }else {
-                        var elements = document.getElementsByClassName("messages-block");
-                        Array.prototype.forEach.call(elements, function(elem) {
-                            elem.scrollTop = elem.scrollHeight;
+                fetchChats: function () {
+                    var th = this;
+                    axios.post("/OpenChatsServlet?userId=" + <%= loggedInUser.getId() %>, {}).then(function(response){
+                        th.chats = response.data.reverse();
+                        th.chats.forEach(function (elem) {
+                            elem.newMessageInput = "";
                         });
-                    }
-                }, 0);
+                        th.updateChatScroll();
+                    });
+                },
 
-            },
+                fetchChat: function(toUserId){
+                    var th = this;
+                    axios.post("/OpenChatServlet?toUserId=" + toUserId, {}).then(function(response){
+                        var chat = response.data;
+                        chat.newMessageInput = "";
+                        th.chats.unshift(chat);
+                        th.updateChatScroll();
+                    });
+                },
+
+                //This method is invoked automatically when socket
+                //server sends message to this session.
+                getSocketMessage: function (data) {
+                    var jsonData = JSON.parse(data.data);
+                    var action = jsonData.action;
+                    data = jsonData.data;
+                    var th = this;
+                    if (action === "getMessage") {
+                        var idx = th.chats.findIndex(x => x.toUserId == data.userFrom.id);
+                        if (idx == -1) {
+                            this.fetchChat(data.userFrom.id);
+                        }
+                        th.chats.find(x => x.toUserId == data.userFrom.id).messages.push(data);
+                    }
+                    if (action === "sendMessage") {
+                        var idx = th.chats.map(function(e) { return e.toUserId; }).indexOf(data.userTo.id);
+                        th.chats[idx].messages.push(data);
+                        th.updateChatScroll(idx);
+                    }
+                    if(action === "openChat"){
+                        var idx = th.chats.findIndex(x => x.toUserId === data.id);
+                        if (idx == -1) {
+                            this.fetchChat(data.id);
+                        }
+                    }
+                },
+
+                openChat: function (toUserId) {
+
+                    mws.send(JSON.stringify({
+                        action: "openChat",
+                        toUserId: toUserId + "",
+                    }));
+
+                },
+
+                closeChat: function (toUserId){
+
+                    //delete from chats in vue app
+                    var th = this;
+                    var idx = th.chats.findIndex(x => x.toUserId === toUserId);
+                    th.chats.splice(idx, 1);
+
+                    //delete from database;
+                    axios.post("/CloseChatServlet?toUserId=" +  toUserId, {}).then(function () {
+                        th.updateChatScroll();
+                    });
+
+
+                },
+
+                sendMessage: function (toUserId) {
+                    var msg = this.chats.find(function(chat){return chat.toUserId == toUserId}).newMessageInput;
+                    if(!msg) return;
+                    mws.send(JSON.stringify({
+                        action: "getMessage",
+                        data: {
+                            toUserId: toUserId + "",
+                            message: msg + "",
+                        }
+                    }));
+                    this.chats.find(function(chat){return chat.toUserId == toUserId}).newMessageInput = "";
+                },
+
+                updateChatScroll : function (idx) {
+                    setTimeout(function () {
+                        if(idx !== undefined){
+                            var elem = document.getElementsByClassName("messages-block")[idx];
+                            elem.scrollTop = elem.scrollHeight;
+                        }else {
+                            var elements = document.getElementsByClassName("messages-block");
+                            Array.prototype.forEach.call(elements, function(elem) {
+                                elem.scrollTop = elem.scrollHeight;
+                            });
+                        }
+                    }, 0);
+
+                },
 //            textAreaAdjust : function(e, idx) {
 //                var o = e.target;
 //                o.style.height = "1px";
@@ -252,20 +246,26 @@
 //
 //
 //            }
-        }
+            }
 
 
 
 
-    });
+        });
 
-    mws.onmessage = appChat.getSocketMessage;
-
-
-</script>
+        mws.onmessage = appChat.getSocketMessage;
 
 
-<% } %>
+    </script>
+
+
+    <% } %>
+
+
+</div>
+<footer>
+    <div class="footer-info"> All Rights Reserved  © HikingPartners.ge  2017</div>
+</footer>
 
 </body>
 </html>

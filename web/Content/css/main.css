@@ -447,8 +447,9 @@ main {
 }
 
 .new-post-img img{
-    width:100%;
-    height:100%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .new-post .post-author-avatar{
@@ -709,7 +710,20 @@ input[type="file"] {
     z-index: 100;
 }
 
+.profile-popup-wrapper.up {
+    padding-top: 0;
+    padding-bottom: 30px;
+}
+
+.profile-popup-wrapper.up .profile-popup:after {
+    top: auto;
+    bottom: -10px;
+    border-bottom: none;
+    border-top: 10px solid #444;
+}
+
 .profile-popup {
+    position: relative;
     width: 370px;
     height: 245px;
     background: white;
@@ -722,7 +736,7 @@ input[type="file"] {
     position: absolute;
     content: "";
     left: 10px;
-    top: 20px;
+    top: -10px;
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
     border-bottom: 10px solid #444;
@@ -742,7 +756,7 @@ input[type="file"] {
 
 .profile-popup-name {
     position: absolute;
-    top: 45%;
+    top: 40%;
     left: 38%;
     color: white;
     font-family: 'Montserrat', Helvetica, arial, sans-serif;
@@ -1020,6 +1034,7 @@ input[type="file"] {
     border-radius: 12px;
     padding: 5px 8px 6px;
     text-align: left;
+    max-width: 100%;
 }
 
 .message-text-wrapper.self-message{
