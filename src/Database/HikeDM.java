@@ -199,6 +199,12 @@ public class HikeDM {
     public void respondToRequest(int requestId, String response) {
         databaseConnector.callProcedure("request_response", Arrays.asList("" + requestId, "\"" + response + "\""));
     }
+
+    /**
+     * Gets ids of requested hikes for given user.
+     * @param userId user whose requested hikes need to be fetcher
+     * @return ids as list
+     */
     public List<Integer> getRequestedHikeIds(int userId){
         String query = "select id from hikes where id in (select hike_ID from requests where sender_ID = ?)";
         PreparedStatement st = databaseConnector.getPreparedStatement(query);
@@ -216,4 +222,34 @@ public class HikeDM {
     }
 
 
+    public int addCoverPhoto(String description, String newFilePath, int hikeID) {
+        String query = "insert into cover_photos (description, hike_ID, img_url) values (?,?,?)";
+        PreparedStatement coverPhotoStatement = databaseConnector.getPreparedStatement(query);
+        try {
+            coverPhotoStatement.setString(1, description);
+            coverPhotoStatement.setInt(2, hikeID);
+            coverPhotoStatement.setString(3, newFilePath);
+            databaseConnector.updateDataWithPreparedStatement(coverPhotoStatement);
+            ResultSet resultSet = databaseConnector.getData("select ID from cover_photos order by ID desc limit 1");
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public void updateCoverPhoto(int coverID, String description, String newFilePath) {
+        String query = "update cover_photos set description = ?, newFilePath = ? where ID = ?";
+        PreparedStatement updateCoverStatement = databaseConnector.getPreparedStatement(query);
+        try {
+            updateCoverStatement.setString(1, description);
+            updateCoverStatement.setString(2, newFilePath);
+            updateCoverStatement.setInt(3, coverID);
+            databaseConnector.updateDataWithPreparedStatement(updateCoverStatement);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

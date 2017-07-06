@@ -439,6 +439,7 @@ main {
 }
 
 .new-post-img{
+    position:relative;
     background:#ccc;
     width:53px;
     height:53px;
@@ -455,13 +456,14 @@ main {
 }
 
 .photo-remove-button{
+    z-index:1000;
     cursor: pointer;
     position: absolute;
     background: white;
     width:14px;
     height:14px;
-    top:7px;
-    right:9px;
+    top:-5px;
+    right:1px;
 }
 
 .photo-remove-button .fa{
@@ -596,7 +598,7 @@ main {
 
 .new-hike-input.descr{
     width: 100%;
-    height: 200px;
+    height: 150px;
     resize: none;
     margin-bottom: 20px;
 }
@@ -857,6 +859,71 @@ input[type="file"] {
     cursor: pointer;
 }
 
+
+.new-hike-pictures {
+    height: 90px;
+    width:100%;
+}
+
+.new-hike-pictures .new-post-img {
+    cursor: pointer;
+    float: left;
+}
+
+.edit-img-block{
+    font-size: 42px;
+    top:0;
+    position:absolute;
+    width:100%;
+    height:100%;
+    background-color:#595959;
+    opacity:0;
+}
+
+.edit-img-popup{
+    left: 50%;
+    transform: translateX(-50%);
+    margin:0 auto;
+    z-index:10000;
+    position:absolute;
+    background-color:white;
+    width:400px;
+    padding:20px;
+    box-shadow: rgb(204, 204, 204) 0px 0px 1px 1px;
+}
+
+.popup-img {
+    width: 100%;
+    height:300px;
+}
+
+.popup-img img{
+    width:100%;
+    height:100%;
+}
+
+.description-area-block{
+
+}
+
+.description-area-block textarea{
+    width: 100%;
+    outline: none;
+    border: none;
+    box-shadow: rgb(204, 204, 204) 0px 0px 1px 1px;
+    resize: none;
+}
+
+.edit-img-block:hover{
+    opacity:0.8;
+}
+
+.edit-img-block .fa{
+    top: -5px;
+    position: relative;
+    left: 9px;
+}
+
 .chats {
     position: fixed;
     bottom: 0;
@@ -959,7 +1026,7 @@ input[type="file"] {
     display: block;
     text-align: right;
     max-width: 100%;
-    padding-left: 27px; 
+    padding-left: 27px;
 }
 
 .message-text-wrapper.self-message .message-text {
@@ -968,13 +1035,13 @@ input[type="file"] {
 }
 
 /*.chat-add-message {*/
-    /*position: relative;*/
+/*position: relative;*/
 /*}*/
 
 /*.chat-add-message textarea {*/
-    /*resize: none;*/
-    /*position: absolute;*/
-    /*bottom:0;*/
+/*resize: none;*/
+/*position: absolute;*/
+/*bottom:0;*/
 /*}*/
 
 

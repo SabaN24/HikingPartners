@@ -277,9 +277,8 @@ INSERT INTO cover_photos VALUES
 insert into posts values
   (1,"9ზე ოკრიბაშ იყავით ბერლინში მივდივართ", '',  1, 1, now(), null),
   (2,"რუსი ნაშები ჩითავენ? XD XD XD", '', 1, 3, now(), null),
-  (3,"ხალვა მომაქ მე", '', 1, 2, now(), NULL ),
-  (4, "შავი ქამრები არ დამანახოთ!!! მწვანე კაია", '', 1, 4, now(), null);
-
+  (3,"ხალვა მომაქ მე", '', 1, 2, now(), NULL );
+  
 insert into comments
 (comment_text, post_ID, hike_ID, user_ID, comment_time, privacy_type)
 values
