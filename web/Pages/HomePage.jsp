@@ -23,7 +23,7 @@
     <div class="main-content hike-container">
         <ul class="hikes-list">
             <li class="hike-item" v-for="hike in hikes">
-                <div class="slider-block">
+                <div class="slider-block" v-bind:style="{'backgroundImage':'url(' + hike.coverPhotos[0].src + ')'}">
                     <div class="caption">
                         {{hike.coverPhotos[0].description}}
                     </div>
@@ -154,9 +154,9 @@
     function initAutocomplete() {
         // Create the search box and link it to the UI element.
 
-
+        var center = {lat: 42.23333, lng: 43.96667};
         var map = new google.maps.Map(document.getElementById('map'), {
-            center: {lat: 42.23333, lng: 43.96667},
+            center: center,
             zoom: 7,
             mapTypeId: 'roadmap'
         });
@@ -264,6 +264,10 @@
             map.fitBounds(bounds);
 
         });
+        google.maps.event.addListenerOnce(map, 'mouseover', function() {
+            google.maps.event.trigger(map, 'resize');
+            map.panTo(center);
+        });
 
     }
     function post(path, params, method) {
@@ -319,7 +323,6 @@
             },
             requestedHikeIds: [],
             popupIsActive: false,
-            popupIsActive: false,
             newHikePage: 1,
             pictures: [],
             popupImgShow: false,
@@ -367,7 +370,16 @@
 
             },
             closePopup: function(){
+                this.newHike = {};
+                this.newHikePage = 1;
                 this.popupIsActive = false;
+                this.pictures = [];
+                this.popupImgShow = false;
+                this.popupImg = "";
+                this.editImgDescription = "";
+                this.popupImgIndex = 0;
+                document.querySelector("#form-pictures").innerHTML = "";
+                reload();
             },
 
             sendRequest: function(hikeId){
@@ -423,7 +435,7 @@
                 var self = this;
                 axios.post('/UploadCover?hikeID=' + hikeID, new FormData(document.querySelector("#form-pictures"))).then(function(response){
                     if(response.status == 200){
-                        self.hikes.unshift(JSON.parse(response.data));
+                        self.hikes.unshift(response.data);
                         self.closePopup();
                     }else{
                         self.uploadingPicture = false;

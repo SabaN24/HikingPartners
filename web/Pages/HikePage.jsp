@@ -98,9 +98,9 @@
     </aside>
     <main>
         <div class="main-content">
-            <div class="slider-block">
+            <div class="slider-block" style="background-image: url(<%=defaultModel.getCoverPhotos().get(0).getSrc()%>)">
                 <div class="caption">
-                    Qvabistavi <%--<%=  defaultModel.getCoverPhotos().get(0).getDescription() %>--%>
+                    <%=  defaultModel.getCoverPhotos().get(0).getDescription() %>
                 </div>
             </div>
 

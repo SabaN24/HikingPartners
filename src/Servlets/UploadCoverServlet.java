@@ -3,6 +3,7 @@ package Servlets;
 import Database.HikeDM;
 import Models.Hike.HikeInfo;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -33,11 +34,9 @@ public class UploadCoverServlet extends HttpServlet {
         try {
             List<FileItem> files = servletFileUpload.parseRequest(request);
             UUID newFileName;
-            int coverID = 0;
             List<String> descriptions = new ArrayList<>();
-            String newFilePath = "";
+            String newFilePath;
             int hikeID = Integer.parseInt(request.getParameter("hikeID"));
-            int n = files.size() / 2;
             int i = 0;
             for(FileItem file : files){
                 if(file.isFormField()){
@@ -54,10 +53,10 @@ public class UploadCoverServlet extends HttpServlet {
                     hikeDM.addCoverPhoto(description, newFilePath, hikeID);
                     i++;
                 }
-                HikeInfo hikeInfo = hikeDM.getHikeById(hikeID);
-                Gson gson = new Gson();
-                response.getWriter().print(gson.toJson(hikeInfo));
             }
+            HikeInfo hikeInfo = hikeDM.getHikeById(hikeID);
+            Gson gson = new GsonBuilder().serializeNulls().create();
+            response.getWriter().print(gson.toJson(hikeInfo));
         } catch (Exception e) {
             e.printStackTrace();
         }
