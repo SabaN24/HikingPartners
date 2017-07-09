@@ -1141,3 +1141,28 @@ input[type="file"] {
 .request-hike-name:hover {
     color: #444444;
 }
+
+.edit-description-popup {
+    width: 60%;
+    height: 40%;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    box-shadow: 0 0 1px 1px #ccc;
+    padding: 20px 30px;
+    font-family: 'Montserrat', myriad-regular, Helvetica, Arial, sans-serif;
+    display: none;
+}
+
+.edit-description-popup.active {
+    display: block;
+}
+
+.new-description-area {
+    width: 95%;
+    height: 90%;
+    max-width: 95%;
+    max-height: 90%;
+}

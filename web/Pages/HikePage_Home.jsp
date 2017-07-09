@@ -1,4 +1,5 @@
-<%@ page import="Models.Hike.DefaultModel" %><%--
+<%@ page import="Models.Hike.DefaultModel" %>
+<%@ page import="Database.HikeDM" %><%--
   Created by IntelliJ IDEA.
   User: Sandro
   Date: 18-Jun-17
@@ -14,6 +15,9 @@
                 <div class="description-header__left">
                     <%
                         DefaultModel defaultModel = (DefaultModel) request.getAttribute(DefaultModel.ATTR);
+                        Integer loggedInUser = (Integer) request.getSession().getAttribute("userID");
+                        int loggedInUserId = loggedInUser;
+                        boolean IdMatch = (loggedInUserId == defaultModel.getCreator().getId());
                         out.print(defaultModel.getName());
                     %>
                 </div>
@@ -27,8 +31,16 @@
                 </div>
             </div>
             <div class="description-body">
-                <div style="margin-bottom: 10px;font-weight:bold;">Description:</div>
+                <div style="margin-bottom: 10px;font-weight:bold; display: inline-block;">Description:</div>
+                <button class="edit-button" v-if="creatorLoggedIn" @click="openEditDescription"></button>
+                <br>
                 {{aboutModel.description}}
+            </div>
+            <div class="edit-description-popup" :class="{active : editDescriptionPopupIsActive }">
+                <textarea class="new-description-area" v-model="newDescription"></textarea>
+                <br>
+                <button class="mybtn" @click="editDescription()" onsubmit="return false;">Edit Description</button>
+                <div class="close-block" @click="closeEditDescription()">x</div>
             </div>
         </div>
         <div class="comments-count">{{aboutModel.comments.length}} comment<span v-show="aboutModel.comments.length != 1">s</span></div>
@@ -90,8 +102,11 @@
         data: {
             aboutModel: {},
             newCommentInput: "",
-            profilePopupVue: profilePopupVue
-        },
+            profilePopupVue: profilePopupVue,
+            editDescriptionPopupIsActive: false,
+            newDescription: "",
+            creatorLoggedIn: <%= IdMatch %>,
+    },
         //These functions will be called when page loads.
         created: function () {
             this.fetchData()
@@ -149,6 +164,23 @@
                         commentID: commentId + "",
                     }
                 }));
+            },
+
+            openEditDescription: function () {
+                this.newDescription = this.aboutModel.description;
+                this.editDescriptionPopupIsActive = true;
+            },
+
+            closeEditDescription: function () {
+                this.editDescriptionPopupIsActive = false;
+            },
+
+            editDescription: function(){
+                var th = this;
+                axios({url: "/EditHikeDescription", method:"post", params:{hikeId: hikeId, description: this.newDescription}});
+                this.aboutModel.description = this.newDescription;
+                this.newDescription = "";
+                this.closeEditDescription();
             }
         }
     });

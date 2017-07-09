@@ -99,3 +99,18 @@ a, a:visited, a:hover, a:active {
     font-size: 22px;
     margin: 20px 0;
 }
+.edit-button {
+    cursor: pointer;
+    display: inline-block;
+    float: right;
+    outline: none;
+    background: none;
+    background-image: url("../img/edit-logo.png");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    width: 20px;
+    height: 20px;
+    border: none;
+}
+

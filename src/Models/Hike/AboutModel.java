@@ -78,7 +78,8 @@ public class AboutModel {
 
     @Override
     public String toString(){
-        return "Start: " + startDate.toString() + " End: " + endDate.toString() + " Max: " + maxPeople;
+        return "Start: " + startDate.toString() + " End: " + endDate.toString() + " Max: " + maxPeople + " Description: "
+                + description;
     }
 
 }

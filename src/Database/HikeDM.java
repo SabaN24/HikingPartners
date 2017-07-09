@@ -252,4 +252,16 @@ public class HikeDM {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Updates description of hike with given id with given text.
+     * @param id id of hike description of which needs to be updated
+     * @param text new description of hike
+     */
+    public void updateDescription(int id, String text){
+        String query = "update hikes set description = " + "\"" + text + "\"" + " where id = " + id + ";";
+        PreparedStatement preparedStatement = databaseConnector.getPreparedStatement(query);
+        databaseConnector.updateDataWithPreparedStatement(preparedStatement);
+    }
+
 }
