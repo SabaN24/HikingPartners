@@ -65,12 +65,7 @@
             <ul class="nav-list">
                 <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Home' }">
                     <a href='<%= "/HikePage/Home?hikeId=" + hikeId%>' class="nav-link">
-                        <i class="fa fa-home fa-pages"></i> HikePage
-                    </a>
-                </li>
-                <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Items' }">
-                    <a href="#" class="nav-link">
-                        <i class="fa fa-list-ul fa-pages"></i> Items
+                        <i class="fa fa-home fa-pages"></i> About
                     </a>
                 </li>
                 <li class="nav-item" v-bind:class="{ active: '<%= subPage %>'== 'Members' }">
