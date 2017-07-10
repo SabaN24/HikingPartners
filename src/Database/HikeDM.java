@@ -167,10 +167,11 @@ public class HikeDM {
      * @return list of requests
      */
     public List<Request> getRequestsOfUser(int userId) {
-        String query = "SELECT * FROM REQUESTS WHERE receiver_ID = " + userId + ";";
+        String query = "SELECT * FROM REQUESTS WHERE receiver_ID = ?;";
         List<Request> requests = new ArrayList<>();
         PreparedStatement preparedStatement = databaseConnector.getPreparedStatement(query);
         try {
+            preparedStatement.setInt(1, userId);
             ResultSet rs = databaseConnector.getDataWithPreparedStatement(preparedStatement);
             while (rs.next()) {
                 int id = rs.getInt("ID");
@@ -222,6 +223,13 @@ public class HikeDM {
     }
 
 
+    /**
+     * Adds cover photo to given hike with given description
+     * @param description description of cover photo
+     * @param newFilePath path of photo
+     * @param hikeID id of hike
+     * @return id of new hike photo
+     */
     public int addCoverPhoto(String description, String newFilePath, int hikeID) {
         String query = "insert into cover_photos (description, hike_ID, img_url) values (?,?,?)";
         PreparedStatement coverPhotoStatement = databaseConnector.getPreparedStatement(query);
@@ -240,6 +248,13 @@ public class HikeDM {
         return -1;
     }
 
+
+    /**
+     * Updates cover photo with given id
+     * @param description description of cover photo
+     * @param newFilePath path of photo
+     * @param coverID id of photo
+     */
     public void updateCoverPhoto(int coverID, String description, String newFilePath) {
         String query = "update cover_photos set description = ?, newFilePath = ? where ID = ?";
         PreparedStatement updateCoverStatement = databaseConnector.getPreparedStatement(query);
@@ -259,8 +274,31 @@ public class HikeDM {
      * @param text new description of hike
      */
     public void updateDescription(int id, String text){
-        String query = "update hikes set description = " + "\"" + text + "\"" + " where id = " + id + ";";
+        String query = "update hikes set description = ? where id = ?;";
         PreparedStatement preparedStatement = databaseConnector.getPreparedStatement(query);
+        try {
+            preparedStatement.setString(1, text);
+            preparedStatement.setInt(2, id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        databaseConnector.updateDataWithPreparedStatement(preparedStatement);
+    }
+
+    /**
+     * Updates name of hike with given id with given text.
+     * @param id id of hike description of which needs to be updated
+     * @param text new name of hike
+     */
+    public void updateName(int id, String text){
+        String query = "update hikes set hike_name = ? where id = ?;";
+        PreparedStatement preparedStatement = databaseConnector.getPreparedStatement(query);
+        try {
+            preparedStatement.setString(1, text);
+            preparedStatement.setInt(2, id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         databaseConnector.updateDataWithPreparedStatement(preparedStatement);
     }
 

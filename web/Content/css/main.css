@@ -1142,7 +1142,7 @@ input[type="file"] {
     color: #444444;
 }
 
-.edit-description-popup {
+.edit-popup {
     width: 60%;
     height: 40%;
     position: fixed;
@@ -1156,13 +1156,24 @@ input[type="file"] {
     display: none;
 }
 
-.edit-description-popup.active {
+.edit-popup.active {
     display: block;
 }
 
-.new-description-area {
+.text-area {
+    border: 1px solid grey;
     width: 95%;
     height: 90%;
     max-width: 95%;
     max-height: 90%;
+}
+
+.edit-popup.name {
+    width: 30%;
+    height: 15%;
+}
+
+.text-area.name {
+    height: 70%;
+    max-height: 70%;
 }

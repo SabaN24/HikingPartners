@@ -18,8 +18,10 @@
                         Integer loggedInUser = (Integer) request.getSession().getAttribute("userID");
                         int loggedInUserId = loggedInUser;
                         boolean IdMatch = (loggedInUserId == defaultModel.getCreator().getId());
-                        out.print(defaultModel.getName());
+                        String hikeName = defaultModel.getName();
                     %>
+                    {{name}}
+                    <div class="edit-button" style="margin-left: 30px;" v-if="creatorLoggedIn" @click="openEditName"></div>
                 </div>
                 <div class="description-header__right">
                             <span title="ადამიანების მაქსიმალური რაოდენობა" style="margin-right: 30px;"><i
@@ -27,7 +29,6 @@
                     <span title="გამგზავრების თარიღი" style="margin-right: 20px;"><i class="fa fa-arrow-up"
                                                                                      aria-hidden="true"></i> {{aboutModel.startDate | cutTime}}</span>
                     <span title="ჩამოსვლის თარიღი"><i class="fa fa-arrow-down" aria-hidden="true"></i> {{aboutModel.endDate | cutTime}}</span>
-
                 </div>
             </div>
             <div class="description-body">
@@ -36,8 +37,14 @@
                 <br>
                 {{aboutModel.description}}
             </div>
-            <div class="edit-description-popup" :class="{active : editDescriptionPopupIsActive }">
-                <textarea class="new-description-area" v-model="newDescription"></textarea>
+            <div class="edit-popup name" :class="{active : editNamePopupIsActive }">
+                <textarea class="text-area name" v-model="newName"></textarea>
+                <br>
+                <button class="mybtn" @click="editName()" onsubmit="return false;">Edit Name</button>
+                <div class="close-block" @click="closeEditName()">x</div>
+            </div>
+            <div class="edit-popup description" :class="{active : editDescriptionPopupIsActive }">
+                <textarea class="text-area description" v-model="newDescription"></textarea>
                 <br>
                 <button class="mybtn" @click="editDescription()" onsubmit="return false;">Edit Description</button>
                 <div class="close-block" @click="closeEditDescription()">x</div>
@@ -104,9 +111,12 @@
             newCommentInput: "",
             profilePopupVue: profilePopupVue,
             editDescriptionPopupIsActive: false,
+            editNamePopupIsActive: false,
             newDescription: "",
             creatorLoggedIn: <%= IdMatch %>,
-    },
+            name: "<%= hikeName %>",
+            newName: "",
+        },
         //These functions will be called when page loads.
         created: function () {
             this.fetchData()
@@ -181,6 +191,23 @@
                 this.aboutModel.description = this.newDescription;
                 this.newDescription = "";
                 this.closeEditDescription();
+            },
+
+            openEditName: function () {
+                this.newName = this.name;
+                this.editNamePopupIsActive = true;
+            },
+
+            closeEditName: function () {
+                this.editNamePopupIsActive = false;
+            },
+
+            editName: function(){
+                var th = this;
+                axios({url: "/EditHikeName", method:"post", params:{hikeId: hikeId, name: this.newName}});
+                this.name = this.newName;
+                this.newName = "";
+                this.closeEditName();
             }
         }
     });
