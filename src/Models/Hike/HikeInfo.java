@@ -78,4 +78,10 @@ public class HikeInfo extends DefaultModel {
                 getJoinedPeople() + " Start: " + getStartDate() + " End: " + getEndDate() + " Desc: " + getDescription();
     }
 
+    @Override
+    public boolean equals(Object secondHikeInfo){
+        if(getId() == ((DefaultModel)secondHikeInfo).getId()) return true;
+        return false;
+    }
+
 }

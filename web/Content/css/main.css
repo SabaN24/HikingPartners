@@ -1141,6 +1141,30 @@ input[type="file"] {
 .request-hike-name:hover {
     color: #444444;
 }
+.searchItems{
+    text-align: center;
+    font-family: bpg-arial,Arial, sans-serif;
+}
+.radio-buttons{
+    color: white;
+}
+
+#location-search, #hike-name-search, #member-name-search, #date-search {
+    width: 50%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+
+#noSearchData{
+    text-align: center;
+    color:#c8c8c8;
+    font-size:25px;
+}
 
 .edit-popup {
     width: 60%;

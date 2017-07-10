@@ -18,6 +18,25 @@
 <link rel="stylesheet" href="/Content/css/common.css">
 <link rel="stylesheet" href="/Content/css/main.css">
 
+<div class="searchItems">
+    <div class="search-bars">
+        <input id="location-search" type="text" placeholder="Search">
+        <input id="hike-name-search" type="text" placeholder="Search">
+        <input id="member-name-search" type="text" placeholder="Search">
+        <input id="date-search" type="text" placeholder="Search" class="datepicker dateSearch" v-model="searchedDate" oninput="radioButtonChecks()">
+    </div>
+    <div class="radio-buttons">
+        <form>
+            <input type="radio" name="filter" id="location" checked="checked" onclick="radioButtonChecks()">Location
+            <input type="radio" name="filter" id="hikeName" onclick="radioButtonChecks()">Hike Name
+            <input type="radio" name="filter" id="memberName" onclick="radioButtonChecks()">Member Name
+            <input type="radio" name="filter" id="date"  onclick="radioButtonChecks()">Date<p></p>
+        </form>
+    </div>
+
+
+</div>
+
 <div id="vueapp">
 
     <div class="main-content hike-container">
@@ -139,18 +158,97 @@
     </div>
 </div>
 
+<p id="noSearchData"></p>
+
 <script src="../Scripts/axios.min.js"></script>
 <script src="../Scripts/vue.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAN41T3N0B5Tx61omm8n9ZX6quK4FvG1jk&libraries=places&callback=initAutocomplete"
-        async defer></script>
+async defer></script>
+
+
+
+
 
 <script>
+    var locationSearch = document.getElementById("location-search");
+    var hikeNameSearch = document.getElementById("hike-name-search");
+    var memberNameSearch = document.getElementById("member-name-search");
+    var dateSearch = document.getElementById("date-search");
+    radioButtonChecks();
+
+
+    var data = ""; //searched location data.
+    hideShowSearchBars("location-search", "hike-name-search", "member-name-search", "date-search");
+    function hideShowSearchBars(block, none1, none2, none3){
+        document.getElementById(block).style.display = 'block';
+        document.getElementById(none1).style.display = 'none';
+        document.getElementById(none2).style.display = 'none';
+        document.getElementById(none3).style.display = 'none';
+    }
+
+    function radioButtonChecks() {
+        if(document.getElementById("location").checked){
+            hideShowSearchBars("location-search", "hike-name-search", "member-name-search", "date-search");
+            locationSearch.addEventListener("input", function () {
+                if (locationSearch.value === "") {
+                    app.redisplayAllHike();
+                    return;
+                }
+                var hikeSearchBox = new google.maps.places.SearchBox(locationSearch);
+                hikeSearchBox.addListener('places_changed', function () {
+
+                    var places = hikeSearchBox.getPlaces();
+                    var locationLat = 92.0;
+                    var locationLng = 182.0;
+
+                    if (places.length != 0) {
+                        locationLat = places[Object.keys(places)[0]].geometry.location.lat();
+                        locationLng = places[Object.keys(places)[0]].geometry.location.lng();
+                    }
+                    data = JSON.stringify({lat: locationLat + '', lng: locationLng + '', option: "location"});
+
+                    app.locationSearch();
+
+                });
+            });
+        }else if(document.getElementById("hikeName").checked){
+            hideShowSearchBars("hike-name-search", "location-search", "member-name-search", "date-search");
+            hikeNameSearch.addEventListener("input", function () {
+                if (hikeNameSearch.value === "") {
+                    app.redisplayAllHike();
+                    return;
+                }
+                data = JSON.stringify({hikeName: hikeNameSearch.value + '', option: "hikeName"});
+
+                app.hikeNameSearch();
+
+            });
+        }else if(document.getElementById("memberName").checked){
+
+            hideShowSearchBars("member-name-search", "hike-name-search", "location-search",  "date-search");
+
+            memberNameSearch.addEventListener("input", function () {
+                if (memberNameSearch.value === "") {
+                    app.redisplayAllHike();
+                    return;
+                }
+                data = JSON.stringify({memberName: memberNameSearch.value + '', option: "memberName"});
+
+                app.memberNameSearch();
+            });
+        }else if(document.getElementById("date").checked){
+            hideShowSearchBars("date-search", "member-name-search", "hike-name-search", "location-search");
+        }
+    }
+
 
     var locationsArray = [];
     var input = document.createElement("input");
     input.setAttribute("id", "pac-input");
     input.setAttribute("type", "text");
     input.setAttribute("placeholder", "Search Box");
+
+
     function initAutocomplete() {
         // Create the search box and link it to the UI element.
 
@@ -174,6 +272,10 @@
             };
             locationsArray.push(markedLocation);
 
+
+            // The rest of this code assumes you are not using a library.
+            // It can be made less wordy if you use one.
+
             var marker = new google.maps.Marker({
                 position: location,
                 draggable:true,
@@ -185,12 +287,11 @@
                 lng: ""
             }
 
+
             google.maps.event.addListener(marker, 'dragstart', function(evt) {
                 startLoc.lat = evt.latLng.lat();
                 startLoc.lng = evt.latLng.lng();
             });
-
-
             google.maps.event.addListener(marker, 'dragend', function(evt) {
                 var endLoc = {
                     lat: evt.latLng.lat(),
@@ -210,7 +311,10 @@
             searchBox.setBounds(map.getBounds());
         });
 
+
         var markers = [];
+
+        //Hikes Search Box Listener.
 
 
         // Listen for the event fired when the user selects a prediction and retrieve
@@ -226,12 +330,10 @@
                 marker.setMap(null);
             });
 
-
-
             markers = [];
+
             // For each place, get the icon, name and location.
             var bounds = new google.maps.LatLngBounds();
-
             places.forEach(function(place) {
                 if (!place.geometry) {
                     console.log("Returned place contains no geometry");
@@ -314,6 +416,7 @@
         el: '#vueapp',
         data: {
             hikes: "",
+            searchedDate: "",
             newHike: {
                 name: "",
                 maxPeople: "",
@@ -344,7 +447,7 @@
             var th = this;
             $(".datepicker.startDate").datepicker({
                 weekStart: 1,
-                format: "dd/mm/yyyy"
+                format: "dd/mm/yyyy",
             }).on("changeDate", (e) => {
                     th.newHike.startDate = e.target.value;
                 }
@@ -356,9 +459,75 @@
                     th.newHike.endDate = e.target.value;
                 }
             );
+            $(".datepicker.dateSearch").datepicker({
+                weekStart: 1,
+                format: "dd/mm/yyyy",
+                multidate: true
+            }).on("changeDate", (e) => {
+                    var th = this;
+                    th.searchedDate = e.target.value;
+                    console.log(th.searchedDate);
+                    if(th.searchedDate.length >= 21){
+                        data = JSON.stringify({date: th.searchedDate + '', option: "date"});
+                        axios({url:"/HikeSearchServlet", method:"post", params:{data:data}}).then(function (response) {
+                            th.hikes = response.data.reverse();
+                            if(th.hikes.length == 0){
+                                document.getElementById("noSearchData").innerHTML = "No results for that name";
+                            }else{
+                                document.getElementById("noSearchData").innerHTML = ""
+                            }
+                        });
+                    }
+                }
+            );
         },
 
         methods: {
+            locationSearch: function () {
+                var th = this;
+                axios({url:"/HikeSearchServlet", method:"post", params:{data:data}}).then(function (response) {
+                    th.hikes = response.data.reverse();
+                    if(th.hikes.length == 0){
+                        document.getElementById("noSearchData").innerHTML = "No results for that location";
+                    }else{
+                        document.getElementById("noSearchData").innerHTML = ""
+                    }
+                });
+            },
+
+            redisplayAllHike: function () {
+                var th = this;
+                axios.post("/HikesListServlet", {}).then(function (response) {
+                    th.hikes = response.data.reverse();
+                    document.getElementById("noSearchData").innerHTML = ""
+                });
+            },
+
+            hikeNameSearch: function () {
+                var th = this;
+                axios({url:"/HikeSearchServlet", method:"post", params:{data:data}}).then(function (response) {
+                    th.hikes = response.data.reverse();
+                    if(th.hikes.length == 0){
+                        document.getElementById("noSearchData").innerHTML = "No results for that name";
+                    }else{
+                        document.getElementById("noSearchData").innerHTML = ""
+                    }
+                });
+            },
+
+            memberNameSearch: function () {
+                var th = this;
+                axios({url:"/HikeSearchServlet", method:"post", params:{data:data}}).then(function (response) {
+                    th.hikes = response.data.reverse();
+                    if(th.hikes.length == 0){
+                        document.getElementById("noSearchData").innerHTML = "No results for that name";
+                    }else{
+                        document.getElementById("noSearchData").innerHTML = ""
+                    }
+                });
+            },
+
+
             showPopup: function(){
                 this.popupIsActive = true;
             },
@@ -457,9 +626,6 @@
             }
 
         }
-
-
-
 
     });
 </script>
