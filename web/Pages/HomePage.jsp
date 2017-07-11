@@ -140,7 +140,7 @@
                 </div>
                 <span class="new-hike-added-images" v-for="(picture, index) in pictures">
                     <div class="new-post-img">
-                        <img src="/Content/img/uploadPicture.png" v-bind:src="picture.src" alt="">
+                        <img v-bind:src="picture.src" alt="">
                         <div class="photo-remove-button" @click="removePicture(index)"><i class="fa fa-window-close"></i></div>
                         <div class="edit-img-block" @click="openImgDescription(index)">
                             <i class="fa fa-pencil fa-2" aria-hidden="true"></i>

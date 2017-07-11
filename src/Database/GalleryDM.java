@@ -4,6 +4,8 @@ import Models.Photo;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Levani on 01.07.2017.
@@ -56,6 +58,24 @@ public class GalleryDM {
                 String description = "";
                 return new Photo(id, photoPath, description);
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Photo> getGalleryPhotos(int hikeID){
+        String query = "select * from gallery_photos where hike_ID = " + hikeID;
+        ResultSet resultSet = databaseConnector.getData(query);
+        try {
+            List<Photo> result = new ArrayList<>();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("ID");
+                String photoPath = resultSet.getString("img_url");
+                String description = "";
+                result.add(new Photo(id, photoPath, description));
+            }
+            return result;
         } catch (SQLException e) {
             e.printStackTrace();
         }

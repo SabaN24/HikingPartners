@@ -87,7 +87,7 @@
                 <%
                     if(loggedInUserIsMember){%>
                 <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Gallery' }">
-                    <a href="#" class="nav-link">
+                    <a href="<%= "/HikePage/Gallery?hikeId=" + hikeId%>" class="nav-link">
                         <i class="fa fa-picture-o fa-pages"></i> Gallery
                     </a>
                 </li>
