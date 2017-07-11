@@ -54,7 +54,7 @@
             <ul class="created-hikes-list">
                 <li class="created-hike bg" v-for="hike in createdHikes"
                     @click="window.location = '/HikePage/Home?hikeId=' + hike.id"
-                    :style="{ backgroundImage: 'url(' + '../Content/img/pic1.jpg' + ')' }">
+                    :style="{'backgroundImage':'url(' + hike.coverPhotos[hike.coverPhotos.length-1].src + ')'}">
                     {{ hike.name }}
                 </li>
             </ul>

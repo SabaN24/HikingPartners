@@ -33,36 +33,53 @@
         String subPage = fullSubPage.substring(9, fullSubPage.length() - 4);
         User creator = defaultModel.getCreator();
         out.print(defaultModel.getName());
+
+
+
+        boolean IdMatch = (loggedInUserId == defaultModel.getCreator().getId());
+        String hikeName = defaultModel.getName();
+
     %>
 </setTitle>
 <script>
     document.getElementsByTagName("title")[0].innerHTML = document.getElementsByTagName("setTitle")[0].innerHTML;
 </script>
 
-<div id="profilePopupVue" v-if=" '<%= subPage %>' == 'Feed' || '<%= subPage %>' == 'Home' || '<%= subPage %>' == 'Members' " class="profile-popup-wrapper" :class="{ active : profPopupActive, up : popupUp }" @mouseleave="profPopupActive = false" >
+<div id="profilePopupVue"
+     v-if=" '<%= subPage %>' == 'Feed' || '<%= subPage %>' == 'Home' || '<%= subPage %>' == 'Members' "
+     class="profile-popup-wrapper" :class="{ active : profPopupActive, up : popupUp }"
+     @mouseleave="profPopupActive = false">
     <div class="profile-popup">
-        <div class="profile-popup-cover bg" :style="{ backgroundImage: 'url(' + hoveredUser.coverPictureAddress + ')' }">
+        <div class="profile-popup-cover bg"
+             :style="{ backgroundImage: 'url(' + hoveredUser.coverPictureAddress + ')' }">
             <div class="profile-popup-name">{{hoveredUser.firstName}} {{hoveredUser.lastName}}</div>
         </div>
-        <div class="profile-popup-prof-pic bg" :style="{ backgroundImage: 'url(' + hoveredUser.profilePictureAddress + ')' }"></div>
+        <div class="profile-popup-prof-pic bg"
+             :style="{ backgroundImage: 'url(' + hoveredUser.profilePictureAddress + ')' }"></div>
         <div class="profile-popup-info">
-            <div><i class="fa fa-birthday-cake" aria-hidden="true"></i>Birthday: {{hoveredUser.birthDate ? hoveredUser.birthDate : "hidden"}} </div>
-            <div><i class="fa fa-envelope" aria-hidden="true"></i>Email: {{hoveredUser.email}} </div>
+            <div><i class="fa fa-birthday-cake" aria-hidden="true"></i>Birthday: {{hoveredUser.birthDate ?
+                hoveredUser.birthDate : "hidden"}}
+            </div>
+            <div><i class="fa fa-envelope" aria-hidden="true"></i>Email: {{hoveredUser.email}}</div>
         </div>
-        <div class="profile-popup-nav" v-show="hoveredUser.id != <%= ((User)request.getAttribute("loggedInUser")).getId() %>">
-            <a  class="mybtn profile-popup-btn" :href="'/Profile?userID=' + hoveredUser.id"><i class="fa fa-user" aria-hidden="true" ></i>Go To Profile</a>
-            <button class="mybtn profile-popup-btn"  v-on:click="openConversation(hoveredUser.id)" ><i class="fa fa-commenting" aria-hidden="true"></i>Message</button>
+        <div class="profile-popup-nav"
+             v-show="hoveredUser.id != <%= ((User)request.getAttribute("loggedInUser")).getId() %>">
+            <a class="mybtn profile-popup-btn" :href="'/Profile?userID=' + hoveredUser.id"><i class="fa fa-user"
+                                                                                              aria-hidden="true"></i>Go
+                To Profile</a>
+            <button class="mybtn profile-popup-btn" v-on:click="openConversation(hoveredUser.id)"><i
+                    class="fa fa-commenting" aria-hidden="true"></i>Message
+            </button>
         </div>
     </div>
 </div>
 
-<div id="vueapp">
-
+<div>
 
 
     <aside>
         <div class="creator-block" onclick="window.location = '/Profile?userID=<%= creator.getId()%>'">
-            <div class="avatar-block" style="background-image: url(<%= creator.getProfilePictureAddress() %>) " >
+            <div class="avatar-block" style="background-image: url(<%= creator.getProfilePictureAddress() %>) ">
 
             </div>
             <div class="name-block">
@@ -110,55 +127,128 @@
     </aside>
     <main>
         <div class="main-content">
-            <div class="slider-block" style="background-image: url(<%=defaultModel.getCoverPhotos().get(0).getSrc()%>)">
-                <div class="caption">
-                    <%=  defaultModel.getCoverPhotos().get(0).getDescription() %>
-                </div>
-            </div>
 
+                <div id="coverVue" class="slider-block" v-bind:style="{ backgroundImage: 'url(' + coverPhoto + ')' }">
+                    <div class="caption">
+                        <%=  defaultModel.getCoverPhotos().get(0).getDescription() %>
+                        <form action="" onsubmit="return false;" id="form-cover"></form>
+                        <div  v-if="isCreator" v-if="!uploadingCover" class="upload-image-button cover-image-button " @click="chooseCover()" ></div>
+                        <div v-if="uploadingCover">
+                            <button @click="saveCover()">Save Cover</button>
+                            <button @click="removeCover()">Remove Cover</button>
+                        </div>
+                    </div>
+                </div>
         </div>
 
-        <script>
-            var profilePopupVue = new Vue({
-                el: "#profilePopupVue",
-                data: {
-                    profPopupActive: false,
-                    popupUp : false,
-                    hoveredUser: {}
-                },
-                methods: {
-                    hoverUser: function(user, e){
-                        if(this.profPopupActive) return;
-                        this.hoveredUser = user;
-                        this.profPopupActive = true;
-                        var rect = e.target.getBoundingClientRect();
-                        var popup = document.querySelector('.profile-popup-wrapper');
-                        popup.style.left = rect.left + pageXOffset +'px';
-                        popup.style.top = rect.top + pageYOffset + e.target.clientHeight - 5 +'px';
-                        console.log(e);
-                        console.log(window.innerHeight);
-                        this.popupUp = false;
-                        if(window.innerHeight - e.clientY < 300){
-                            this.popupUp = true;
-                            popup.style.top = rect.top + pageYOffset - 275 +'px';
-                        }
+            <script>
+                var profilePopupVue = new Vue({
+                    el: "#profilePopupVue",
+                    data: {
+                        profPopupActive: false,
+                        popupUp: false,
+                        hoveredUser: {}
                     },
-                    hoverOutUser: function (e) {
-                        if(!this.profPopupActive) return;
-                        if(document.querySelectorAll(".profile-popup-wrapper:hover").length) return;
-                        this.profPopupActive = false;
+                    methods: {
+                        hoverUser: function (user, e) {
+                            if (this.profPopupActive) return;
+                            this.hoveredUser = user;
+                            this.profPopupActive = true;
+                            var rect = e.target.getBoundingClientRect();
+                            var popup = document.querySelector('.profile-popup-wrapper');
+                            popup.style.left = rect.left + pageXOffset + 'px';
+                            popup.style.top = rect.top + pageYOffset + e.target.clientHeight - 5 + 'px';
+                            console.log(e);
+                            console.log(window.innerHeight);
+                            this.popupUp = false;
+                            if (window.innerHeight - e.clientY < 300) {
+                                this.popupUp = true;
+                                popup.style.top = rect.top + pageYOffset - 275 + 'px';
+                            }
+                        },
+                        hoverOutUser: function (e) {
+                            if (!this.profPopupActive) return;
+                            if (document.querySelectorAll(".profile-popup-wrapper:hover").length) return;
+                            this.profPopupActive = false;
 
+                        },
+                        openConversation: function (userId) {
+                            appChat.openChat(userId);
+                        }
+
+                    }
+                });
+
+                var coverVue = new Vue({
+                    el: "#coverVue",
+                    data: {
+                        coverPhoto: "",
+                        coverPhotoBackUp: "",
+                        uploadingCover: false,
+                        isCreator: true,
                     },
-                    openConversation: function (userId) {
-                        appChat.openChat(userId);
+                    created: function ()  {
+                        console.log(this.coverPhoto);
+                        this.coverPhoto= "<%=defaultModel.getCoverPhotos().get(defaultModel.getCoverPhotos().size()-1).getSrc()%>";
+                        this.coverPhotoBackUp = this.coverPhoto;
+                        console.log(this.coverPhoto);
+                        this.isCreator = <%=IdMatch%>;
+                    },
+                    methods: {
+                        chooseCover: function () {
+                            var input = document.createElement("input");
+                            var self = this;
+
+
+
+                            input.setAttribute("name", "cover");
+                            input.setAttribute("type", "file");
+                            input.setAttribute("style", "display:none;");
+                            input.setAttribute("accept", "image/*");
+                            document.querySelector("#form-cover").insertBefore(input, document.querySelector("#form-cover").children[0]);
+
+                            var descriptionInput = document.createElement("input");
+                            descriptionInput.setAttribute("name", "descriptions");
+                            descriptionInput.setAttribute("type", "hidden");
+                            descriptionInput.setAttribute("value", "");
+                            document.querySelector("#form-cover").insertBefore(descriptionInput, document.querySelector("#form-cover").children[0]);
+
+                            input.click();
+                            input.onchange = function (event) {
+                                var input = event.target;
+                                if (input.files && input.files[0]) {
+                                    var reader = new FileReader();
+                                    reader.onload = function (e) {
+                                        self.coverPhoto = e.target.result;
+                                        self.uploadingCover = true;
+                                    };
+                                    reader.readAsDataURL(input.files[0]);
+                                }
+                            }
+                        },
+
+                        saveCover: function(){
+                            var th = this;
+                            th.coverPhotoBackUp = th.coverPhoto;
+                            th.uploadingCover = false;
+                            axios.post('/UploadCover?hikeID=' + <%= hikeId %>, new FormData(document.querySelector("#form-cover")));
+                        },
+
+                        removeCover: function () {
+                            var th = this;
+                            th.uploadingCover =false;
+                            th.coverPhoto = th.coverPhotoBackUp;
+                            th.uploadingCover = false;
+                        }
+
                     }
 
-                }
-            });
+                });
 
-        </script>
+            </script>
 
-        <jsp:include page='<%= fullSubPage %>'/>
+<div  id="vueapp">
+            <jsp:include page='<%= fullSubPage %>'/>
 
     </main>
 

@@ -42,7 +42,7 @@
     <div class="main-content hike-container">
         <ul class="hikes-list">
             <li class="hike-item" v-for="hike in hikes">
-                <div class="slider-block" v-bind:style="{'backgroundImage':'url(' + hike.coverPhotos[0].src + ')'}">
+                <div class="slider-block" v-bind:style="{'backgroundImage':'url(' + hike.coverPhotos[hike.coverPhotos.length-1].src + ')'}">
                     <div class="caption">
                         {{hike.coverPhotos[0].description}}
                     </div>

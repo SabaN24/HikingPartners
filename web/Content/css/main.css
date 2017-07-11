@@ -1344,3 +1344,9 @@ input[type="file"] {
     height: 100%;
     object-fit: cover;
 }
+
+.cover-image-button {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+}

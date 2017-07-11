@@ -49,7 +49,7 @@ public class UploadCoverServlet extends HttpServlet {
                     File newFile = new File(Helper.root(this) + newFilePath);
                     newFile.createNewFile();
                     file.write(newFile);
-                    Helper.savePrefferedSize(newFile);
+                    //Helper.savePrefferedSize(newFile);
                     hikeDM.addCoverPhoto(description, newFilePath, hikeID);
                     i++;
                 }
