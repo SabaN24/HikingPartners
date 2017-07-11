@@ -21,7 +21,7 @@
                         String hikeName = defaultModel.getName();
                     %>
                     {{name}}
-                    <div class="edit-button" style="margin-left: 30px;" v-if="creatorLoggedIn" @click="openEditName"></div>
+                    <button class="edit-button" v-if="creatorLoggedIn" @click="openEditName()"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                 </div>
                 <div class="description-header__right">
                             <span title="ადამიანების მაქსიმალური რაოდენობა" style="margin-right: 30px;"><i

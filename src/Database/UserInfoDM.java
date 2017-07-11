@@ -188,4 +188,20 @@ public class UserInfoDM {
         return null;
     }
 
+    /**
+     * Updates "about-me-text" of user with given id.
+     * @param userId id of user
+     */
+    public void updateAboutMeInfo(int userId, String text){
+        String query = "update users set about_me_text = ? where id = ?;";
+        PreparedStatement preparedStatement = databaseConnector.getPreparedStatement(query);
+        try {
+            preparedStatement.setString(1, text);
+            preparedStatement.setInt(2, userId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        databaseConnector.updateDataWithPreparedStatement(preparedStatement);
+    }
+
 }

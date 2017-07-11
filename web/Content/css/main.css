@@ -1166,8 +1166,6 @@ input[type="file"] {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 
@@ -1307,8 +1305,6 @@ input[type="file"] {
     background: #e8e8e8;
 }
 
-
-
 .notifications-list-item:hover {
     color: #444;
 }
@@ -1317,14 +1313,17 @@ input[type="file"] {
     border-bottom: none;
 }
 
-
-
 .edit-popup.name {
     width: 30%;
     height: 15%;
 }
 
 .text-area.name {
+    height: 70%;
+    max-height: 70%;
+}
+
+.text-area.about {
     height: 70%;
     max-height: 70%;
 }

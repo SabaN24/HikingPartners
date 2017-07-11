@@ -3,6 +3,8 @@
 <%@ page import="Models.Hike.DefaultModel" %>
 <%@ page import="java.util.List" %>
 <%@ page import="Models.User" %>
+<%@ page import="Database.MainDM" %>
+<%@ page import="Models.Member" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%--
   Created by IntelliJ IDEA.
@@ -18,6 +20,15 @@
     <%
         DefaultModel defaultModel = (DefaultModel) request.getAttribute(DefaultModel.ATTR);
         int hikeId = defaultModel.getId();
+        List<Member> hikeMembers = MainDM.getInstance().getHikeMembers(hikeId);
+        Integer loggedInUser = (Integer) request.getSession().getAttribute("userID");
+        int loggedInUserId = loggedInUser;
+        boolean loggedInUserIsMember = false;
+        for(int i = 0; i < hikeMembers.size(); i++){
+            if(hikeMembers.get(i).getId() == loggedInUserId) {
+                loggedInUserIsMember = true;
+            }
+        }
         String fullSubPage = (String) request.getAttribute("subPage");
         String subPage = fullSubPage.substring(9, fullSubPage.length() - 4);
         User creator = defaultModel.getCreator();
@@ -73,21 +84,27 @@
                         <i class="fa fa-users fa-pages"></i> Members
                     </a>
                 </li>
+                <%
+                    if(loggedInUserIsMember){%>
                 <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Gallery' }">
                     <a href="#" class="nav-link">
                         <i class="fa fa-picture-o fa-pages"></i> Gallery
                     </a>
                 </li>
+                <%}%>
                 <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Locations' }">
                     <a href="<%= "/LocationsServlet?hikeId=" + hikeId%>" class="nav-link">
                         <i class="fa fa-map-marker fa-pages"></i> Locations
                     </a>
                 </li>
+                <%
+                    if(loggedInUserIsMember){%>
                 <li class="nav-item" v-bind:class="{ active: '<%= subPage %>' == 'Feed' }">
                     <a href='<%= "/HikePage/Feed?hikeId=" + hikeId%>' class="nav-link">
                         <i class="fa fa-rss-square fa-pages"></i> Feed
                     </a>
                 </li>
+                <%}%>
             </ul>
         </nav>
     </aside>

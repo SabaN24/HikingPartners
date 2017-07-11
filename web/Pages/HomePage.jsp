@@ -182,7 +182,7 @@ async defer></script>
     var data = ""; //searched location data.
     hideShowSearchBars("location-search", "hike-name-search", "member-name-search", "date-search");
     function hideShowSearchBars(block, none1, none2, none3){
-        document.getElementById(block).style.display = 'block';
+        document.getElementById(block).style.display = 'inline-block';
         document.getElementById(none1).style.display = 'none';
         document.getElementById(none2).style.display = 'none';
         document.getElementById(none3).style.display = 'none';
