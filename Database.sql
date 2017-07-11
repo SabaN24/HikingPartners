@@ -297,8 +297,6 @@ INSERT INTO hike_to_user VALUES
 INSERT INTO cover_photos VALUES
   (1, 'მაგარი ლოკაცია დზნ', 1, '');
 
-
-
 insert into posts values
   (1,"9ზე ოკრიბაშ იყავით ბერლინში მივდივართ", '',  1, 1, now(), null),
   (2,"რუსი ნაშები ჩითავენ? XD XD XD", '', 1, 3, now(), null),
@@ -501,5 +499,4 @@ CREATE PROCEDURE get_home_page_info(user_ID INT)
                else (case when (select count(1) from requests r where r.sender_ID = user_ID and r.hike_ID = ID) = 1 then 2 else 0 end) end) as user_status from hikes;
 
   END $$
-
 

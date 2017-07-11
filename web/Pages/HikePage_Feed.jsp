@@ -175,6 +175,9 @@
             },
 
             submitPost: function(){
+                if(!this.newPostText && !this.youtubeLink && !this.uploadingPicture){
+                    return;
+                }
                 if(!this.uploadingPicture){
                     this.sendPost();
                 }
