@@ -33,7 +33,7 @@
             </div>
             <div class="description-body">
                 <div style="margin-bottom: 10px;font-weight:bold; display: inline-block;">Description:</div>
-                <button class="edit-button" v-if="creatorLoggedIn" @click="openEditDescription"></button>
+                <button class="edit-button" v-if="creatorLoggedIn" @click="openEditDescription"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                 <br>
                 {{aboutModel.description}}
             </div>
@@ -47,7 +47,7 @@
                 <textarea class="text-area description" v-model="newDescription"></textarea>
                 <br>
                 <button class="mybtn" @click="editDescription()" onsubmit="return false;">Edit Description</button>
-                <div class="close-block" @click="closeEditDescription()">x</div>
+                <div class="close-block" @click="closeEditDescription()"><i class="fa fa-times" aria-hidden="true"></i></div>
             </div>
         </div>
         <div class="comments-count">{{aboutModel.comments.length}} comment<span v-show="aboutModel.comments.length != 1">s</span></div>

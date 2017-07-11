@@ -4,13 +4,12 @@ import Models.*;
 import Models.Hike.AboutModel;
 import Models.Hike.DefaultModel;
 import Models.Hike.HikeInfo;
+import Models.Hike.HikeInfoExtended;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 public class MainDM {
@@ -279,6 +278,33 @@ public class MainDM {
         return creator;
     }
 
+    public List<Notification> getNotifications(int userID){
+        List<Notification> res = new ArrayList<>();
+        String query = "select * from notifications where user_ID = ?";
+        PreparedStatement statement = databaseConnector.getPreparedStatement(query);
+        try {
+            statement.setInt(1, userID);
+            ResultSet rs = databaseConnector.getDataWithPreparedStatement(statement);
+            while(rs.next()){
+                Integer ID = rs.getInt("ID");
+                Date time = (Date) rs.getObject("time");
+                Integer typeID = rs.getInt("type_ID");
+                Integer postID = (Integer) rs.getObject("post_ID");
+                Integer fromUserID = rs.getInt("from_user_ID");
+                User fromUser = UserInfoDM.getInstance().getUserByID(fromUserID);
+                Integer requestID = (Integer) rs.getObject("request_ID");
+                Integer hikeID = (Integer) rs.getObject("hike_ID");
+                String hikeName = (String) rs.getObject("hike_name");
+                Integer seen = rs.getInt("seen");
+                Notification notification = new Notification(ID, userID, time, typeID, postID, fromUser, requestID, hikeID, hikeName, seen);
+                res.add(notification);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+
     /**
      * Builds MiniUser object from given resultset.
      *
@@ -346,4 +372,31 @@ public class MainDM {
         return query;
     }
 
+    public List<HikeInfoExtended> getHomePageInfo(int userID) {
+        List<HikeInfoExtended> result = new ArrayList<>();
+        ResultSet rs = databaseConnector.callProcedure("get_home_page_info", Arrays.asList("" + userID));
+        try {
+            while (rs.next()) {
+                int id = rs.getInt("ID");
+                Date startDate = (Date)rs.getObject("start_date");
+                Date endDate = (Date)rs.getObject("end_date");
+                String description = rs.getString("description");
+                int maxPeople = rs.getInt("max_people");
+                int userStatus = rs.getInt("user_status");
+                ResultSet joinedPeopleRS = databaseConnector.callProcedure("get_joined_people",
+                        Arrays.asList("" + id));
+                int joinedPeople = 0;
+                if (joinedPeopleRS.next()) {
+                    joinedPeople = joinedPeopleRS.getInt("count");
+                }
+                DefaultModel defaultModel = getDefaultModel(id);
+                HikeInfoExtended elem = new HikeInfoExtended(id, defaultModel.getName(), defaultModel.getCreator(),
+                        defaultModel.getCoverPhotos(), maxPeople, joinedPeople, startDate, endDate, description, userStatus);
+                result.add(elem);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 }

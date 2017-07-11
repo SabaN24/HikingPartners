@@ -1,4 +1,4 @@
-<%--
+<%@ page import="Models.Hike.HikeInfoExtended" %><%--
   Created by IntelliJ IDEA.
   User: Saba
   Date: 22.06.2017
@@ -70,10 +70,12 @@
                         </div>
                     </div>
 
-                    <button v-if="hike.joinedPeople < hike.maxPeople && !requestedHikeIds.includes(hike.id)" class="mybtn submit-request"
-                            @click="sendRequest(hike.id)" onsubmit="return false;"> Send Request </button>
-                    <div  v-if="hike.joinedPeople > hike.maxPeople" class="mybtn submit-request">Hike is full</div>
-                    <div v-if="requestedHikeIds.includes(hike.id)" class="mybtn submit-request">Request sent</div>
+                    <template v-if="hike.userStatus != <%= HikeInfoExtended.MEMBER %>">
+                        <button v-if="hike.joinedPeople < hike.maxPeople && hike.userStatus == <%= HikeInfoExtended.NOT_MEMBER %>" class="mybtn submit-request"
+                                @click="sendRequest(hike.id)" onsubmit="return false;">Send Request</button>
+                        <div v-if="hike.joinedPeople == hike.maxPeople && hike.userStatus != <%= HikeInfoExtended.REQUEST_SENT %>" class="mybtn submit-request request-info">Hike is full</div>
+                        <div v-if="hike.userStatus == <%= HikeInfoExtended.REQUEST_SENT %>" class="mybtn submit-request request-info">Request sent</div>
+                    </template>
 
                 </div>
             </li>
@@ -424,7 +426,6 @@ async defer></script>
                 endDate: "",
                 description: ""
             },
-            requestedHikeIds: [],
             popupIsActive: false,
             newHikePage: 1,
             pictures: [],
@@ -438,9 +439,6 @@ async defer></script>
             var th = this;
             axios.post("/HikesListServlet", {}).then(function (response) {
                 th.hikes = response.data.reverse();
-            });
-            axios.post("/GetRequestedHikeIds", {}).then(function (response) {
-                th.requestedHikeIds = response.data;
             });
         },
         mounted: function() {
@@ -553,7 +551,6 @@ async defer></script>
 
             sendRequest: function(hikeId){
                 axios.post("/SendRequest?hikeId=" + hikeId, {});
-                this.requestedHikeIds.push(hikeId);
             },
 
             addLocation: function(hikeID){

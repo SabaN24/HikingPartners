@@ -1,7 +1,7 @@
 package Servlets;
 
 import Database.MainDM;
-import Models.Hike.HikeInfo;
+import Models.Hike.HikeInfoExtended;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Saba on 22.06.2017.
@@ -20,12 +21,13 @@ import java.util.List;
 public class HikesListServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         MainDM mainDM = MainDM.getInstance();
-        List<HikeInfo> hikes = mainDM.getHikes(-1);
+        int userID = (Integer) request.getSession().getAttribute("userID");
+        List<HikeInfoExtended> info = mainDM.getHomePageInfo(userID);
         Gson gson = new GsonBuilder().serializeNulls().create();
-        String hikesList = gson.toJson(hikes);
+        String message = gson.toJson(info);
         response.setContentType("text/html; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().print(hikesList);
+        response.getWriter().print(message);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

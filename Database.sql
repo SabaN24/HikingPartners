@@ -190,6 +190,31 @@ create table if not exists open_chats(
 
 );
 
+create table if not exists notification_types(
+  ID int auto_increment not null,
+  name varchar(50) not null,
+  primary key(ID)
+);
+
+create table if not exists notifications(
+  ID int auto_increment not null,
+  user_ID int not null,
+  time datetime not null,
+  type_ID int not null,
+  post_ID int,
+  from_user_ID int not null,
+  request_ID int,
+  hike_ID int,
+  hike_name varchar(200),
+  seen int not null,
+  primary key(ID),
+  foreign key(user_ID) references users(ID),
+  foreign key(from_user_ID) references users(ID),
+  foreign key(post_ID) references posts(ID),
+  foreign key(request_ID) references requests(ID),
+  foreign key(hike_ID) references hikes(ID)
+);
+
 
 
 -- ----------------------------------------------------------------------------- --
@@ -270,7 +295,7 @@ INSERT INTO hike_to_user VALUES
   (4, 1, 4, 2);
 
 INSERT INTO cover_photos VALUES
-  (1, 'მაგარი ლოკაცია დზნ', 1, '/Content/img/pic1.jpg');
+  (1, 'მაგარი ლოკაცია დზნ', 1, '');
 
 
 
@@ -278,7 +303,7 @@ insert into posts values
   (1,"9ზე ოკრიბაშ იყავით ბერლინში მივდივართ", '',  1, 1, now(), null),
   (2,"რუსი ნაშები ჩითავენ? XD XD XD", '', 1, 3, now(), null),
   (3,"ხალვა მომაქ მე", '', 1, 2, now(), NULL );
-  
+
 insert into comments
 (comment_text, post_ID, hike_ID, user_ID, comment_time, privacy_type)
 values
@@ -323,9 +348,15 @@ WHERE
 -- delete from post_likes where ID = 5;
 -- delete from comment_likes where ID = 12;
 INSERT INTO REQUESTS (sender_id, receiver_id, hike_id) values
-(1, 3, 1),
-(2, 3, 1),
-(4, 3, 1);
+  (1, 3, 1),
+  (2, 3, 1),
+  (4, 3, 1);
+
+
+insert into notification_types (name) values ("Request"), ("Comment"), ("Like");
+
+insert into notifications values(1, 3, NOW(), 1, NULL, 2, NULL, 1, "ტაშისკარი", 0), (2, 3, now(), 2, 1, 3, null, 1, "ტაშისკარი", 0), (3, 3, now(), 3, 2, 4, null, 1, "ტაშისკარი", 1);
+
 -- --------------------------------------------------------------------- --
 DELIMITER $$
 
@@ -428,7 +459,6 @@ CREATE PROCEDURE get_hikes_by_user(user_id INT)
 DELIMITER $$
 
 
-
 CREATE PROCEDURE get_hike_members(hike_id INT)
   BEGIN
     SELECT *, (select role_ID roleID from hike_to_user h where h.user_ID = u.ID and h.hike_ID = hike_id) role_ID
@@ -437,6 +467,8 @@ CREATE PROCEDURE get_hike_members(hike_id INT)
   END$$
 
 DELIMITER $$
+
+
 CREATE PROCEDURE request_response(request_id INT, response VARCHAR(20))
   BEGIN
     DECLARE desired_hike INT;
@@ -461,3 +493,13 @@ CREATE PROCEDURE request_response(request_id INT, response VARCHAR(20))
     END IF;
 
   END $$
+
+DELIMITER $$
+CREATE PROCEDURE get_home_page_info(user_ID INT)
+  BEGIN
+    select *, (case when (select count(1) from hike_to_user htu where htu.hike_ID = ID and htu.user_ID = user_ID) = 1 then 1
+               else (case when (select count(1) from requests r where r.sender_ID = user_ID and r.hike_ID = ID) = 1 then 2 else 0 end) end) as user_status from hikes;
+
+  END $$
+
+

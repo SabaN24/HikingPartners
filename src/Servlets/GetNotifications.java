@@ -1,6 +1,9 @@
 package Servlets;
 
 import Database.HikeDM;
+import Database.MainDM;
+import Models.Notification;
+import Models.Request;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -14,19 +17,24 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Created by Sandro on 04-Jul-17.
+ * Created by Sandro on 11-Jul-17.
  */
-@WebServlet("/GetRequestedHikeIds")
-public class GetRequestedHikeIds extends HttpServlet {
+@WebServlet("/GetNotifications")
+public class GetNotifications extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        MainDM dm = MainDM.getInstance();
         HttpSession session = request.getSession();
-        int userID = (int)session.getAttribute("userID");
-        List<Integer> requestedHikeIds = HikeDM.getInstance().getRequestedHikeIds(userID);
+        Integer userID = (Integer) session.getAttribute("userID");
+        if(userID == null){
+            Helper.servlet("/Home", request, response);
+            return;
+        }
+        List<Notification> notifications = dm.getNotifications(userID);
         Gson gson = new GsonBuilder().serializeNulls().create();
-        String userMessage = gson.toJson(requestedHikeIds, List.class);
+        String message = gson.toJson(notifications);
         response.setContentType("text/html; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().print(userMessage);
+        response.getWriter().print(message);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

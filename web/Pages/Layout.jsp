@@ -1,5 +1,6 @@
 <%@ page import="Servlets.Helper" %>
-<%@ page import="Models.User" %><%--
+<%@ page import="Models.User" %>
+<%@ page import="Models.Notification" %><%--
   Created by IntelliJ IDEA.
   User: Levani
   Date: 13.06.2017
@@ -42,7 +43,7 @@
 <% } %>
 <div class="wrapper clearfix">
     <% if(!pageName.equals("LoginPage.jsp")){ %>
-    <header>
+    <header id="notificationsVue">
         <div class="header-left">
             <div class="logo-block">
                 <a class="logo-link" href="/Home">
@@ -58,7 +59,7 @@
 
                 <a href="/Profile?userID=<%=loggedInUser.getId()%>" class="profile-link">
                     <div class="avatar-block" style="background-image: url(<%= loggedInUser.getProfilePictureAddress() %>) ">
-
+                    <div class="notifications-count">{{newNotificationsCount}}</div>
                     </div>
                     <div class="hidden logged-user-id"><%=loggedInUser.getId()%></div>
                     <div class="profile-name">
@@ -66,6 +67,24 @@
                     </div>
                 </a>
                 <div class="logout-block"><a href="/Logout">Log out</a></div>
+            </div>
+            <div class="notifications-toggle" @click="toggleNotifications()"><i class="fa fa-caret-down" aria-hidden="true"></i></div>
+            <div class="notifications" :class="{active : notificationsActive}">
+                <div v-if="!notifications.length" class="no-notifications">No notifications.</div>
+                <ul class="notifications-list">
+                    <li class="notifications-list-item" v-for="notification in notifications"  :class="{notSeen : !notification.seen}">
+                        <div class="avatar-block notification-avatar" :style="{ backgroundImage: 'url(' + notification.fromUser.profilePictureAddress + ')' }"></div>
+                        <div v-if="notification.typeID == <%= Notification.REQUEST %>" class="notification-info" @click="toggleNotifications();window.location = '/HikePage/Feed?hikeId=' + notification.hikeID + '#' + notification.postID">
+                            <span class="notification-name">{{notification.fromUser.firstName}} {{notification.fromUser.lastName}}</span> wants to join {{notification.hikeName}}.
+                        </div>
+                        <div v-if="notification.typeID == <%= Notification.COMMENT %>" class="notification-info" @click="toggleNotifications();window.location = '/HikePage/Feed?hikeId=' + notification.hikeID + '#' + notification.postID">
+                            <span class="notification-name">{{notification.fromUser.firstName}} {{notification.fromUser.lastName}}</span> commented in the post you are following.
+                        </div>
+                        <div v-if="notification.typeID == <%= Notification.LIKE %>" class="notification-info" @click="toggleNotifications();window.location = '/HikePage/Feed?hikeId=' + notification.hikeID + '#' + notification.postID">
+                            <span class="notification-name">{{notification.fromUser.firstName}} {{notification.fromUser.lastName}}</span> liked your comment.
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
 
@@ -118,6 +137,47 @@
 
         var mws = new WebSocket("ws://localhost:8080/MessagesSocket/<%= loggedInUser.getId() %>");
 
+        //var ntfws = new WebSocket("ws://localhost:8080/NotificationsSocket/<%= loggedInUser.getId() %>");
+
+
+        var notificationsVue = new Vue({
+            el: "#notificationsVue",
+            data: {
+                notifications: [],
+                notificationsActive: false
+            },
+            created(){
+                this.fetchNotifications();
+            },
+            methods: {
+                fetchNotifications: function(){
+                    var th = this;
+                    axios.post("/GetNotifications", {}).then(function(response){
+                        th.notifications = response.data;
+                        console.log(th.notifications);
+                    });
+                },
+                toggleNotifications: function(){
+                    var fa = document.querySelector(".notifications-toggle .fa");
+                    if(this.notificationsActive){
+                        this.notificationsActive = false;
+                        fa.classList.remove("fa-caret-up");
+                        fa.classList.add("fa-caret-down");
+                    }else {
+                        this.notificationsActive = true;
+                        fa.classList.remove("fa-caret-down");
+                        fa.classList.add("fa-caret-up");
+                    }
+
+                }
+            },
+            computed: {
+                newNotificationsCount: function () {
+                    return this.notifications.filter(function(not){ return !not.seen }).length;
+                }
+            }
+        });
+
         var appChat = new Vue({
             el: '#chatVue',
             //These are stored instance variables for vue,
@@ -126,14 +186,11 @@
             data: {
                 chats: [],
                 newMessage: "",
-                loggedInUser: user
-
+                loggedInUser: user,
             },
             //These functions will be called when page loads.
             created: function () {
                 this.fetchChats();
-            },
-            updated: function () {
             },
             //These are stored methods that vue will be able to use.
             methods: {
@@ -237,15 +294,6 @@
                     }, 0);
 
                 },
-//            textAreaAdjust : function(e, idx) {
-//                var o = e.target;
-//                o.style.height = "1px";
-//                o.style.height = (o.scrollHeight)+"px";
-//                var el = document.querySelectorAll(".messages-block")[idx];
-//                el.style.height = 274 - o.scrollHeight + 'px';
-//
-//
-//            }
             }
 
 

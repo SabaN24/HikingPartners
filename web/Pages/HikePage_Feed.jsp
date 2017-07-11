@@ -34,10 +34,10 @@
         <div class="post-popup" :class="{active : videoPopupIsActive}">
             <input type="text" style="margin-bottom: 10px;" v-model="youtubeLink">
             <button class="mybtn" @click="addYoutubeLink()">Add Link</button>
-            <div class="close-block" @click="closeLinkPopup()">x</div>
+            <div class="close-block" @click="closeLinkPopup()"><i class="fa fa-times" aria-hidden="true"></i></div>
         </div>
     </div>
-    <div class="post-block main-content" v-for="(post, index) in posts">
+    <div class="post-block main-content" v-for="(post, index) in posts" :id="post.id">
         <div class="post-upper">
             <div class="avatar-block post-author-avatar"
                  @mouseenter="profilePopupVue.hoverUser(post.user, event)" @mouseleave="profilePopupVue.hoverOutUser(event)"

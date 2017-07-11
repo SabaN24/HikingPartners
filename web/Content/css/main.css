@@ -527,6 +527,15 @@ main {
     top: -5px;
 }
 
+.request-info {
+    background: #aaa;
+    cursor: default;
+}
+
+.request-info:hover {
+    background: #aaa;
+}
+
 .dates-block {
     font-size: 12px;
     display: inline-block;
@@ -609,7 +618,7 @@ main {
     position: absolute;
     cursor: pointer;
     right: 20px;
-    top: 10px;
+    top: 8px;
     transition: color .15s;
 }
 
@@ -1192,6 +1201,122 @@ input[type="file"] {
     max-width: 95%;
     max-height: 90%;
 }
+
+.notifications-toggle {
+    display: inline-block;
+    font-size: 30px;
+    margin-left: 20px;
+    margin-right: 26px;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+}
+
+.notifications-toggle:hover {
+    color: #ccc;
+}
+
+.notifications-count {
+    width: 15px;
+    height: 15px;
+    line-height: 15px;
+    font-family: arial, sans-serif;
+    background: #FA3C4C;
+    border-radius: 50%;
+    position: absolute;
+    left: 21px;
+    top: 22px;
+    font-size: 10px;
+    text-align: center;
+}
+
+.notifications {
+    background: white;
+    border-radius: 10px;
+    min-height: 100px;
+    min-width: 200px;
+    position: absolute;
+    right: 20px;
+    top: 90px;
+    color: #000;
+    line-height: normal;
+    box-shadow: 0 1px 10px 1px rgba(0, 0, 0, .35);
+    z-index: 100;
+    visibility: hidden;
+    opacity: 0;
+    transition: .3s visibility, .3s opacity, .3s top;
+}
+
+.notifications.active {
+    visibility: visible;
+    opacity: 1;
+    top: 100px;
+}
+
+.notifications:before {
+    display: block;
+    position: absolute;
+    content: "";
+    right: 25px;
+    top: -10px;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid white;
+}
+
+.no-notifications {
+    display: inline-block;
+    position: relative;
+    margin-top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.notification-avatar {
+    margin-right: 15px;
+    height: 40px;
+    width: 40px;
+}
+
+.notification-name {
+    font-weight: bold;
+}
+
+.notification-info {
+    display: inline-block;
+}
+
+.notifications-list-item {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.notifications-list-item:first-child{
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+}
+
+.notifications-list-item:last-child{
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.notifications-list-item.notSeen {
+    background: #e8e8e8;
+}
+
+
+
+.notifications-list-item:hover {
+    color: #444;
+}
+
+.notifications-list-item:last-child {
+    border-bottom: none;
+}
+
+
 
 .edit-popup.name {
     width: 30%;
