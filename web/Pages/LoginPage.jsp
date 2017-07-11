@@ -8,9 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <link rel="stylesheet" href="../Content/css/login-page.css">
 
-<setTitle>
-    Login
-</setTitle>
+<script> document.querySelectorAll('title')[0].innerHTML = 'Login'; </script>
 
 <div id = "status"></div>
 

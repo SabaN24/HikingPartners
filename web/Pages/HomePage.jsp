@@ -472,7 +472,7 @@ async defer></script>
                         axios({url:"/HikeSearchServlet", method:"post", params:{data:data}}).then(function (response) {
                             th.hikes = response.data.reverse();
                             if(th.hikes.length == 0){
-                                document.getElementById("noSearchData").innerHTML = "No results for that name";
+                                document.getElementById("noSearchData").innerHTML = "No results for those dates";
                             }else{
                                 document.getElementById("noSearchData").innerHTML = ""
                             }
