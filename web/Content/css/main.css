@@ -1085,30 +1085,31 @@ input[type="file"] {
 .mynav-link:hover {
     color: #bbb;
 }
-.request-container {
+.notifications-container {
     width: 50%;
     position: relative;
     margin: 0 auto;
     padding: 40px;
 }
 
-.request-item {
+.notifications-item__page {
     position: relative;
     display: block;
-    padding: 20px 0;
+    padding: 10px 0;
     border-bottom: 1px solid #bbb;
+    cursor: pointer;
 }
 
-.request-item:first-child {
+.notifications-item__page:first-child {
     border-top: 1px solid #bbb;
 }
 
-.request-item .avatar-block {
+.notifications-item__page .avatar-block {
     width: 50px;
     height: 50px;
 }
 
-.request-text {
+.notification-text {
     display: inline-block;
     margin-left: 10px;
 }
@@ -1135,19 +1136,19 @@ input[type="file"] {
     margin-right: 0;
 }
 
-.request-user-name {
+.notification-user-name {
     cursor: pointer;
 }
 
-.request-user-name:hover {
+.notification-user-name:hover {
     color: #444444;
 }
 
-.request-hike-name {
+.notification-hike-name {
     cursor: pointer;
 }
 
-.request-hike-name:hover {
+.notification-hike-name:hover {
     color: #444444;
 }
 .searchItems{

@@ -10,10 +10,10 @@ import java.io.IOException;
 /**
  * Created by Saba on 7/4/2017.
  */
-@WebServlet("/RequestListServlet")
-public class RequestListServlet extends HttpServlet {
+@WebServlet("/Notifications")
+public class NotificationsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Helper.view("RequestsList", request, response);
+        Helper.view("Notifications", request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

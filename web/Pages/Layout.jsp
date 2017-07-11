@@ -53,13 +53,13 @@
         </div>
         <div class="header-right">
             <div class="mynav">
-                <div class="mynav-item"><a href="/RequestListServlet" class="mynav-link">Notifications</a></div>
+                <div class="mynav-item"><a href="/Notifications" class="mynav-link">Notifications</a></div>
             </div>
             <div class="profile-block">
 
                 <a href="/Profile?userID=<%=loggedInUser.getId()%>" class="profile-link">
                     <div class="avatar-block" style="background-image: url(<%= loggedInUser.getProfilePictureAddress() %>) ">
-                    <div class="notifications-count">{{newNotificationsCount}}</div>
+                    <div class="notifications-count" v-if="newNotificationsCount">{{newNotificationsCount}}</div>
                     </div>
                     <div class="hidden logged-user-id"><%=loggedInUser.getId()%></div>
                     <div class="profile-name">
@@ -154,7 +154,6 @@
                     var th = this;
                     axios.post("/GetNotifications", {}).then(function(response){
                         th.notifications = response.data;
-                        console.log(th.notifications);
                     });
                 },
                 toggleNotifications: function(){
