@@ -245,6 +245,16 @@ values
    'https://scontent.xx.fbcdn.net/v/t1.0-9/s720x720/13417545_10206253488526918_2372119789953736284_n.jpg?oh=24c863192b37a0973f1e3759a2b8f46f&oe=5A054DD9',
    'https://www.facebook.com/app_scoped_user_id/10209073007213123/'
   ),
+  ('1536237479760304',
+   'Nodo',
+   'Sanaia',
+   'https://fb-s-c-a.akamaihd.net/h-ak-fbx/v/t31.0-1/c0.0.1436.1436/18056606_1476655045718548_3695045088900175596_o.jpg?oh=5940125bf8e8d74dc5899c5d647879ae&oe=59C5806D&__gda__=1511126933_4cf0d64cca2ea3538000c0237e8bdc51',
+   NULL,
+   'male',
+   'nodarsanaia@ymail.com ',
+   'Hello! I am new Hiker!',
+   NULL,
+   'https://www.facebook.com/app_scoped_user_id/1536237479760304/'),
   ('1530047160352334',
    'Levan',
    'Beroshvili',
@@ -296,6 +306,8 @@ INSERT INTO hike_to_user VALUES
 
 INSERT INTO cover_photos VALUES
   (1, 'მაგარი ლოკაცია დზნ', 1, '');
+
+
 
 insert into posts values
   (1,"9ზე ოკრიბაშ იყავით ბერლინში მივდივართ", '',  1, 1, now(), null),
@@ -483,6 +495,7 @@ CREATE PROCEDURE request_response(request_id INT, response VARCHAR(20))
       requests
     WHERE
       ID = request_id;
+    delete from notifications where notifications.request_ID = request_id;
     DELETE FROM requests
     WHERE
       id = request_id;
@@ -493,10 +506,9 @@ CREATE PROCEDURE request_response(request_id INT, response VARCHAR(20))
   END $$
 
 DELIMITER $$
-CREATE PROCEDURE get_home_page_info(user_ID INT)
+CREATE PROCEDURE get_home_page_info(user_ID1 INT)
   BEGIN
-    select *, (case when (select count(1) from hike_to_user htu where htu.hike_ID = ID and htu.user_ID = user_ID) = 1 then 1
-               else (case when (select count(1) from requests r where r.sender_ID = user_ID and r.hike_ID = ID) = 1 then 2 else 0 end) end) as user_status from hikes;
+    select *, (case when (select count(1) from hike_to_user htu where htu.hike_ID = h.ID and htu.user_ID = user_ID1) = 1 then 1
+               else (case when (select count(1) from requests r where r.sender_ID = user_ID1 and r.hike_ID = h.ID) = 1 then 2 else 0 end) end) as user_status from hikes h;
 
   END $$
-
