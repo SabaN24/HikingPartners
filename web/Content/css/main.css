@@ -1111,6 +1111,7 @@ input[type="file"] {
 
 .notification-text {
     display: inline-block;
+    vertical-align: middle;
     margin-left: 10px;
 }
 
@@ -1209,6 +1210,11 @@ input[type="file"] {
     vertical-align: middle;
     cursor: pointer;
     user-select: none;
+    transition: .2s transform;
+}
+
+.notifications-toggle.active {
+    transform: rotate(180deg);
 }
 
 .notifications-toggle:hover {
@@ -1283,6 +1289,12 @@ input[type="file"] {
 
 .notification-info {
     display: inline-block;
+    vertical-align: middle;
+}
+
+.notification-time {
+    font-size: 11px;
+    color: #444444;
 }
 
 .notifications-list-item {
@@ -1302,7 +1314,7 @@ input[type="file"] {
 }
 
 .notifications-list-item.notSeen {
-    background: #e8e8e8;
+    background: #EEEEFd;
 }
 
 .notifications-list-item:hover {

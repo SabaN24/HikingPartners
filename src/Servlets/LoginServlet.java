@@ -47,6 +47,7 @@ public class LoginServlet extends HttpServlet {
             }
             HttpSession session = request.getSession();
             session.setAttribute("userID", userID);
+            //session.setAttribute("userID", 5);
             Helper.servlet("/Home", request, response);
         }catch(Exception e){
             int x = 5;

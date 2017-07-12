@@ -72,7 +72,7 @@
 
                     <template v-if="hike.userStatus != <%= HikeInfoExtended.MEMBER %>">
                         <button v-if="hike.joinedPeople < hike.maxPeople && hike.userStatus == <%= HikeInfoExtended.NOT_MEMBER %>" class="mybtn submit-request"
-                                @click="sendRequest(hike.id)" onsubmit="return false;">Send Request</button>
+                                @click="sendRequest(hike.id)">Send Request</button>
                         <div v-if="hike.joinedPeople == hike.maxPeople && hike.userStatus != <%= HikeInfoExtended.REQUEST_SENT %>" class="mybtn submit-request request-info">Hike is full</div>
                         <div v-if="hike.userStatus == <%= HikeInfoExtended.REQUEST_SENT %>" class="mybtn submit-request request-info">Request sent</div>
                     </template>
@@ -551,6 +551,7 @@ async defer></script>
 
             sendRequest: function(hikeId){
                 axios.post("/SendRequest?hikeId=" + hikeId, {});
+                this.hikes.find(function(x){return x.id == hikeId;}).userStatus = <%= HikeInfoExtended.REQUEST_SENT %>;
             },
 
             addLocation: function(hikeID){

@@ -11,44 +11,24 @@
 
 <div class="main-content notifications-container">
     <ul class="notifications-list__page">
-        <li class="notifications-item__page" v-for="(notification, index) in notifications" v-if="notification.typeID == <%= Notification.REQUEST %>" :class="{notSeen : !notification.seen}">
-            <div class="avatar-block" @mouseenter="hoverUser(notification.fromUser, event)" @mouseleave="hoverOutUser(event)"
-                 @click="window.location = '/Profile?userID=' +  notification.fromUser.id"
+        <li class="notifications-item__page" v-for="(notification, index) in notifications" :class="{notSeen : !notification.seen}" @click="clickNotification(notification)">
+            <div class="avatar-block"
+                 @click.stop="window.location = '/Profile?userID=' +  notification.fromUser.id"
                  :style="{ backgroundImage: 'url(' + notification.fromUser.profilePictureAddress + ')' }"></div>
             <div class="notification-text">
-                <span  class="notification-user-name"
-                       @mouseenter="hoverUser(notification.fromUser, event)" @mouseleave="hoverOutUser(event)"
-                       @click="window.location = '/Profile?userID=' +  notification.fromUser.id">
-                    {{notification.fromUser.firstName}} {{notification.fromUser.lastName}}</span> wants to join
-                <span class="notification-hike-name" @click="window.location = '/HikePage/Home?hikeId=' +  notification.hikeID">{{notification.hikeName}}</span>
+                <div>
+                    <span  class="notification-user-name" @click="window.location = '/Profile?userID=' +  notification.fromUser.id">
+                        {{notification.fromUser.firstName}} {{notification.fromUser.lastName}}
+                    </span>
+                    <span> wants to join<span class="notification-hike-name" @click.stop="window.location = '/HikePage/Home?hikeId=' +  notification.hikeID"> {{notification.hikeName}}</span></span>
+                    <span v-if="notification.typeID == <%= Notification.COMMENT %>" > commented in the post you are following.</span>
+                    <span v-if="notification.typeID == <%= Notification.LIKE %>" > liked your comment.</span>
+                </div>
+                <div class="notification-time">{{notification.time | cutTime}}</div>
             </div>
-            <div class="request-btns">
-                <button class="mybtn accept" @click="respondToRequest(request.id, 'accept', index)" onsubmit="return false;"> Accept </button>
-                <button class="mybtn reject"  @click="respondToRequest(request.id, 'reject', index)" onsubmit="return false;"> Reject </button>
-            </div>
-        </li>
-        <li class="notifications-item__page" v-for="(notification, index) in notifications" v-if="notification.typeID == <%= Notification.COMMENT %>"
-            @click="window.location = '/HikePage/Feed?hikeId=' + notification.hikeID + '#' + notification.postID" :class="{notSeen : !notification.seen}">
-            <div class="avatar-block" @mouseenter="hoverUser(notification.fromUser, event)" @mouseleave="hoverOutUser(event)"
-                 @click="window.location = '/Profile?userID=' +  notification.fromUser.id"
-                 :style="{ backgroundImage: 'url(' + notification.fromUser.profilePictureAddress + ')' }"></div>
-            <div class="notification-text">
-                <span  class="notification-user-name"
-                       @mouseenter="hoverUser(notification.fromUser, event)" @mouseleave="hoverOutUser(event)"
-                       @click="window.location = '/Profile?userID=' +  notification.fromUser.id">
-                    {{notification.fromUser.firstName}} {{notification.fromUser.lastName}}</span> commented in the post you are following.
-            </div>
-        </li>
-        <li class="notifications-item__page" v-for="(notification, index) in notifications" v-if="notification.typeID == <%= Notification.LIKE %>"
-            @click="window.location = '/HikePage/Feed?hikeId=' + notification.hikeID + '#' + notification.postID" :class="{notSeen : !notification.seen}">
-            <div class="avatar-block" @mouseenter="hoverUser(notification.fromUser, event)" @mouseleave="hoverOutUser(event)"
-                 @click="window.location = '/Profile?userID=' +  notification.fromUser.id"
-                 :style="{ backgroundImage: 'url(' + notification.fromUser.profilePictureAddress + ')' }"></div>
-            <div class="notification-text">
-                <span  class="notification-user-name"
-                       @mouseenter="hoverUser(notification.fromUser, event)" @mouseleave="hoverOutUser(event)"
-                       @click="window.location = '/Profile?userID=' +  notification.fromUser.id">
-                    {{notification.fromUser.firstName}} {{notification.fromUser.lastName}}</span> liked your comment.
+            <div class="request-btns" v-if="notification.typeID == <%= Notification.REQUEST %>">
+                <button class="mybtn accept" @click.stop="respondToRequest(notification.requestID, 'accept', index)"> Accept </button>
+                <button class="mybtn reject"  @click.stop="respondToRequest(notification.requestID, 'reject', index)"> Reject </button>
             </div>
         </li>
     </ul>
@@ -84,24 +64,13 @@
 
             respondToRequest: function(requestId, response, index) {
                 axios({url: "/RespondToRequest", method:"post", params:{requestId: requestId, response: response}});
-                this.requests.splice(index, 1);
+                this.notifications.splice(index, 1);
             },
-            hoverUser: function(user, e){
-                if(this.profPopupActive) return;
-                this.hoveredUser = user;
-                this.profPopupActive = true;
-                var popup = document.getElementsByClassName('profile-popup-wrapper')[0];
-                var rect = e.target.getBoundingClientRect();
-                popup.style.left = rect.left + pageXOffset +'px';
-                popup.style.top = rect.top + pageYOffset + e.target.clientHeight - 5 +'px';
-            },
-            hoverOutUser: function (e) {
-                if(!this.profPopupActive) return;
-                if(document.querySelectorAll(".profile-popup-wrapper:hover").length) return;
-                this.profPopupActive = false;
+            clickNotification: function(not){
+                if(not.typeID != '<%= Notification.REQUEST %>')
+                    window.location = '/HikePage/Feed?hikeId=' + not.hikeID + '#' + not.postID;
 
             }
-
         }
     });
 

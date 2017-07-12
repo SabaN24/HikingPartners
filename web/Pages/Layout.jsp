@@ -68,22 +68,23 @@
                 </a>
                 <div class="logout-block"><a href="/Logout">Log out</a></div>
             </div>
-            <div class="notifications-toggle" @click="toggleNotifications()"><i class="fa fa-caret-down" aria-hidden="true"></i></div>
+            <div class="notifications-toggle" :class="{ active : notificationsActive }" @click="toggleNotifications()"><i class="fa fa-caret-down" aria-hidden="true"></i></div>
             <div class="notifications" :class="{active : notificationsActive}">
                 <div v-if="!notifications.length" class="no-notifications">No notifications.</div>
                 <ul class="notifications-list">
-                    <li class="notifications-list-item" v-for="notification in notifications"  :class="{notSeen : !notification.seen}">
+                    <li class="notifications-list-item" v-for="notification in notifications"  :class="{notSeen : !notification.seen}" @click="clickNotification(notification)">
                         <div class="avatar-block notification-avatar" :style="{ backgroundImage: 'url(' + notification.fromUser.profilePictureAddress + ')' }"></div>
-                        <div v-if="notification.typeID == <%= Notification.REQUEST %>" class="notification-info" @click="toggleNotifications();window.location = '/HikePage/Feed?hikeId=' + notification.hikeID + '#' + notification.postID">
-                            <span class="notification-name">{{notification.fromUser.firstName}} {{notification.fromUser.lastName}}</span> wants to join {{notification.hikeName}}.
-                        </div>
-                        <div v-if="notification.typeID == <%= Notification.COMMENT %>" class="notification-info" @click="toggleNotifications();window.location = '/HikePage/Feed?hikeId=' + notification.hikeID + '#' + notification.postID">
-                            <span class="notification-name">{{notification.fromUser.firstName}} {{notification.fromUser.lastName}}</span> commented in the post you are following.
-                        </div>
-                        <div v-if="notification.typeID == <%= Notification.LIKE %>" class="notification-info" @click="toggleNotifications();window.location = '/HikePage/Feed?hikeId=' + notification.hikeID + '#' + notification.postID">
-                            <span class="notification-name">{{notification.fromUser.firstName}} {{notification.fromUser.lastName}}</span> liked your comment.
+                        <div class="notification-info">
+                            <div>
+                                <span class="notification-name">{{notification.fromUser.firstName}} {{notification.fromUser.lastName}}</span>
+                                <span v-if="notification.typeID == <%= Notification.REQUEST %>" > wants to join {{notification.hikeName}}.</span>
+                                <span v-if="notification.typeID == <%= Notification.COMMENT %>" > commented in the post you are following.</span>
+                                <span v-if="notification.typeID == <%= Notification.LIKE %>" > liked your comment.</span>
+                            </div>
+                            <div class="notification-time">{{notification.time | cutTime}}</div>
                         </div>
                     </li>
+
                 </ul>
             </div>
         </div>
@@ -157,17 +158,20 @@
                     });
                 },
                 toggleNotifications: function(){
-                    var fa = document.querySelector(".notifications-toggle .fa");
-                    if(this.notificationsActive){
-                        this.notificationsActive = false;
-                        fa.classList.remove("fa-caret-up");
-                        fa.classList.add("fa-caret-down");
-                    }else {
-                        this.notificationsActive = true;
-                        fa.classList.remove("fa-caret-down");
-                        fa.classList.add("fa-caret-up");
-                    }
+                    this.notificationsActive = !this.notificationsActive;
+                },
+                clickNotification: function(not){
+                    this.toggleNotifications();
+                    this.seeNotification(not.ID);
+                    if(not.typeID != '<%= Notification.REQUEST %>')
+                        window.location = '/HikePage/Feed?hikeId=' + not.hikeID + '#' + not.postID;
+                    else
+                        window.location = '/Notifications#' + not.ID;
 
+                },
+                seeNotification: function(notID){
+                    axios({method: "post", url:"/SeeNotification", params:{ notificationID: notID }});
+                    this.notifications.find(function(x){return x.ID == notID}).seen = 1;
                 }
             },
             computed: {

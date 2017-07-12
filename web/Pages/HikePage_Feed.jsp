@@ -120,6 +120,11 @@
 </div>
 
 <script>
+    setTimeout(function(){
+        var tmp = location.hash;
+        location.hash = "";
+        location.hash = tmp;
+    }, 10);
 
     var ws = new WebSocket("ws://localhost:8080/HikeFeedSocket/" + hikeId);
     var app = new Vue({

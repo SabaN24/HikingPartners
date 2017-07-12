@@ -305,6 +305,18 @@ public class MainDM {
         return res;
     }
 
+    /* Marks notification with id notId as seen. */
+    public void seeNotification(int notID){
+        String quest = "update notifications set seen = 1 where ID = ?;";
+        PreparedStatement statement = databaseConnector.getPreparedStatement(quest);
+        try {
+            statement.setInt(1, notID);
+            databaseConnector.updateDataWithPreparedStatement(statement);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Builds MiniUser object from given resultset.
      *
