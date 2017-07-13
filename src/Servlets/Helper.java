@@ -99,7 +99,7 @@ public class Helper {
         String pathArr[] = fullPath.split("/WEB-INF/classes/");
         fullPath = pathArr[0].substring(0, pathArr[0].indexOf("out") - 1);
         String reponsePath = new File(fullPath).getPath() + File.separatorChar;
-        return reponsePath;
+        return reponsePath + "/web";
     }
 
     public static void savePrefferedSize(File file){

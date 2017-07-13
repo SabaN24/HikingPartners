@@ -44,7 +44,7 @@ public class PostPhotoServlet extends HttpServlet {
             for(FileItem file : files){
                 UUID newFileName = UUID.randomUUID();
                 String fileType = file.getContentType().substring(file.getContentType().indexOf('/') + 1);
-                String newFilePath = "/web/Content/img/" + newFileName + "." + fileType;
+                String newFilePath = "/Content/img/" + newFileName + "." + fileType;
                 File newFile = new File(Helper.root(this) + newFilePath);
                 newFile.createNewFile();
                 file.write(newFile);
