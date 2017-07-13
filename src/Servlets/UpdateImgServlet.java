@@ -30,6 +30,8 @@ public class UpdateImgServlet extends HttpServlet {
         HikeDM.getInstance().updateCoverPhoto(photoID, description, null);
         List<Photo> photos = MainDM.getInstance().getCoverPhotos(hikeID);
         Gson gson = new GsonBuilder().serializeNulls().create();
+        response.setContentType("text/html; charset=UTF-8");
+        response.setCharacterEncoding("UTF-8");
         response.getWriter().print(gson.toJson(photos));
     }
 }

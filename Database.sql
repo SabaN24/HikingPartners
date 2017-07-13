@@ -305,7 +305,7 @@ INSERT INTO hike_to_user VALUES
   (4, 1, 4, 2);
 
 INSERT INTO cover_photos VALUES
-  (1, 'მაგარი ლოკაცია დზნ', 1, '');
+  (1, 'მაგარი ლოკაცია დზნ', 1, '/Content/img/pic1.jpg');
 
 
 

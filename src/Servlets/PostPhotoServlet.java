@@ -52,6 +52,8 @@ public class PostPhotoServlet extends HttpServlet {
                 Map<String, Object> data = new HashMap<>();
                 data.put("imgUrl", newFilePath);
                 Gson gson = new Gson();
+                response.setContentType("text/html; charset=UTF-8");
+                response.setCharacterEncoding("UTF-8");
                 response.getWriter().print(gson.toJson(data));
             }
         } catch (Exception e) {

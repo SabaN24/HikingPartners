@@ -51,13 +51,15 @@ public class UploadCoverServlet extends HttpServlet {
                     File newFile = new File(Helper.root(this) + newFilePath);
                     newFile.createNewFile();
                     file.write(newFile);
-                    //Helper.savePrefferedSize(newFile);
+                    Helper.savePrefferedSize(newFile);
                     hikeDM.addCoverPhoto(description, newFilePath, hikeID);
                     i++;
                 }
             }
             List<Photo> photos = MainDM.getInstance().getCoverPhotos(hikeID);
             Gson gson = new GsonBuilder().serializeNulls().create();
+            response.setContentType("text/html; charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
             response.getWriter().print(gson.toJson(photos));
         } catch (Exception e) {
             e.printStackTrace();
