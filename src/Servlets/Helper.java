@@ -97,7 +97,7 @@ public class Helper {
             e.printStackTrace();
         }
         String pathArr[] = fullPath.split("/WEB-INF/classes/");
-        fullPath = pathArr[0];
+        fullPath = pathArr[0].substring(0, pathArr[0].indexOf("out") - 1);
         String reponsePath = new File(fullPath).getPath() + File.separatorChar;
         return reponsePath;
     }
