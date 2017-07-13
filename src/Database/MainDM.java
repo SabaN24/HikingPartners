@@ -352,7 +352,7 @@ public class MainDM {
      * @param hikeId id of demanded hike
      * @return List<Photo> object built from cover photos of given hike
      */
-    private List<Photo> getCoverPhotos(int hikeId) {
+    public List<Photo> getCoverPhotos(int hikeId) {
         ResultSet rs = databaseConnector.callProcedure("get_cover_photos", Arrays.asList("" + hikeId));
         List<Photo> coverPhotos = new ArrayList<>();
         try {

@@ -153,7 +153,7 @@
         <div class="map-container" v-show="newHikePage == 2">
             <h3>Choose hiking locations</h3>
             <div id="map"></div>
-            <button class="mybtn" style="padding: 10px 100px;" @click="addHike">Add Hike</button>
+            <button class="mybtn" style="padding: 10px 100px;" @click="addHike" v-disabled="submitted">Add Hike</button>
 
         </div>
         <div class="close-block" @click="closePopup()"><i class="fa fa-times" aria-hidden="true"></i></div>
@@ -432,7 +432,8 @@ async defer></script>
             popupImgShow: false,
             popupImg: "",
             editImgDescription: "",
-            popupImgIndex: 0
+            popupImgIndex: 0,
+            submitted: true
         },
 
         created: function () {
@@ -508,7 +509,7 @@ async defer></script>
                     if(th.hikes.length == 0){
                         document.getElementById("noSearchData").innerHTML = "No results for that name";
                     }else{
-                        document.getElementById("noSearchData").innerHTML = ""
+                        document.getElementById("noSearchData").innerHTML = "";
                     }
                 });
             },
@@ -527,9 +528,12 @@ async defer></script>
 
 
             showPopup: function(){
+                this.submitted = false;
                 this.popupIsActive = true;
             },
             addHike: function(){
+                if(this.submitted) return;
+                this.submitted = true;
                 var th = this;
                 axios({url: "/AddHikeServlet", method: "post", params: th.newHike}).then(function(response){
                     th.addLocation(response.data.hikeID + '');
@@ -598,12 +602,19 @@ async defer></script>
                 this.pictures.splice(index, 1);
             },
 
+            insertNewHike: function(hikeID){
+                var self = this;
+                axios.get("/HikeInfo?hikeID=" + hikeID).then(function(response){
+                    self.hikes.unshift(response.data);
+                    self.closePopup();
+                });
+            },
+
             uploadPictures: function(hikeID){
                 var self = this;
                 axios.post('/UploadCover?hikeID=' + hikeID, new FormData(document.querySelector("#form-pictures"))).then(function(response){
                     if(response.status == 200){
-                        self.hikes.unshift(response.data);
-                        self.closePopup();
+                        self.insertNewHike(hikeID);
                     }else{
                         self.uploadingPicture = false;
                     }

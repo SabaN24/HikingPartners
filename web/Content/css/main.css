@@ -184,8 +184,12 @@ main {
     padding: 10px;
 }
 
+.slider-container{
+    position:relative;
+}
+
 .slider-block {
-    height: 235px;
+    height: 235px !important;
     width: 100%;
     background-image: url("../img/pic1.jpg");
     background-size: cover;
@@ -193,6 +197,20 @@ main {
     background-repeat: no-repeat;
     position: relative;
     margin-bottom: 20px;
+}
+
+.slick-slide {
+    outline: none !important;
+}
+
+.slick-prev{
+    z-index:10000;
+    left:15px;
+}
+
+.slick-next{
+    z-index:10000;
+    right:15px;
 }
 
 .caption {
@@ -1359,6 +1377,6 @@ input[type="file"] {
 
 .cover-image-button {
     position: absolute;
-    right: 15px;
-    bottom: 15px;
+    right: 20px;
+    bottom: 40px;
 }

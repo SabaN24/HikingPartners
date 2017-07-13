@@ -1,7 +1,9 @@
 package Servlets;
 
 import Database.HikeDM;
+import Database.MainDM;
 import Models.Hike.HikeInfo;
+import Models.Photo;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.commons.fileupload.FileItem;
@@ -54,9 +56,9 @@ public class UploadCoverServlet extends HttpServlet {
                     i++;
                 }
             }
-            HikeInfo hikeInfo = hikeDM.getHikeById(hikeID);
+            List<Photo> photos = MainDM.getInstance().getCoverPhotos(hikeID);
             Gson gson = new GsonBuilder().serializeNulls().create();
-            response.getWriter().print(gson.toJson(hikeInfo));
+            response.getWriter().print(gson.toJson(photos));
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<div class="main-content" id="galleryVue">
+<div class="main-content">
     <ul class="gallery-list">
         <li class="gallery-li" v-for="image in images">
             <img :src="image.src" alt="">
@@ -16,7 +16,7 @@
 
 <script>
     var galleryVue = new Vue({
-        el: "#galleryVue",
+        el: "#vueapp",
         data: {
             images: []
         },

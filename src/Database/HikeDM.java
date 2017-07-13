@@ -256,15 +256,27 @@ public class HikeDM {
      * @param coverID id of photo
      */
     public void updateCoverPhoto(int coverID, String description, String newFilePath) {
-        String query = "update cover_photos set description = ?, newFilePath = ? where ID = ?";
-        PreparedStatement updateCoverStatement = databaseConnector.getPreparedStatement(query);
-        try {
-            updateCoverStatement.setString(1, description);
-            updateCoverStatement.setString(2, newFilePath);
-            updateCoverStatement.setInt(3, coverID);
-            databaseConnector.updateDataWithPreparedStatement(updateCoverStatement);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if(newFilePath == null){
+            String query = "update cover_photos set description = ? where ID = ?";
+            PreparedStatement updateCoverStatement = databaseConnector.getPreparedStatement(query);
+            try {
+                updateCoverStatement.setString(1, description);
+                updateCoverStatement.setInt(2, coverID);
+                databaseConnector.updateDataWithPreparedStatement(updateCoverStatement);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }else{
+            String query = "update cover_photos set description = ?, newFilePath = ? where ID = ?";
+            PreparedStatement updateCoverStatement = databaseConnector.getPreparedStatement(query);
+            try {
+                updateCoverStatement.setString(1, description);
+                updateCoverStatement.setString(2, newFilePath);
+                updateCoverStatement.setInt(3, coverID);
+                databaseConnector.updateDataWithPreparedStatement(updateCoverStatement);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 

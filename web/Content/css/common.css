@@ -104,7 +104,6 @@ a, a:visited, a:hover, a:active {
 .edit-button {
     cursor: pointer;
     display: inline-block;
-    float: right;
     outline: none;
     background: none;
     border: none;
@@ -117,3 +116,10 @@ a, a:visited, a:hover, a:active {
     color: black;
 }
 
+.edit-cover-button{
+    color: #888;
+}
+
+.edit-cover-button:hover{
+    color: white;
+}

@@ -20,6 +20,8 @@
     <link rel="stylesheet" href="../Content/css/normalize.css">
     <link rel="stylesheet" href="../Content/css/font-awesome.min.css">
     <link rel="stylesheet" href="../Content/css/common.css">
+    <link rel="stylesheet" href="../Content/css/slick.css">
+    <link rel="stylesheet" href="../Content/css/slick-theme.css">
     <link rel="stylesheet" href="../Content/css/main.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat|Quicksand" rel="stylesheet">
     <script src="../Scripts/axios.min.js"></script>
