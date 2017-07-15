@@ -91,6 +91,8 @@ CREATE TABLE IF NOT EXISTS posts (
   PRIMARY KEY (ID),
   FOREIGN KEY (hike_ID)
   REFERENCES hikes (ID),
+  FOREIGN KEY (photo_ID)
+  REFERENCES gallery_photos(ID),
   foreign key (user_ID)
   references users(ID)
 );
