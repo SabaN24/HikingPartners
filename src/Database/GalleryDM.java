@@ -49,8 +49,8 @@ public class GalleryDM {
         PreparedStatement preparedStatement = databaseConnector.getPreparedStatement(query.toString());
         try {
             preparedStatement.setInt(1, hikeID);
-            preparedStatement.setInt(2, userID);
-            preparedStatement.setString(3, newPhoto);
+            preparedStatement.setInt(3, userID);
+            preparedStatement.setString(2, newPhoto);
             databaseConnector.updateDataWithPreparedStatement(preparedStatement);
             ResultSet resultSet = databaseConnector.getData("select ID from gallery_photos order by ID desc limit 1");
             if (resultSet.next()) {

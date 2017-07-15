@@ -60,6 +60,7 @@ public class HikeFeedDM {
             preparedStatement.setInt(4, userID);
             preparedStatement.setString(5, time);
             preparedStatement.setInt(6, photoID);
+            databaseConnector.updateDataWithPreparedStatement(preparedStatement);
             ResultSet resultSet = databaseConnector.getData("select ID from posts order by ID desc limit 1");
             if (resultSet.next()) {
                 return resultSet.getInt("ID");
