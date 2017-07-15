@@ -11,6 +11,7 @@ import java.io.IOException;
 
 /**
  * Created by Saba on 11.07.2017.
+ * Servlet edits about info of user when called from page.
  */
 @WebServlet("/EditUserAboutInfo")
 public class EditUserAboutInfo extends HttpServlet {

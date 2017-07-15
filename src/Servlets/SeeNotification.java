@@ -11,6 +11,7 @@ import java.io.IOException;
 
 /**
  * Created by Sandro on 12-Jul-17.
+ * Makes status of notification "seen". Gets called when user sees notification.
  */
 @WebServlet("/SeeNotification")
 public class SeeNotification extends HttpServlet {

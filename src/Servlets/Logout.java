@@ -10,6 +10,7 @@ import java.io.IOException;
 
 /**
  * Created by Sandro on 26-Jun-17.
+ * Logs user out and redirects to LoginPage.
  */
 @WebServlet("/Logout")
 public class Logout extends HttpServlet {

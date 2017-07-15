@@ -15,6 +15,7 @@ import java.util.List;
 
 /**
  * Created by Levani on 11.07.2017.
+ * Returns list of photos for given hike when called from front-end.
  */
 @WebServlet("/GetGalleryServlet")
 public class GetGalleryServlet extends HttpServlet {

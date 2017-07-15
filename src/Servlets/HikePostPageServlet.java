@@ -17,6 +17,7 @@ import java.util.List;
 
 /**
  * Created by Saba on 19.06.2017.
+ * Returns posts for given hike.
  */
 @WebServlet("/HikePostPageServlet")
 public class HikePostPageServlet extends HttpServlet {

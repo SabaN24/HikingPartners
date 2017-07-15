@@ -12,6 +12,7 @@ import java.io.IOException;
 
 /**
  * Created by Nodo on 7/2/2017.
+ * Servlet closes chat whenever called.
  */
 @WebServlet("/CloseChatServlet")
 public class CloseChatServlet extends HttpServlet {

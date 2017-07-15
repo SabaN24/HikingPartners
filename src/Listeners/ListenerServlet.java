@@ -1,5 +1,6 @@
 package Listeners; /**
  * Created by vache on 6/12/2017.
+ * Lisetner which listens to creation and other actions of ServletContext.
  */
 
 import javax.servlet.ServletContextEvent;

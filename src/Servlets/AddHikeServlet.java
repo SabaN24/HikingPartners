@@ -19,6 +19,7 @@ import java.util.Map;
 
 /**
  * Created by Saba on 27.06.2017.
+ * Servlet adds hike whenever called from front-end.
  */
 @WebServlet("/AddHikeServlet")
 public class AddHikeServlet extends HttpServlet {

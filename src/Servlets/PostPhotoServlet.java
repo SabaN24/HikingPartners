@@ -29,6 +29,8 @@ import java.util.UUID;
 
 /**
  * Created by Saba on 29.06.2017.
+ * Posts a photo in feed whenever user tries to to so from HikePage feed.
+ * File is stored in Content/img folder.
  */
 @WebServlet("/PostPhoto")
 public class PostPhotoServlet extends HttpServlet {

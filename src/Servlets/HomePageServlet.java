@@ -10,6 +10,7 @@ import java.io.IOException;
 
 /**
  * Created by Saba on 22.06.2017.
+ * Redirects user to HomePage.
  */
 @WebServlet("/Home")
 public class HomePageServlet extends HttpServlet {

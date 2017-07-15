@@ -18,6 +18,7 @@ import java.util.List;
 
 /**
  * Created by Sandro on 11-Jul-17.
+ * Gets notifications for user when called from page.
  */
 @WebServlet("/GetNotifications")
 public class GetNotifications extends HttpServlet {

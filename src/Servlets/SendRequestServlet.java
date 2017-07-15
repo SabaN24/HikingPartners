@@ -14,6 +14,7 @@ import java.io.IOException;
 
 /**
  * Created by Saba on 7/3/2017.
+ * Adds new request to database whenever Send Request button is pressed.
  */
 @WebServlet("/SendRequest")
 public class SendRequestServlet extends HttpServlet {

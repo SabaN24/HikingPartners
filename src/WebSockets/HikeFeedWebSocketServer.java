@@ -30,6 +30,12 @@ public class HikeFeedWebSocketServer{
     private Gson frontGson;
     private Gson gson;
 
+    /**
+     * Method which gets called when Socket gets opened. Initializes all private variables.
+     * @param session current session
+     * @param hikeId id of hike
+     * @param config private configurations of socket
+     */
     @OnOpen
     public void open(Session session, @PathParam("hikeId") int hikeId, EndpointConfig config) {
         if(!connectedSessions.containsKey(hikeId)){
@@ -43,12 +49,25 @@ public class HikeFeedWebSocketServer{
         gson = new Gson();
     }
 
+    /**
+     * Method which gets called when Socket gets closed. Removes current session from all sessions.
+     * @param session current session
+     * @param hikeId id of hike
+     */
     @OnClose
     public void close(Session session, @PathParam("hikeId") int hikeId) {connectedSessions.get(hikeId).remove(session);}
 
+    /**
+     * Method which gets called when Socket comes up with en error.
+     */
     @OnError
     public void onError(Throwable error) {}
 
+    /**
+     * Method which gets called when Socket receives a message.
+     * @param session current session
+     * @param hikeId id of hike
+     */
     @OnMessage
     public void handleMessage(String message, Session session, @PathParam("hikeId") int hikeId) {
         //JsonObject jsonMessage = reader.readObject();
@@ -71,6 +90,13 @@ public class HikeFeedWebSocketServer{
         }
     }
 
+    /**
+     * Adds comment to feed of all connected sessions.
+     * @param jsonMessage message which needs to be sent
+     * @param session sessions
+     * @param hikeId id of hike
+     * @param action type of action
+     */
     private void addComment(Map<String, Object> jsonMessage, Session session, @PathParam("hikeId") int hikeId, String action){
         Map<String, Object> data = (Map)(jsonMessage.get("data"));
         String comment = (String)data.get("comment");
@@ -87,6 +113,13 @@ public class HikeFeedWebSocketServer{
         webSocketHelper.sendToAllConnectedSessions(com, action, hikeId, connectedSessions.get(hikeId).keySet());
     }
 
+    /**
+     * Adds comment like to feed of all connected sessions.
+     * @param jsonMessage message which needs to be sent
+     * @param session sessions
+     * @param hikeId id of hike
+     * @param action type of action
+     */
     private void addCommentLike(Map<String, Object> jsonMessage, Session session, @PathParam("hikeId") int hikeId, String action){
         Map<String, Object> data = (Map)(jsonMessage.get("data"));
         HttpSession httpSession = connectedSessions.get(hikeId).get(session);
@@ -99,6 +132,13 @@ public class HikeFeedWebSocketServer{
         webSocketHelper.sendToAllConnectedSessions(like, action, hikeId, connectedSessions.get(hikeId).keySet());
     }
 
+    /**
+     * Adds post to feed of all connected sessions.
+     * @param jsonMessage message which needs to be sent
+     * @param session sessions
+     * @param hikeId id of hike
+     * @param action type of action
+     */
     private void addPost(Map<String, Object> jsonMessage, Session session, @PathParam("hikeId") int hikeId, String action){
         Map<String, Object> data = (Map)(jsonMessage.get("data"));
         String post = (String)data.get("post");
@@ -120,6 +160,12 @@ public class HikeFeedWebSocketServer{
         webSocketHelper.sendToAllConnectedSessions(newPost, action, hikeId, connectedSessions.get(hikeId).keySet());
     }
 
+    /**
+     * Adds post like to feed of all connected sessions.
+     * @param jsonMessage message which needs to be sent
+     * @param session sessions
+     * @param hikeId id of hike
+     */
     private void addPostLike(Map<String, Object> jsonMessage, Session session, @PathParam("hikeId") int hikeId){
         Map<String, Object> data = (Map)(jsonMessage.get("data"));
         HttpSession httpSession = connectedSessions.get(hikeId).get(session);

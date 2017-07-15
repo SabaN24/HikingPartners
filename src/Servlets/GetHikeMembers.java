@@ -15,6 +15,7 @@ import java.util.List;
 
 /**
  * Created by Sandro on 01-Jul-17.
+ * Returns members of hike when called from front-end.
  */
 @WebServlet("/GetHikeMembers")
 public class GetHikeMembers extends HttpServlet {

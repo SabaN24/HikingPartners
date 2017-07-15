@@ -13,6 +13,7 @@ import java.util.List;
 
 /**
  * Created by Nodo on 6/19/2017.
+ * Redirects to feed of hike.
  */
 @WebServlet("/HikePage/Feed")
 public class HikePageFeedServlet extends HttpServlet {

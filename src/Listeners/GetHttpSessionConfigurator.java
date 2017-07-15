@@ -7,6 +7,7 @@ import javax.websocket.server.ServerEndpointConfig;
 
 /**
  * Created by Levani on 19.06.2017.
+ * Configures http session.
  */
 
 public class GetHttpSessionConfigurator extends ServerEndpointConfig.Configurator

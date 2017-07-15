@@ -19,10 +19,16 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
 
-/*
+/**
 * Gets name of jsp file, request, response and redirects request and response.
-* */
+*/
 public class Helper {
+    /**
+     * Loads page with given name
+     * @param page name of page
+     * @param request
+     * @param response
+     */
     public static void view(String page, HttpServletRequest request, HttpServletResponse response)  {
         HttpSession session = request.getSession();
         MainDM mainDM = MainDM.getInstance();
@@ -48,6 +54,13 @@ public class Helper {
         }
     }
 
+    /**
+     * Loads page with given subpage.
+     * @param page name of page
+     * @param subPage name of subpage
+     * @param request
+     * @param response
+     */
     public static void view(String page, String subPage, HttpServletRequest request, HttpServletResponse response)  {
         request.setAttribute("subPage", page + "_" + subPage + ".jsp");
         if(page.equals("HikePage")) {
@@ -64,6 +77,12 @@ public class Helper {
         }
     }
 
+    /**
+     * Redirects request and response to given servlet.
+     * @param servlet name of servlet
+     * @param request
+     * @param response
+     */
     public static void servlet(String servlet, HttpServletRequest request, HttpServletResponse response){
         try {
             response.sendRedirect(servlet);

@@ -15,6 +15,7 @@ import java.io.IOException;
 
 /**
  * Created by Sandro on 17-Jun-17.
+ * Gets comments for hike.
  */
 @WebServlet("/HikeCommentsServlet")
 public class HikeCommentsServlet extends HttpServlet {

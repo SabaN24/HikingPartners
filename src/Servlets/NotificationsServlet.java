@@ -9,6 +9,7 @@ import java.io.IOException;
 
 /**
  * Created by Saba on 7/4/2017.
+ * Redirects to notifications page of user.
  */
 @WebServlet("/Notifications")
 public class NotificationsServlet extends HttpServlet {

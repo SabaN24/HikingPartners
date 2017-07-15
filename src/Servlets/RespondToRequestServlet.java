@@ -11,6 +11,7 @@ import java.io.IOException;
 
 /**
  * Created by Saba on 7/4/2017.
+ * Sends response to request (about adding to hike) to database.
  */
 @WebServlet("/RespondToRequest")
 public class RespondToRequestServlet extends HttpServlet {

@@ -14,6 +14,7 @@ import java.io.IOException;
 
 /**
  * Created by Levani on 12.07.2017.
+ * Returns hike info whenever hikepage loads.
  */
 @WebServlet("/HikeInfo")
 public class HikeInfoServlet extends HttpServlet {

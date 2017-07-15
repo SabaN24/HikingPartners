@@ -6,21 +6,24 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * DBConnection class which communicates with database
+ * DBConnection class which gets connected to database and executes queries.
  *
  * @author Saba
- *
  */
 
 public class DatabaseConnector {
 
+
+    //Private variables
     private static DatabaseConnector connector = null;
 
     private Connection connection;
 
-
-    public static DatabaseConnector getInstance(){
-        if(connector == null){
+    /**
+     * Private constructor of ChatDM object (Singletone pattern)
+     */
+    public static DatabaseConnector getInstance() {
+        if (connector == null) {
             connector = new DatabaseConnector();
         }
         return connector;
@@ -44,6 +47,7 @@ public class DatabaseConnector {
 
     /**
      * Getting data from database
+     *
      * @param query - SQL statement
      * @return Data depending on query
      */
@@ -60,6 +64,7 @@ public class DatabaseConnector {
 
     /**
      * Updating database depending on query
+     *
      * @param query - SQL statement
      */
     public void updateData(String query) {
@@ -73,20 +78,20 @@ public class DatabaseConnector {
 
     /**
      * Calls given procedure in database.
-     * @param procedure name of procedure
-     * @param parameters list of parameters
      *
+     * @param procedure  name of procedure
+     * @param parameters list of parameters
      * @return result of procedure
      */
-    public ResultSet callProcedure(String procedure, List<String> parameters){
+    public ResultSet callProcedure(String procedure, List<String> parameters) {
         ResultSet rs = null;
         try {
             Statement statement = connection.createStatement();
             StringBuilder query = new StringBuilder("CALL " + procedure + "(");
-            for(int i = 0; i < parameters.size() - 1; i++){
+            for (int i = 0; i < parameters.size() - 1; i++) {
                 query.append(parameters.get(i) + ", ");
             }
-            if(parameters.size() != 0) {
+            if (parameters.size() != 0) {
                 query.append(parameters.get(parameters.size() - 1) + ");");
             }
             rs = statement.executeQuery(query.toString());
@@ -96,17 +101,13 @@ public class DatabaseConnector {
         return rs;
     }
 
-    /*
-     * Added this 3 methods Because UserIndoDM is using PreparedStatement instead of Statement
-     * Someone must change this class and all other classes which using Statement and not PreparedStatement.
-     */
-
     /**
      * returning prepared statement depending on query
+     *
      * @param query
      * @return PreparedStatement
      */
-    public PreparedStatement getPreparedStatement(String query){
+    public PreparedStatement getPreparedStatement(String query) {
         try {
             return connection.prepareStatement(query);
         } catch (SQLException e) {
@@ -117,9 +118,10 @@ public class DatabaseConnector {
 
     /**
      * Updating data in database using PreparedStatement
+     *
      * @param st
      */
-    public void updateDataWithPreparedStatement(PreparedStatement st){
+    public void updateDataWithPreparedStatement(PreparedStatement st) {
         try {
             st.executeUpdate();
         } catch (SQLException e) {
@@ -129,6 +131,7 @@ public class DatabaseConnector {
 
     /**
      * Getting data from database using PreparedStatement
+     *
      * @param st
      * @return
      */

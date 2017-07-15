@@ -14,6 +14,7 @@ import java.io.IOException;
 
 /**
  * Created by Sandro on 27-Jun-17.
+ * Gets profile of user.
  */
 @WebServlet("/GetProfileUser")
 public class GetProfileUser extends HttpServlet {

@@ -15,15 +15,14 @@ import java.util.List;
 
 /**
  * Created by Nodo on 7/2/2017.
+ * Shows open chats for user who called this action from front-end.
  */
 @WebServlet("/OpenChatsServlet")
 public class OpenChatsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         int fromUserId = Integer.parseInt(request.getParameter("userId"));
         Gson gson = new GsonBuilder().serializeNulls().create();
         List<Chat> chats = ChatDM.getInstance().getChats(fromUserId);
-
         String jsonChats = gson.toJson(chats);
         response.setContentType("text/html; charset=UTF-8");
         response.setCharacterEncoding("UTF-8");

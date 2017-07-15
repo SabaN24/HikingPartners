@@ -15,6 +15,7 @@ import java.util.List;
 
 /**
  * Created by Saba on 27.06.2017.
+ * Servlet reutrns list of created hikes by user.
  */
 @WebServlet("/CreatedHikesServlet")
 public class CreatedHikesServlet extends HttpServlet {

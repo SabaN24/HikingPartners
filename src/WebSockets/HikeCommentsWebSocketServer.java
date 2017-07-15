@@ -2,6 +2,7 @@ package WebSockets;
 
 /**
  * Created by Sandro on 17.06.2017.
+ * Socket which is responisble for exchanging  comments and likes of hikefeed between sockets.
  */
 import Database.MainDM;
 import Database.HikeFeedDM;
@@ -29,6 +30,12 @@ public class HikeCommentsWebSocketServer {
     private Gson frontGson;
     private Gson gson;
 
+    /**
+     * Method which gets called when Socket gets opened. Initializes all private variables.
+     * @param session current session
+     * @param hikeId id of hike
+     * @param config private configurations of socket
+     */
     @OnOpen
     public void open(Session session, @PathParam("hikeId") int hikeId, EndpointConfig config) {
         if(!connectedSessions.containsKey(hikeId)){
@@ -42,12 +49,25 @@ public class HikeCommentsWebSocketServer {
         frontGson = new GsonBuilder().serializeNulls().create();
     }
 
+    /**
+     * Method which gets called when Socket gets closed. Removes current session from all sessions.
+     * @param session current session
+     * @param hikeId id of hike
+     */
     @OnClose
     public void close(Session session, @PathParam("hikeId") int hikeId) {connectedSessions.get(hikeId).remove(session);}
 
+    /**
+     * Method which gets called when Socket comes up with en error.
+     */
     @OnError
     public void onError(Throwable error) {}
 
+    /**
+     * Method which gets called when Socket receives a message.
+     * @param session current session
+     * @param hikeId id of hike
+     */
     @OnMessage
     public void handleMessage(String message, Session session, @PathParam("hikeId") int hikeId) {
         //JsonObject jsonMessage = reader.readObject();
@@ -61,6 +81,13 @@ public class HikeCommentsWebSocketServer {
         }
     }
 
+    /**
+     * Adds comment to feed of all connected sessions.
+     * @param jsonMessage message which needs to be sent
+     * @param session sessions
+     * @param hikeId id of hike
+     * @param action type of action
+     */
     private void addComment(Map<String, Object> jsonMessage, Session session, @PathParam("hikeId") int hikeId, String action){
         Map<String, Object> data = (Map)(jsonMessage.get("data"));
         String comment = (String)data.get("comment");
@@ -77,6 +104,13 @@ public class HikeCommentsWebSocketServer {
         webSocketHelper.sendToAllConnectedSessions(comm, action, hikeId, connectedSessions.get(hikeId).keySet());
     }
 
+    /**
+     * Adds comment like to feed of all connected sessions.
+     * @param jsonMessage message which needs to be sent
+     * @param session sessions
+     * @param hikeId id of hike
+     * @param action type of action
+     */
     private void addCommentLike(Map<String, Object> jsonMessage, Session session, @PathParam("hikeId") int hikeId, String action) {
         Map<String, Object> data = (Map)(jsonMessage.get("data"));
         HttpSession httpSession = connectedSessions.get(hikeId).get(session);

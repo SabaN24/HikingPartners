@@ -14,8 +14,16 @@ public class UserInfoDM {
     private DatabaseConnector databaseConnector;
     private static UserInfoDM userInfoDM = null;
 
+    /**
+     * Private constructor of HikeSearchDM object (Singletone pattern)
+     */
     private UserInfoDM(){databaseConnector = DatabaseConnector.getInstance();}
 
+    /**
+     * getInstance method so that class is singletone.
+     *
+     * @return UserInfoDM object
+     */
     public static UserInfoDM getInstance() {
         if (userInfoDM == null) {
             userInfoDM = new UserInfoDM();
@@ -24,16 +32,16 @@ public class UserInfoDM {
     }
 
     /**
-     * registers users with these parameters
-     * @param facebookID
-     * @param firstName
-     * @param lastName
-     * @param profilePicURL
-     * @param birthDate
-     * @param gender
-     * @param email
-     * @param coverPicURL
-     * @param facebookLink
+     * Registers users with given parameters.
+     * @param facebookID facebook id of user
+     * @param firstName first name of user
+     * @param lastName last name of user
+     * @param profilePicURL url of profile picture of user
+     * @param birthDate birth date of user
+     * @param gender gender of user
+     * @param email email of user
+     * @param coverPicURL url of cover picture of user
+     * @param facebookLink link to facebook of user
      * @return user id
      */
     public int registerUser(long facebookID, String firstName, String lastName, String profilePicURL, Date birthDate, String gender, String email, String coverPicURL, String facebookLink){
@@ -64,8 +72,8 @@ public class UserInfoDM {
 
     /**
      * Check if user is registered before or not
-     * @param facebookID
-     * @return boolean
+     * @param facebookID facebook id of user
+     * @return boolean answer to search
      */
     public boolean isUserRegistered(long facebookID){
         String query = "select count(facebook_ID) count from users where facebook_id = ?";
@@ -86,13 +94,13 @@ public class UserInfoDM {
 
     /**
      * Updating past registered user info
-     * @param facebookID
-     * @param firstName
-     * @param lastName
-     * @param imgURL
-     * @param birthDate
-     * @param gender
-     * @param email
+     * @param facebookID facebook id of user
+     * @param firstName first name of user
+     * @param lastName last name of user
+     * @param imgURL url of profile picture of user
+     * @param birthDate birth date of user
+     * @param gender gender of user
+     * @param email email of user
      * @return updated user ID
      */
     public int updateUserInfo(long facebookID, String firstName, String lastName, String imgURL, Date birthDate, String gender, String email, String coverPicURL, String facebookLink){
@@ -125,7 +133,7 @@ public class UserInfoDM {
 
     /**
      * Getting User by Facebook ID
-     * @param facebookID
+     * @param facebookID  facebook id of user
      * @return User depending on Facebook ID
      */
     public User getUserByFacebookkID(long facebookID) {
@@ -158,7 +166,7 @@ public class UserInfoDM {
 
     /**
      * Getting User by ID
-     * @param ID
+     * @param ID id of user
      * @return User depending on ID
      */
     public User getUserByID(int ID) {

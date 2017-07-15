@@ -23,6 +23,19 @@ public class Notification {
     private String hikeName;
     private Integer seen;
 
+    /**
+     * Constructor of Notification object.
+     * @param ID id of notification
+     * @param userID receiver of notification
+     * @param time time when notification was sent
+     * @param typeID type of notification
+     * @param postID post which sent notification
+     * @param fromUser user who acted in notification
+     * @param requestID request of notification
+     * @param hikeID id of hike which was involved in notification
+     * @param hikeName name of hike which was involved in notification
+     * @param seen whether or not notification has been seen by receiver
+     */
     public Notification(Integer ID, Integer userID, Date time, Integer typeID, Integer postID, User fromUser, Integer requestID, Integer hikeID, String hikeName, Integer seen){
         this.ID = ID;
         this.userID = userID;

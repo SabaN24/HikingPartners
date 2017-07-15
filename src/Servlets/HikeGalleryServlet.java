@@ -9,6 +9,7 @@ import java.io.IOException;
 
 /**
  * Created by Levani on 11.07.2017.
+ * Redirects to Gallery page of hike.
  */
 @WebServlet("/HikePage/Gallery")
 public class HikeGalleryServlet extends HttpServlet {

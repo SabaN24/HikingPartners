@@ -22,6 +22,7 @@ import java.util.*;
 
 /**
  * Created by Levani on 04.07.2017.
+ * Uploads cover photo, stores it in /Content/img folder and adds it to database.
  */
 @WebServlet("/UploadCover")
 public class UploadCoverServlet extends HttpServlet {

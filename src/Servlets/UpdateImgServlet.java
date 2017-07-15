@@ -16,6 +16,7 @@ import java.util.List;
 
 /**
  * Created by Levani on 12.07.2017.
+ * Updates cover photo when called from front-end.
  */
 @WebServlet("/UpdateImg")
 public class UpdateImgServlet extends HttpServlet {

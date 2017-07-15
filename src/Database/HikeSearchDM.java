@@ -18,11 +18,19 @@ public class HikeSearchDM {
     private HikeDM hikeDM;
     private static HikeSearchDM hikeSearchDM = null;
 
+    /**
+     * Private constructor of HikeSearchDM object (Singletone pattern)
+     */
     private HikeSearchDM() {
         databaseConnector = DatabaseConnector.getInstance();
         hikeDM = HikeDM.getInstance();
     }
 
+    /**
+     * getInstance method so that class is singletone.
+     *
+     * @return HikeSearchDM object
+     */
     public static HikeSearchDM getInstance() {
         if (hikeSearchDM == null) {
             hikeSearchDM = new HikeSearchDM();
@@ -30,6 +38,14 @@ public class HikeSearchDM {
         return hikeSearchDM;
     }
 
+    /**
+     * Gets list of hikes which match location parameter given in search.
+     * @param latFrom starting latitude of search
+     * @param latTo ending latitude of search
+     * @param lngFrom starting longitude of search
+     * @param lngTo ending longitude of search
+     * @return list of hikes
+     */
     public List<HikeInfo> getSearchedHikesByLocation(Double latFrom, Double latTo, Double lngFrom, Double lngTo) {
         Set<Integer> searchedHikeIds = new HashSet<>();
         List<HikeInfo> searchedHikes = new ArrayList<>();
@@ -54,6 +70,11 @@ public class HikeSearchDM {
         return searchedHikes;
     }
 
+    /**
+     * Gets list of hikes which match hike name parameter given in search.
+     * @param searchedName name of hike which user searched
+     * @return list of matching hikes
+     */
     public List<HikeInfo> getSearchedHikesByHikeName(String searchedName) {
         List<HikeInfo> searchedHikes = new ArrayList<>();
         String query = "select ID from hikes where hike_name like ?";
@@ -70,6 +91,11 @@ public class HikeSearchDM {
         return searchedHikes;
     }
 
+    /**
+     * Gets list of hikes which match member name parameter given in search.
+     * @param searchedName name of hike which user searched
+     * @return list of matching hikes
+     */
     public List<HikeInfo> getSearchedHikesByMemberName(String searchedName) {
         String query = "select hike_id FROM hike_to_user inner join users where user_ID = users.id and concat(concat(first_name, \" \"), last_name) like ?";
         PreparedStatement pst = databaseConnector.getPreparedStatement(query);
@@ -91,6 +117,12 @@ public class HikeSearchDM {
         return searchedHikes;
     }
 
+    /**
+     * Gets list of hikes which match time parameter given in search.
+     * @param from starting date
+     * @param to ending date
+     * @return list of  matching hikes
+     */
     public List<HikeInfo> getSearchedHikesByDate(String from, String to) {
         String query = "SELECT * from hikes where start_date > ? and end_date < ?";
         PreparedStatement pst = databaseConnector.getPreparedStatement(query);

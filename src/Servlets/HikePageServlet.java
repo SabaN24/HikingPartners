@@ -9,6 +9,7 @@ import java.io.IOException;
 
 /**
  * Created by Saba on 12.06.2017.
+ * Redirects to hike page home.
  */
 @WebServlet("/HikePage/Home")
 public class HikePageServlet extends HttpServlet {

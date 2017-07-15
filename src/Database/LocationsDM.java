@@ -14,8 +14,15 @@ public class LocationsDM {
     private DatabaseConnector databaseConnector;
     private static LocationsDM locationsDM = null;
 
+    /**
+     * Private constructor which calls getInstance method.
+     */
     private LocationsDM(){databaseConnector = DatabaseConnector.getInstance();}
 
+    /**
+     * getInstance method so that class is singletone
+     * @return LocationsDM object
+     */
     public static LocationsDM getInstance() {
         if (locationsDM == null) {
             locationsDM = new LocationsDM();
@@ -24,7 +31,7 @@ public class LocationsDM {
     }
 
     /**
-     * connect Hike and Location
+     * Connect Hike and Location in database
      * @param hikeID
      * @param location_lat
      * @param location_lng
@@ -51,9 +58,9 @@ public class LocationsDM {
     }
 
     /**
-     * Get list of locations by hike id;
+     * Get list of locations by hike id.
      * @param hikeID
-     * @return list of locations
+     * @return list of locations of given hike
      */
     public ArrayList<Location> getLocationsByHikeID(int hikeID){
         ArrayList<Location> locations = new ArrayList<>();

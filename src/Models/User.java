@@ -29,17 +29,16 @@ public class User {
     /**
      *constructor of the user
      * gets these parameters:
-     * @param id
-     * @param firstName
-     * @param lastName
-     * @param profilePictureAddress
-     * @param facebookID
-     * @param birthDate
-     * @param gender
-     * @param email
-     * @param aboutMe
-     * @param coverPictureAddress
-     * @param facebookLink
+     * @param id id of user
+     * @param facebookID facebook id of user
+     * @param firstName first name of user
+     * @param lastName last name of user
+     * @param profilePictureAddress url of profile picture of user
+     * @param birthDate birth date of user
+     * @param gender gender of user
+     * @param email email of user
+     * @param coverPictureAddress url of cover picture of user
+     * @param facebookLink link to facebook of user
      */
     public User(int id, String firstName, String lastName, String profilePictureAddress, long facebookID, Date birthDate, String gender, String email, String aboutMe, String coverPictureAddress , String facebookLink) {
         this.id = id;
@@ -55,6 +54,10 @@ public class User {
         this.facebookLink = facebookLink;
     }
 
+    /**
+     * Sets birth date of user.
+     * @param dt birth date
+     */
     public void setBd(Date dt){
         this.birthDate = dt;
     }

@@ -13,6 +13,7 @@ import java.io.IOException;
 
 /**
  * Created by Sandro on 26-Jun-17.
+ * Redirects user to profile page of chosen user.
  */
 @WebServlet("/Profile")
 public class ProfileServlet extends HttpServlet {

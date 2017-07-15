@@ -13,6 +13,8 @@ import java.sql.Date;
 
 /**
  * Created by Levani on 19.06.2017.
+ * Registers (or logs in user in case they are registered) new user when user tries to login with facebook.
+ * DoGet method redirects to login page.
  */
 @WebServlet("/Login")
 public class LoginServlet extends HttpServlet {

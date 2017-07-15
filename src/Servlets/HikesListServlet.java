@@ -16,6 +16,7 @@ import java.util.Map;
 
 /**
  * Created by Saba on 22.06.2017.
+ * Gets list of hikes created by user when called from front-end.
  */
 @WebServlet("/HikesListServlet")
 public class HikesListServlet extends HttpServlet {

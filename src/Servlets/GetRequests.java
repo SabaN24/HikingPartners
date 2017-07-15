@@ -17,6 +17,7 @@ import java.util.List;
 
 /**
  * Created by Saba on 7/4/2017.
+ * Gets requests for given user.
  */
 @WebServlet("/GetRequests")
 public class GetRequests extends HttpServlet {

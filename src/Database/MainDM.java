@@ -21,10 +21,18 @@ public class MainDM {
 
     private static MainDM dm = null;
 
+    /**
+     * Private constructor of HikeSearchDM object (Singletone pattern)
+     */
     private MainDM() {
         databaseConnector = DatabaseConnector.getInstance();
     }
 
+    /**
+     * getInstance method so that class is singletone.
+     *
+     * @return MainDM object
+     */
     public static MainDM getInstance() {
         if (dm == null) {
             dm = new MainDM();
@@ -152,6 +160,11 @@ public class MainDM {
         return comments;
     }
 
+    /**
+     * Parse list of likes from given resultset.
+     * @param likesSet resultset returned by database
+     * @return list of likes
+     */
     private List<Like> parseLikes(ResultSet likesSet) {
         List<Like> likes = new ArrayList<>();
         try {
@@ -238,7 +251,9 @@ public class MainDM {
     }
 
     /**
-     * Returns hike members depending on hikeID.
+     * Returns hike members depending for given hike
+     * @param hikeID id of hike
+     * @return Members of given hike as list
      */
     public List<Member> getHikeMembers(int hikeID){
         ResultSet rs = databaseConnector.callProcedure("get_hike_members", Arrays.asList("" + hikeID));
@@ -278,6 +293,11 @@ public class MainDM {
         return creator;
     }
 
+    /**
+     * Gets list of notifications for given user
+     * @param userID id of user
+     * @return list of all notifications for given user
+     */
     public List<Notification> getNotifications(int userID){
         List<Notification> res = new ArrayList<>();
         String query = "select * from notifications where user_ID = ?";
@@ -305,7 +325,10 @@ public class MainDM {
         return res;
     }
 
-    /* Marks notification with id notId as seen. */
+    /**
+     * Marks notification as seen
+     * @param notID id of notification
+     */
     public void seeNotification(int notID){
         String quest = "update notifications set seen = 1 where ID = ?;";
         PreparedStatement statement = databaseConnector.getPreparedStatement(quest);
@@ -371,19 +394,23 @@ public class MainDM {
 
 
     /**
-     * method decorates given parameters for sql query syntax
+     * Creates sql query with given parameters.
      *
-     * @param Table  table from we get information
+     * @param table  table from we get information
      * @param column column name
-     * @param id     identificator in order to filter
-     *               (selects rows thats' column equals identificator)
+     * @param id column value
      * @return decorated query
      */
-    private String constructQuery(String Table, String column, String id) {
-        String query = "SELECT * FROM " + Table + " WHERE " + column + " = " + "\"" + id + "\";";
+    private String constructQuery(String table, String column, String id) {
+        String query = "SELECT * FROM " + table + " WHERE " + column + " = " + "\"" + id + "\";";
         return query;
     }
 
+    /**
+     * Returns homepage info for given hike.
+     * @param userID id of user who tries to access info
+     * @return info about hike
+     */
     public List<HikeInfoExtended> getHomePageInfo(int userID) {
         List<HikeInfoExtended> result = new ArrayList<>();
         ResultSet rs = databaseConnector.callProcedure("get_home_page_info", Arrays.asList("" + userID));

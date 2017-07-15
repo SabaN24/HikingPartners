@@ -15,6 +15,7 @@ import java.util.Map;
 
 /**
  * Created by vache on 6/29/2017.
+ * Returns locations for given hike when called from front-end.
  */
 @WebServlet("/LocationsServlet")
 public class LocationsServlet extends HttpServlet {
