@@ -57,9 +57,12 @@ public class ChatDM {
         List<Message> messages = new ArrayList<>();
         User userFrom = MainDM.getInstance().getUserById(user1);
         User  userTo = MainDM.getInstance().getUserById(user2);
-        String query = "SELECT * FROM Messages  WHERE from_user_id = " + "\"" + user1 + "\"" +  " and to_user_id  = " + "\"" +  user2 + "\";";
-        ResultSet rs = databaseConnector.getData(query);
+        String query = "SELECT * FROM Messages  WHERE from_user_id = ? and to_user_id  = ?;";
+        PreparedStatement preparedStatement = databaseConnector.getPreparedStatement(query);
         try {
+            preparedStatement.setInt(1, user1);
+            preparedStatement.setInt(2, user2);
+            ResultSet rs = databaseConnector.getDataWithPreparedStatement(preparedStatement);
             while(rs.next()){
                 int id = rs.getInt("ID");
                 String messageText = rs.getString("message");
@@ -71,9 +74,12 @@ public class ChatDM {
         }
         userFrom = MainDM.getInstance().getUserById(user2);
         userTo = MainDM.getInstance().getUserById(user1);
-        query = "SELECT * FROM Messages  WHERE from_user_id = " + "\"" + user2 + "\"" +  " and to_user_id  = " + "\"" +  user1 + "\";";
-        rs = databaseConnector.getData(query);
+        query = "SELECT * FROM Messages  WHERE from_user_id = ? and to_user_id = ?;";
+        PreparedStatement preparedStatement1 = databaseConnector.getPreparedStatement(query);
         try {
+            preparedStatement1.setInt(1, user2);
+            preparedStatement1.setInt(2, user1);
+            ResultSet rs = databaseConnector.getDataWithPreparedStatement(preparedStatement1);
             while(rs.next()){
                 int id = rs.getInt("ID");
                 String messageText = rs.getString("message");
@@ -105,7 +111,6 @@ public class ChatDM {
             newMessage.setString(3, messageText);
             newMessage.setDate(4,  new java.sql.Date(date.getTime()));
             databaseConnector.updateDataWithPreparedStatement(newMessage);
-
             ResultSet resultSet = databaseConnector.getData("select ID from messages order by ID desc limit 1");
             if (resultSet.next()) {
                 return resultSet.getInt(1);
@@ -126,11 +131,9 @@ public class ChatDM {
      * @return Chat object
      */
     public Chat getChat(int fromUserId, int toUserId){
-
         User userTo = MainDM.getInstance().getUserById(toUserId);
         List<Message> messages = getChatMessages(fromUserId, toUserId);
         return new Chat(toUserId,userTo, messages);
-
     }
 
 
@@ -141,9 +144,11 @@ public class ChatDM {
      */
     public List<Chat> getChats(int fromUserId) {
         List<Chat> chats = new ArrayList<>();
-        String query = "SELECT * FROM open_chats where from_user_id = "  +  "\"" +  fromUserId + "\";";
-        ResultSet rs = databaseConnector.getData(query);
+        String query = "SELECT * FROM open_chats where from_user_id = ?;";
+        PreparedStatement preparedStatement = databaseConnector.getPreparedStatement(query);
         try {
+            preparedStatement.setInt(1, fromUserId);
+            ResultSet rs = databaseConnector.getDataWithPreparedStatement(preparedStatement);
             while(rs.next()){
                 int toUserId  = rs.getInt("to_user_id");
                 chats.add(getChat(fromUserId, toUserId));
@@ -182,8 +187,15 @@ public class ChatDM {
      * @param toUserId
      */
     public void closeChat(int fromUserId, int toUserId){
-        String query = "delete from open_chats  WHERE from_user_id = " + "\"" + fromUserId + "\"" +  " and to_user_id = " + "\"" +  toUserId + "\";";
-        databaseConnector.updateData(query);
+        String query = "delete from open_chats  WHERE from_user_id = ? and to_user_id = ?;";
+        PreparedStatement preparedStatement = databaseConnector.getPreparedStatement(query);
+        try {
+            preparedStatement.setInt(1, fromUserId);
+            preparedStatement.setInt(2, toUserId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        databaseConnector.updateDataWithPreparedStatement(preparedStatement);
     }
 
 
