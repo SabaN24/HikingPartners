@@ -78,4 +78,41 @@ public class NotificationSocketServer {
 
     }
 
+    public static void handleNotification(Map<String, Object> message, int userId){
+        String action = (String)message.get("action");
+        if(action.equals("getComment")){
+            getComment((Map)message.get("data"), userId);
+        }else if(action.equals("getCommentLike")){
+            getCommentLike((Map)message.get("data"), userId);
+        }else if(action.equals("getRequest")){
+            getRequest((Map)message.get("data"), userId);
+        }
+    }
+
+    private static void getComment(Map<String, Object> comment, int userId) {
+
+    }
+
+    private static void getCommentLike(Map<String, Object> commentLike, int userId) {
+
+    }
+
+    private static void getRequest(Map<String, Object> request, int userId) {
+
+    }
+
+    /**
+     * Method which sends notification to user.
+     *
+     * @param notification
+     * @param toUserId
+     */
+    private void sendNotification(Notification notification, int toUserId){
+        try {
+            webSocketHelper.sendToSession(connectedSessions.get(toUserId), frontGson.toJson(notification));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
 }
