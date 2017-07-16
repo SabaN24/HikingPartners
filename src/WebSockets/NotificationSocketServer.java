@@ -107,7 +107,7 @@ public class NotificationSocketServer {
             if (i == fromUserId) continue;
             int id = NotificationsDM.getInstance().addNotification(i, notificationDate, 2, postId, fromUserId, -1, hikeId, hikeName, seen);
             User sender = UserInfoDM.getInstance().getUserByID(fromUserId);
-            Notification notification = new Notification(id, i, currDate, type, postId, sender, -1, hikeId, hikeName, seen);
+            Notification notification = new Notification(id, i, currDate, type, postId == -1 ? null : postId, sender, null, hikeId, hikeName, seen);
             sendNotification(notification, i, fromUserId);
         }
     }
@@ -132,7 +132,7 @@ public class NotificationSocketServer {
         if (follower != fromUserId) {
             int id = NotificationsDM.getInstance().addNotification(follower, notificationDate, 3, postId, fromUserId, -1, hikeId, hikeName, seen);
             User sender = UserInfoDM.getInstance().getUserByID(fromUserId);
-            Notification notification = new Notification(id, follower, currDate, type, postId, sender, -1, hikeId, hikeName, seen);
+            Notification notification = new Notification(id, follower, currDate, type, postId == -1 ? null : postId, sender, null, hikeId, hikeName, seen);
             sendNotification(notification, follower, fromUserId);
         }
     }
@@ -140,11 +140,24 @@ public class NotificationSocketServer {
     /**
      * Sends notification receiver of request.
      *
-     * @param request id of request
+     * @param request request
      * @param userId  id of user who liked comment
      */
     private void getRequest(Map<String, Object> request, int userId) {
-
+        int hikeId = Integer.parseInt((String) request.get("hikeID"));
+        int follower = Integer.parseInt((String) request.get("followerID"));
+        int requestID = Integer.parseInt((String) request.get("requestID"));
+        int type = 1;
+        Date currDate = calendar.getTime();
+        String notificationDate = dateFormat.format(currDate);
+        String hikeName = HikeDM.getInstance().getHikeById(hikeId).getName();
+        int seen = 0;
+        if (follower != userId) {
+            int id = NotificationsDM.getInstance().addNotification(follower, notificationDate, 3, -1, userId, -1, hikeId, hikeName, seen);
+            User sender = UserInfoDM.getInstance().getUserByID(userId);
+            Notification notification = new Notification(id, follower, currDate, type, null, sender, requestID, hikeId, hikeName, seen);
+            sendNotification(notification, follower, userId);
+        }
     }
 
     /**
