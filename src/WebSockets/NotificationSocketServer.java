@@ -39,7 +39,14 @@ public class NotificationSocketServer {
      */
     @OnOpen
     public void open(Session session, @PathParam("userId") int userId, EndpointConfig config) {
-
+        if(!connectedSessions.containsKey(userId)){
+            connectedSessions.put(userId, session);
+        }
+        HttpSession httpsession =  (HttpSession) config.getUserProperties().get(HttpSession.class.getName());
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        calendar = Calendar.getInstance();
+        frontGson = new GsonBuilder().setDateFormat("MMM, d, yyyy HH:mm:ss").create();
+        gson = new Gson();
     }
 
     /**
@@ -50,7 +57,7 @@ public class NotificationSocketServer {
      */
     @OnClose
     public void close(Session session, @PathParam("userId") int userId) {
-
+        connectedSessions.remove(userId);
     }
 
     /**
@@ -67,7 +74,7 @@ public class NotificationSocketServer {
      * @param userId  id of user who calls action
      */
     @OnMessage
-    public void handleMessage(String message, Session session,  @PathParam("userId") int userId) {
+    public void handleMessage(String message, Session session, @PathParam("userId") int userId) {
 
     }
 

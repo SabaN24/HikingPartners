@@ -23,6 +23,7 @@ import java.util.*;
 public class HikeFeedWebSocketServer{
     private static Map<Integer, Map<Session, HttpSession>> connectedSessions = new HashMap<>();
     private static WebSocketHelper webSocketHelper = new WebSocketHelper();
+    private static NotificationSocketServer notificationSocketServer = new NotificationSocketServer();
 
     /* Private instance variables. */
     private DateFormat dateFormat;
