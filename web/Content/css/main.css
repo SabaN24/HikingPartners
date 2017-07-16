@@ -689,15 +689,17 @@ main {
 }
 
 .upload-image-button {
+    color: #888;
     cursor: pointer;
-    background: none;
-    background-image: url("../img/picture-logo.png");
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
     width: 20px;
     height: 20px;
     border: none;
+    opacity: 0.6;
+    transition: .1s color;
+}
+
+.upload-image-button:hover {
+    color: white;
 }
 
 .upload-image-button:focus {

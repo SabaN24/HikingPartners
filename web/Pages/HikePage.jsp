@@ -146,7 +146,9 @@
                 <%i++;}%>
             </div>
             <% if(defaultModel.getCreator().getId() == loggedInUserId){%>
-            <div v-if="!uploadingCover" class="upload-image-button cover-image-button" @click="chooseCover()" ></div>
+            <div v-if="!uploadingCover" class="upload-image-button cover-image-button" @click="chooseCover()" >
+                <i class="fa fa-picture-o" aria-hidden="true"></i>
+            </div>
             <%}%>
             <form action="" onsubmit="return false;" id="form-cover"></form>
         </div>
