@@ -101,7 +101,10 @@ public class HikeCommentsWebSocketServer {
         int returnedID = HikeFeedDM.getInstance().addComment(userID, postID, hikeID, comment, privacyType, time);
         User user = MainDM.getInstance().getUserById(userID);
         Comment comm = new Comment(returnedID, comment, postID, user, currDate, 0);
+        jsonMessage.put("postID", "-1");
+        jsonMessage.put("hikeID", "" + hikeID);
         webSocketHelper.sendToAllConnectedSessions(comm, action, hikeId, connectedSessions.get(hikeId).keySet());
+        NotificationSocketServer.handleNotification(jsonMessage, userID);
     }
 
     /**
