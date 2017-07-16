@@ -3,6 +3,7 @@ package WebSockets;
 /**
  * Created by Levani on 14.06.2017.
  */
+
 import Database.*;
 import Listeners.GetHttpSessionConfigurator;
 import Models.*;
@@ -23,9 +24,11 @@ public class NotificationSocketServer {
     private static WebSocketHelper webSocketHelper = new WebSocketHelper();
 
     /* Private instance variables. */
-    private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");;
-    private Calendar calendar = Calendar.getInstance();;
-    private Gson frontGson = new GsonBuilder().setDateFormat("MMM, d, yyyy HH:mm:ss").create();;
+    private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    ;
+    private Calendar calendar;
+    private Gson frontGson = new GsonBuilder().setDateFormat("MMM, d, yyyy HH:mm:ss").create();
+    ;
     private Gson gson = new Gson();
 
     /**
@@ -37,10 +40,11 @@ public class NotificationSocketServer {
      */
     @OnOpen
     public void open(Session session, @PathParam("userId") int userId, EndpointConfig config) {
-        if(!connectedSessions.containsKey(userId)){
+        if (!connectedSessions.containsKey(userId)) {
             connectedSessions.put(userId, session);
         }
-        HttpSession httpsession =  (HttpSession) config.getUserProperties().get(HttpSession.class.getName());
+        calendar = Calendar.getInstance();
+        HttpSession httpsession = (HttpSession) config.getUserProperties().get(HttpSession.class.getName());
     }
 
     /**
@@ -65,29 +69,30 @@ public class NotificationSocketServer {
     /**
      * Method which gets called when Socket receives a notification.
      *
-     * @param userId  id of user who calls action
+     * @param userId id of user who calls action
      */
-    public void handleNotification(Map<String, Object> message, int userId){
-        String action = (String)message.get("action");
-        if(action.equals("getComment")){
-            getComment((Map)message.get("data"), userId);
-        }else if(action.equals("getCommentLike")){
-            getCommentLike((Map)message.get("data"), userId);
-        }else if(action.equals("getRequest")){
-            getRequest((Map)message.get("data"), userId);
+    public void handleNotification(Map<String, Object> message, int userId) {
+        String action = (String) message.get("action");
+        if (action.equals("getComment")) {
+            getComment((Map) message.get("data"), userId);
+        } else if (action.equals("getCommentLike")) {
+            getCommentLike((Map) message.get("data"), userId);
+        } else if (action.equals("getRequest")) {
+            getRequest((Map) message.get("data"), userId);
         }
     }
 
     /**
      * Sends notification to all followers of post.
+     *
      * @param comment id of comment
-     * @param userId id of author of comment
+     * @param userId  id of author of comment
      */
     private void getComment(Map<String, Object> comment, int userId) {
-        int postId = Integer.parseInt((String)comment.get("postID"));
-        int hikeId = Integer.parseInt((String)comment.get("hikeID"));
+        int postId = Integer.parseInt((String) comment.get("postID"));
+        int hikeId = Integer.parseInt((String) comment.get("hikeID"));
         Set<Integer> followers = null;
-        if(postId == -1){
+        if (postId == -1) {
             followers = NotificationsDM.getInstance().getHikeFollowers(hikeId);
         } else {
             followers = NotificationsDM.getInstance().getPostFollowers(postId);
@@ -98,28 +103,45 @@ public class NotificationSocketServer {
         String notificationDate = dateFormat.format(currDate);
         String hikeName = HikeDM.getInstance().getHikeById(hikeId).getName();
         int seen = 0;
-        for(Integer i : followers){
-            if(i == fromUserId) continue;
-            int id = NotificationsDM.getInstance().addNotification(i, notificationDate, 2, postId, fromUserId, -1, hikeId, hikeName, 0);
-            User sender = UserInfoDM.getInstance().getUserByID(i);
-            Notification notification = new Notification(id, i, currDate, type, postId, sender, -1, hikeId, hikeName, 0);
+        for (Integer i : followers) {
+            if (i == fromUserId) continue;
+            int id = NotificationsDM.getInstance().addNotification(i, notificationDate, 2, postId, fromUserId, -1, hikeId, hikeName, seen);
+            User sender = UserInfoDM.getInstance().getUserByID(fromUserId);
+            Notification notification = new Notification(id, i, currDate, type, postId, sender, -1, hikeId, hikeName, seen);
             sendNotification(notification, i, fromUserId);
         }
     }
 
     /**
      * Sends notification to all followers of comment.
+     *
      * @param commentLike id of like
-     * @param userId id of user who liked comment
+     * @param userId      id of user who liked comment
      */
     private void getCommentLike(Map<String, Object> commentLike, int userId) {
-
+        int postId = Integer.parseInt((String) commentLike.get("postID"));
+        int hikeId = Integer.parseInt((String) commentLike.get("hikeID"));
+        int commentID = Integer.parseInt((String) commentLike.get("commentID"));
+        int follower = NotificationsDM.getInstance().getCommentFollower(commentID);
+        int type = 3;
+        int fromUserId = userId;
+        Date currDate = calendar.getTime();
+        String notificationDate = dateFormat.format(currDate);
+        String hikeName = HikeDM.getInstance().getHikeById(hikeId).getName();
+        int seen = 0;
+        if (follower != fromUserId) {
+            int id = NotificationsDM.getInstance().addNotification(follower, notificationDate, 3, postId, fromUserId, -1, hikeId, hikeName, seen);
+            User sender = UserInfoDM.getInstance().getUserByID(fromUserId);
+            Notification notification = new Notification(id, follower, currDate, type, postId, sender, -1, hikeId, hikeName, seen);
+            sendNotification(notification, follower, fromUserId);
+        }
     }
 
     /**
      * Sends notification receiver of request.
+     *
      * @param request id of request
-     * @param userId id of user who liked comment
+     * @param userId  id of user who liked comment
      */
     private void getRequest(Map<String, Object> request, int userId) {
 
@@ -131,13 +153,13 @@ public class NotificationSocketServer {
      * @param notification
      * @param toUserId
      */
-    private void sendNotification(Notification notification, int toUserId, int fromUserId){
-        if(fromUserId == toUserId){
+    private void sendNotification(Notification notification, int toUserId, int fromUserId) {
+        if (fromUserId == toUserId) {
             return;
         }
         try {
             webSocketHelper.sendToSession(connectedSessions.get(toUserId), frontGson.toJson(notification));
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

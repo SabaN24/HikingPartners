@@ -156,7 +156,7 @@
                 fetchNotifications: function(){
                     var th = this;
                     axios.post("/GetNotifications", {}).then(function(response){
-                        th.notifications = response.data;
+                        th.notifications = response.data.reverse();
                     });
                 },
                 toggleNotifications: function(){
