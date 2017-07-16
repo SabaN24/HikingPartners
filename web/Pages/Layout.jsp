@@ -140,7 +140,7 @@
 
         var mws = new WebSocket("ws://localhost:8080/MessagesSocket/<%= loggedInUser.getId() %>");
 
-        //var ntfws = new WebSocket("ws://localhost:8080/NotificationsSocket/<%= loggedInUser.getId() %>");
+        var ntfws = new WebSocket("ws://localhost:8080/NotificationSocket/<%= loggedInUser.getId() %>");
 
 
         var notificationsVue = new Vue({
@@ -174,6 +174,9 @@
                 seeNotification: function(notID){
                     axios({method: "post", url:"/SeeNotification", params:{ notificationID: notID }});
                     this.notifications.find(function(x){return x.ID == notID}).seen = 1;
+                },
+                getSocketMessage: function(message){
+                    this.notifications.push(message);
                 }
             },
             computed: {
@@ -182,6 +185,8 @@
                 }
             }
         });
+
+        ntfws.onmessage = notificationsVue.getSocketMessage;
 
         var appChat = new Vue({
             el: '#chatVue',

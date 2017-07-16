@@ -58,7 +58,7 @@ public class NotificationsDM {
      * @param commentId id of comment
      * @return id of user who follows given comment
      */
-    public int getCommontFollower(int commentId) {
+    public int getCommentFollower(int commentId) {
         String query = "Select * from comments where comment_ID = ?;";
         PreparedStatement preparedStatement = databaseConnector.getPreparedStatement(query);
         try {
@@ -82,7 +82,7 @@ public class NotificationsDM {
      */
     public Set<Integer> getHikeFollowers(int hikeId) {
         Set<Integer> followers = new HashSet<>();
-        String query = "Select * from posts where hike_id = ? and privacy_type = 1;";
+        String query = "Select * from comments where hike_id = ? and privacy_type = 1;";
         PreparedStatement preparedStatement = databaseConnector.getPreparedStatement(query);
         followers = getFollowers(preparedStatement, hikeId);
         return followers;

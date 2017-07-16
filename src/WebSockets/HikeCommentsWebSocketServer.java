@@ -23,6 +23,7 @@ import java.util.*;
 public class HikeCommentsWebSocketServer {
     private static Map<Integer, Map<Session, HttpSession>> connectedSessions = new HashMap<>();
     private static WebSocketHelper webSocketHelper = new WebSocketHelper();
+    private static NotificationSocketServer notificationSocketServer = new NotificationSocketServer();
 
     /* Private instance variables. */
     private DateFormat dateFormat;
@@ -101,10 +102,10 @@ public class HikeCommentsWebSocketServer {
         int returnedID = HikeFeedDM.getInstance().addComment(userID, postID, hikeID, comment, privacyType, time);
         User user = MainDM.getInstance().getUserById(userID);
         Comment comm = new Comment(returnedID, comment, postID, user, currDate, 0);
-        jsonMessage.put("postID", "-1");
-        jsonMessage.put("hikeID", "" + hikeID);
+        data.put("postID", "-1");
+        data.put("hikeID", "" + hikeID);
         webSocketHelper.sendToAllConnectedSessions(comm, action, hikeId, connectedSessions.get(hikeId).keySet());
-        NotificationSocketServer.handleNotification(jsonMessage, userID);
+        notificationSocketServer.handleNotification(jsonMessage, userID);
     }
 
     /**

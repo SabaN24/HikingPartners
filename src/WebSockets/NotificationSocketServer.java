@@ -23,10 +23,10 @@ public class NotificationSocketServer {
     private static WebSocketHelper webSocketHelper = new WebSocketHelper();
 
     /* Private instance variables. */
-    private static DateFormat dateFormat;
-    private static Calendar calendar;
-    private static Gson frontGson;
-    private Gson gson;
+    private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");;
+    private Calendar calendar = Calendar.getInstance();;
+    private Gson frontGson = new GsonBuilder().setDateFormat("MMM, d, yyyy HH:mm:ss").create();;
+    private Gson gson = new Gson();
 
     /**
      * Method which gets called when Socket gets opened. Initializes all private variables.
@@ -41,10 +41,6 @@ public class NotificationSocketServer {
             connectedSessions.put(userId, session);
         }
         HttpSession httpsession =  (HttpSession) config.getUserProperties().get(HttpSession.class.getName());
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        calendar = Calendar.getInstance();
-        frontGson = new GsonBuilder().setDateFormat("MMM, d, yyyy HH:mm:ss").create();
-        gson = new Gson();
     }
 
     /**
@@ -71,7 +67,7 @@ public class NotificationSocketServer {
      *
      * @param userId  id of user who calls action
      */
-    public static void handleNotification(Map<String, Object> message, int userId){
+    public void handleNotification(Map<String, Object> message, int userId){
         String action = (String)message.get("action");
         if(action.equals("getComment")){
             getComment((Map)message.get("data"), userId);
@@ -87,7 +83,7 @@ public class NotificationSocketServer {
      * @param comment id of comment
      * @param userId id of author of comment
      */
-    private static void getComment(Map<String, Object> comment, int userId) {
+    private void getComment(Map<String, Object> comment, int userId) {
         int postId = Integer.parseInt((String)comment.get("postID"));
         int hikeId = Integer.parseInt((String)comment.get("hikeID"));
         Set<Integer> followers = null;
@@ -103,11 +99,11 @@ public class NotificationSocketServer {
         String hikeName = HikeDM.getInstance().getHikeById(hikeId).getName();
         int seen = 0;
         for(Integer i : followers){
-            Session s = connectedSessions.get(i);
+            if(i == fromUserId) continue;
             int id = NotificationsDM.getInstance().addNotification(i, notificationDate, 2, postId, fromUserId, -1, hikeId, hikeName, 0);
             User sender = UserInfoDM.getInstance().getUserByID(i);
             Notification notification = new Notification(id, i, currDate, type, postId, sender, -1, hikeId, hikeName, 0);
-            sendNotification(notification, i);
+            sendNotification(notification, i, fromUserId);
         }
     }
 
@@ -116,7 +112,7 @@ public class NotificationSocketServer {
      * @param commentLike id of like
      * @param userId id of user who liked comment
      */
-    private static void getCommentLike(Map<String, Object> commentLike, int userId) {
+    private void getCommentLike(Map<String, Object> commentLike, int userId) {
 
     }
 
@@ -125,7 +121,7 @@ public class NotificationSocketServer {
      * @param request id of request
      * @param userId id of user who liked comment
      */
-    private static void getRequest(Map<String, Object> request, int userId) {
+    private void getRequest(Map<String, Object> request, int userId) {
 
     }
 
@@ -135,7 +131,10 @@ public class NotificationSocketServer {
      * @param notification
      * @param toUserId
      */
-    private static void sendNotification(Notification notification, int toUserId){
+    private void sendNotification(Notification notification, int toUserId, int fromUserId){
+        if(fromUserId == toUserId){
+            return;
+        }
         try {
             webSocketHelper.sendToSession(connectedSessions.get(toUserId), frontGson.toJson(notification));
         }catch(Exception e){
