@@ -1,27 +1,18 @@
 package Servlets;
 
-import Database.GalleryDM;
-import Database.HikeFeedDM;
 import com.google.gson.Gson;
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.IOUtils;
 
-import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +41,7 @@ public class PostPhotoServlet extends HttpServlet {
                 File newFile = new File(Helper.root(this) + newFilePath);
                 newFile.createNewFile();
                 file.write(newFile);
-                Helper.savePrefferedSize(newFile);
+                Helper.savePreferredSize(newFile);
                 Map<String, Object> data = new HashMap<>();
                 data.put("imgUrl", newFilePath);
                 Gson gson = new Gson();

@@ -116,12 +116,16 @@ public class Helper {
             e.printStackTrace();
         }
         String pathArr[] = fullPath.split("/WEB-INF/classes/");
-        fullPath = pathArr[0].substring(0, pathArr[0].indexOf("out") - 1);
+        fullPath = pathArr[0];
         String reponsePath = new File(fullPath).getPath() + File.separatorChar;
-        return reponsePath + "/web";
+        return reponsePath;
     }
 
-    public static void savePrefferedSize(File file){
+    /**
+     * Saves image with preferred size
+     * @param file
+     */
+    public static void savePreferredSize(File file){
         try{
             BufferedImage img = ImageIO.read(file);
             int originalHeight = img.getHeight();
