@@ -19,7 +19,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-@ServerEndpoint(value = "/HikeFeedSocket/{hikeId}", configurator = GetHttpSessionConfigurator.class)
+@ServerEndpoint(value = "/NotificationSocket/{userId}", configurator = GetHttpSessionConfigurator.class)
 public class NotificationSocketServer {
     private static Map<Integer, Session> connectedSessions = new HashMap<>();
     private static WebSocketHelper webSocketHelper = new WebSocketHelper();
