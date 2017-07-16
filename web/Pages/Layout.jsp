@@ -80,7 +80,7 @@
                             <div>
                                 <span class="notification-name">{{notification.fromUser.firstName}} {{notification.fromUser.lastName}}</span>
                                 <span v-if="notification.typeID == <%= Notification.REQUEST %>" > wants to join {{notification.hikeName}}.</span>
-                                <span v-if="notification.typeID == <%= Notification.COMMENT %>" > commented in the post you are following.</span>
+                                <span v-if="notification.typeID == <%= Notification.COMMENT %>" > commented on the post you are following.</span>
                                 <span v-if="notification.typeID == <%= Notification.LIKE %>" > liked your comment.</span>
                             </div>
                             <div class="notification-time">{{notification.time | cutTime}}</div>
@@ -165,8 +165,12 @@
                 clickNotification: function(not){
                     this.toggleNotifications();
                     this.seeNotification(not.ID);
-                    if(not.typeID != '<%= Notification.REQUEST %>')
-                        window.location = '/HikePage/Feed?hikeId=' + not.hikeID + '#' + not.postID;
+                    if(not.typeID != '<%= Notification.REQUEST %>') {
+                        if(not.postID)
+                            window.location = '/HikePage/Feed?hikeId=' + not.hikeID + '#' + not.postID;
+                        else
+                            window.location = '/HikePage/Home?hikeId=' + not.hikeID;
+                    }
                     else
                         window.location = '/Notifications#' + not.ID;
 
@@ -176,7 +180,7 @@
                     this.notifications.find(function(x){return x.ID == notID}).seen = 1;
                 },
                 getSocketMessage: function(message){
-                    this.notifications.push(message);
+                    this.notifications.unshift(JSON.parse(message.data));
                 }
             },
             computed: {

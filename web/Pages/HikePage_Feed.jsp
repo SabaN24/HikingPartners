@@ -208,10 +208,7 @@
             //This method is invoked automatically when socket
             //server sends messageto this session.
             getSocketMessage: function (data) {
-                console.log("----------");
-                console.log(data);
                 var jsonData = JSON.parse(data.data);
-                console.log(jsonData);
                 var action = jsonData.action;
                 data = jsonData.data;
                 if (action == "getComment") {

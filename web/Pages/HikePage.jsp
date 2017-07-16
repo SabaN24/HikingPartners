@@ -197,8 +197,6 @@
                         var popup = document.querySelector('.profile-popup-wrapper');
                         popup.style.left = rect.left + pageXOffset +'px';
                         popup.style.top = rect.top + pageYOffset + e.target.clientHeight - 5 +'px';
-                        console.log(e);
-                        console.log(window.innerHeight);
                         this.popupUp = false;
                         if(window.innerHeight - e.clientY < 300){
                             this.popupUp = true;

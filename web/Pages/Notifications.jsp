@@ -21,7 +21,7 @@
                         {{notification.fromUser.firstName}} {{notification.fromUser.lastName}}
                     </span>
                     <span> wants to join<span class="notification-hike-name" @click.stop="window.location = '/HikePage/Home?hikeId=' +  notification.hikeID"> {{notification.hikeName}}</span></span>
-                    <span v-if="notification.typeID == <%= Notification.COMMENT %>" > commented in the post you are following.</span>
+                    <span v-if="notification.typeID == <%= Notification.COMMENT %>" > commented on the post you are following.</span>
                     <span v-if="notification.typeID == <%= Notification.LIKE %>" > liked your comment.</span>
                 </div>
                 <div class="notification-time">{{notification.time | cutTime}}</div>

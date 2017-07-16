@@ -27,7 +27,7 @@ public class NotificationSocketServer {
     private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     ;
     private Calendar calendar = Calendar.getInstance();
-    private Gson frontGson = new GsonBuilder().setDateFormat("MMM, d, yyyy HH:mm:ss").create();
+    private Gson frontGson = new GsonBuilder().serializeNulls().create();
     ;
     private Gson gson = new Gson();
 
@@ -158,7 +158,9 @@ public class NotificationSocketServer {
             return;
         }
         try {
-            webSocketHelper.sendToSession(connectedSessions.get(toUserId), frontGson.toJson(notification));
+            Session s = connectedSessions.get(toUserId);
+            if(s == null) return;
+            webSocketHelper.sendToSession(s, frontGson.toJson(notification));
         } catch (Exception e) {
             e.printStackTrace();
         }
