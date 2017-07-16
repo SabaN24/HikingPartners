@@ -238,4 +238,25 @@ public class HikeFeedDM {
         }
         return rows != 0;
     }
+
+    /**
+     * Retunrs id of creator of given post.
+     * @param postId id of desired post
+     * @return id of creator
+     */
+    public int getPostCreator(int postId){
+        String query = "Select user_Id from posts where id = ?;";
+        PreparedStatement preparedStatement = databaseConnector.getPreparedStatement(query);
+        try {
+            preparedStatement.setInt(1, postId);
+            ResultSet resultSet = databaseConnector.getDataWithPreparedStatement(preparedStatement);
+            if(resultSet.next()) {
+                int creator = resultSet.getInt("user_ID");
+                return creator;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
 }

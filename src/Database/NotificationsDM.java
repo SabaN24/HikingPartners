@@ -49,6 +49,7 @@ public class NotificationsDM {
         String query = "Select * from comments where post_ID = ?;";
         PreparedStatement preparedStatement = databaseConnector.getPreparedStatement(query);
         Set<Integer> followers = getFollowers(preparedStatement, postId);
+        followers.add(HikeFeedDM.getInstance().getPostCreator(postId));
         return followers;
     }
 
@@ -59,7 +60,7 @@ public class NotificationsDM {
      * @return id of user who follows given comment
      */
     public int getCommentFollower(int commentId) {
-        String query = "Select * from comments where comment_ID = ?;";
+        String query = "Select * from comments where id = ?;";
         PreparedStatement preparedStatement = databaseConnector.getPreparedStatement(query);
         try {
             preparedStatement.setInt(1, commentId);

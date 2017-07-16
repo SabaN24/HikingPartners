@@ -216,7 +216,6 @@ create table if not exists notifications(
 );
 
 
-
 -- ----------------------------------------------------------------------------- --
 
 insert into users (facebook_ID, first_name, last_name, profile_picture_url, birth_date, gender, email, about_me_text, cover_picture_url, facebook_link)
