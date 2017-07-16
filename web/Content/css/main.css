@@ -1365,8 +1365,12 @@ input[type="file"] {
 .gallery-li{
     display: inline-block;
     height:150px;
-    width:30%;
-    padding-right: 15px;
+    width:32%;
+    margin-right: 2%;
+}
+
+.gallery-li:nth-child(3n + 3){
+    margin-right: 0;
 }
 
 .gallery-li img{

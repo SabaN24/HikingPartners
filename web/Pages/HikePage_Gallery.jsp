@@ -6,14 +6,19 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<link href="/Content/css/lightbox.min.css" rel="stylesheet">
+
 <div class="main-content">
     <ul class="gallery-list">
         <li class="gallery-li" v-for="image in images">
-            <img :src="image.src" alt="">
+            <a :href="image.src" data-lightbox="viewer">
+                <img :src="image.src" alt="">
+            </a>
         </li>
     </ul>
 </div>
-
+<script src="/Content/js/lightbox.min.js"></script>
 <script>
     var galleryVue = new Vue({
         el: "#vueapp",
