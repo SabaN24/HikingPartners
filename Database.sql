@@ -422,7 +422,7 @@ CREATE PROCEDURE get_comment_likes(comment_id INT)
 
 DELIMITER $$
 
-CREATE PROCEDURE get_post_likes(post_id INT)
+CREATE PROCEDURE get_post_like_num(post_id INT)
   BEGIN
     SELECT COUNT(post_ID) as count
     FROM post_likes
@@ -443,6 +443,19 @@ create PROCEDURE get_post_comments_likes(post_id INT, hike_id int, privacy int)
       FROM comment_likes cl
         inner join (select ID from comments c where c.post_ID = post_id) c on c.ID = cl.comment_id;
     end if;
+
+  END$$
+  
+  
+  
+DELIMITER $$
+
+create PROCEDURE get_post_likes(post_id INT, hike_id int)
+  BEGIN
+      SELECT pl.post_id comment_id,
+      pl.user_ID user_id
+      FROM post_likes pl
+        inner join (select ID from posts p where p.hike_ID = hike_id) pp on pp.ID = pl.post_id;
 
   END$$
 

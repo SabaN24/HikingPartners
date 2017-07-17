@@ -87,7 +87,7 @@ public class HikeFeedWebSocketServer{
         }
 
         if("getPostLike".equals(jsonMessage.get("action"))){
-            addPostLike(jsonMessage, session, hikeId);
+            addPostLike(jsonMessage, session, hikeId, "getPostLike");
         }
     }
 
@@ -171,17 +171,15 @@ public class HikeFeedWebSocketServer{
      * @param session sessions
      * @param hikeId id of hike
      */
-    private void addPostLike(Map<String, Object> jsonMessage, Session session, @PathParam("hikeId") int hikeId){
+    private void addPostLike(Map<String, Object> jsonMessage, Session session, @PathParam("hikeId") int hikeId, String action){
         Map<String, Object> data = (Map)(jsonMessage.get("data"));
         HttpSession httpSession = connectedSessions.get(hikeId).get(session);
         Integer userID = (Integer) httpSession.getAttribute("userID");
         Integer postID = Integer.parseInt((String)data.get("postID"));
         int returnedID = HikeFeedDM.getInstance().likePost(userID, postID);
-        if(returnedID == -1){
-            data.put("likeResult", "unlike");
-        } else{
-            data.put("likeResult", "like");
-        }
-        webSocketHelper.sendToAllConnectedSessions(new Object(), "", hikeId, connectedSessions.get(hikeId).keySet());
+        Like like;
+        like = new Like(postID, -1, userID, returnedID != -1);
+        data.put("hikeID", "" + hikeId);
+        webSocketHelper.sendToAllConnectedSessions(like, action, hikeId, connectedSessions.get(hikeId).keySet());
     }
 }

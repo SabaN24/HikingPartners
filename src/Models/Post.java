@@ -16,6 +16,7 @@ public class Post {
     private Date time;
     private int likes;
     private String link;
+    private boolean isLiked;
 
     public Photo getPhoto() {
         return photo;
@@ -42,6 +43,28 @@ public class Post {
         this.comments = comments;
         this.likes = likes;
         this.photo = photo;
+        this.isLiked = false;
+    }
+
+
+    public Post(int id, String text, String link, User user, Date time, List<Comment> comments, int likes, Photo photo, boolean isLiked) {
+        this.id = id;
+        this.text = text;
+        this.user = user;
+        this.time = time;
+        this.link = formatLink(link);
+        this.comments = comments;
+        this.likes = likes;
+        this.photo = photo;
+        this.isLiked = isLiked;
+    }
+
+    /**
+     * Setter for isLiked
+     * @param liked
+     */
+    public void setLiked(boolean liked) {
+        isLiked = liked;
     }
 
     /**

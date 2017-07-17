@@ -24,10 +24,17 @@ public class InputCheckers {
         String maxNum = (String)searchedData.get("maxMembersNum");
         String startDate = (String)searchedData.get("startDate");
         String endDate = (String)searchedData.get("endDate");
-        if(!minNum.matches("[0-9]+") || Integer.parseInt(minNum) < 0
-                || !maxNum.matches("[0-9]+") || Integer.parseInt(maxNum) < 0) return false;
+        if(!minNum.equals(""))
+            if (!minNum.matches("[0-9]+") || Integer.parseInt(minNum) < 0) return false;
 
-        if(!dateChecker(startDate) || !dateChecker(endDate)) return false;
+        if(!maxNum.equals(""))
+            if (!maxNum.matches("[0-9]+") || Integer.parseInt(maxNum) < 0) return false;
+
+        if(!startDate.equals(""))
+            if (!dateChecker(startDate)) return false;
+
+        if(!endDate.equals(""))
+            if (!dateChecker(endDate)) return false;
 
         return true;
     }

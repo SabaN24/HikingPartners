@@ -51,6 +51,12 @@ public class TestInputCheckers {
         data.put("startDate", "12/12/1992");
         data.put("endDate", "12/12/1993");
         assertEquals(false, InputCheckers.checkSearchedInputs(data));
+
+        data.put("minMembersNum", "");
+        data.put("maxMembersNum", "");
+        data.put("startDate", "12/12/1992");
+        data.put("endDate", "12/12/1993");
+        assertEquals(true, InputCheckers.checkSearchedInputs(data));
     }
 
     @Test

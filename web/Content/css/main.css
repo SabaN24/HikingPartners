@@ -281,6 +281,7 @@ main {
 .comments-count {
     font-size: 12px;
     padding: 5px 15px;
+    display: inline-block;
 }
 
 .comments-block {
@@ -359,6 +360,14 @@ main {
     vertical-align: middle;
     font-size: 11px;
     user-select: none;
+}
+
+.post-like-block {
+    vertical-align: middle;
+    font-size: 11px;
+    user-select: none;
+    padding: 5px 15px;
+    display: inline-block;
 }
 
 .comment-text {

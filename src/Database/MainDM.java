@@ -170,7 +170,7 @@ public class MainDM {
         try {
             while (likesSet.next()) {
                 int userID = likesSet.getInt("user_id");
-                int commentID = likesSet.getInt("comment_ID");
+                int commentID = likesSet.getInt("comment_id");
                 likes.add(new Like(commentID, userID));
             }
         } catch (Exception e) {
@@ -234,14 +234,18 @@ public class MainDM {
                 Date postDate = (Date) rs.getObject("post_time");
                 User user = getUserById(authorID);
                 List<Comment> comments = getComments("" + id, "" + hikeID, 2, userID);
-                ResultSet likesSet = databaseConnector.callProcedure("get_post_likes", Arrays.asList("" + id));
+                ResultSet likesSet = databaseConnector.callProcedure("get_post_likes", Arrays.asList("" + id, hikeID + "" ));///post_id INT, hike_id
+                List<Like> likesList = new ArrayList<>();
+                likesList = parseLikes(likesSet);
+
+                likesSet = databaseConnector.callProcedure("get_post_like_num", Arrays.asList("" + id));//numberis tema
                 int likes = 0;
                 if (likesSet.next()) {
                     likes = likesSet.getInt("count");
                 }
                 int photoID = rs.getInt("photo_ID");
                 Photo photo = GalleryDM.getInstance().getGalleryPhoto(photoID);
-                Post p = new Post(id, text, link, user, postDate, comments, likes, photo);
+                Post p = new Post(id, text, link, user, postDate, comments, likes, photo, userHasLiked(likesList, userID, id));
                 posts.add(p);
             }
         } catch (SQLException e) {

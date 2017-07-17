@@ -66,6 +66,11 @@
                     :src="post.link">
             </iframe>
         </div>
+        <div class="post-like-block">
+            <i class="fa fa-thumbs-up" v-bind:class="{ liked: post.isLiked }"
+               v-on:click="postLike(post.id)" aria-hidden="true"></i>
+            {{post.likes}}
+        </div>
         <div class="comments-count">
             {{post.comments.length}} comment<span v-show="post.comments.length != 1">s</span>
         </div>
@@ -227,6 +232,19 @@
                     }
                 } else if (action == "getPost") {
                     this.posts.unshift(data);
+                } else if (action == "getPostLike"){
+                    console.log(data);
+                    if (data.liked) {
+                        this.posts.find(x => x.id == data.postID).likes++;
+                        if (data.userID == user.id) {
+                            this.posts.find(x => x.id == data.postID).isLiked = true;
+                        }
+                    } else if (this.posts.find(x => x.id == data.postID).likes > 0) {
+                        this.posts.find(x => x.id == data.postID).likes--;
+                        if (data.userID == user.id) {
+                            this.posts.find(x => x.id == data.postID).isLiked = false;
+                        }
+                    }
                 }
             },
 
@@ -267,7 +285,15 @@
                 this.uploadingPicture = false;
             },
 
-
+            postLike: function (postID) {
+                ws.send(JSON.stringify({
+                    action: "getPostLike",
+                    data: {
+                        postID: "" + postID,
+                    }
+                }));
+            }
+            ,
             //This function is called when like button is clicked.
             like: function (postID, commentID) {
                 ws.send(JSON.stringify({
