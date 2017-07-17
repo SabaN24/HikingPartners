@@ -17,6 +17,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <title></title>
+    <link rel="icon" type="image/gif" href="../Content/images/logoH.png"/>
     <link rel="stylesheet" href="../Content/css/normalize.css">
     <link rel="stylesheet" href="../Content/css/font-awesome.min.css">
     <link rel="stylesheet" href="../Content/css/common.css">

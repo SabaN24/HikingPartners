@@ -4,11 +4,11 @@ header {
     height: 80px;
     line-height: 80px;
     padding: 0 20px;
-    color: white;
+    color: #1d1d21;
     position: relative;
     margin-bottom: 20px;
     z-index: 1;
-    background-color: rgba(0, 0, 0, .4);
+    background-color: white;
 }
 
 .wrapper {
@@ -93,6 +93,7 @@ footer {
     display: inline-block;
     vertical-align: super;
     line-height: normal;
+    color: #1d1d21;
 }
 
 .logout-block {
@@ -1090,7 +1091,7 @@ input[type="file"] {
 }
 
 .mynav-link.mynav-link {
-    color: white;
+    color: #1d1d21;
     font-family: 'Montserrat', myriad-regular, Helvetica, Arial, sans-serif;
     font-size: 16px;
     transition: .2s color;
@@ -1228,6 +1229,8 @@ input[type="file"] {
     cursor: pointer;
     user-select: none;
     transition: .2s transform;
+    color: #1d1d21;
+
 }
 
 .notifications-toggle.active {
@@ -1235,7 +1238,7 @@ input[type="file"] {
 }
 
 .notifications-toggle:hover {
-    color: #ccc;
+    color: #1d1d21;
 }
 
 .notifications-count {

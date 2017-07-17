@@ -1,8 +1,13 @@
 /*Css styling for login page*/
 
+.login-wrapper{
+    height: 85vh;
+}
+
 .login-content {
     position: relative;
-    top: 200px;
+    top: 50%;
+    transform: translateY(-50%);
     margin: 0 auto;
     width: 400px;
 }

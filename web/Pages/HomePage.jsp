@@ -115,9 +115,8 @@
                     Number of Members
                 </div>
                 <div class="search-input" :class="{ active : numberFilterActive }">
-
-                    <input type="number" v-model="minMembersNum" placeholder="Least" class="number-of-people">
-                    <input type="number" v-model="maxMembersNum" placeholder="Most" class="number-of-people">
+                    <input type="number" v-model="minMembersNum" placeholder="Least" class="number-of-people" min="1">
+                    <input type="number" v-model="maxMembersNum" placeholder="Most" class="number-of-people" min="1">
                 </div>
             </li>
         </ul>
@@ -201,13 +200,13 @@
                     <div class="input-header ">
                         Hike name
                     </div>
-                    <input type="text" class="new-hike-input hike-name-input" v-model="newHike.name">
+                    <input type="text" class="new-hike-input hike-name-input" v-model="newHike.name" maxlength="50">
                 </div>
                 <div class="input-block">
                     <div class="input-header">
                         Max people
                     </div>
-                    <input type="text" class="new-hike-input" v-model="newHike.maxPeople">
+                    <input type="number" class="new-hike-input" v-model="newHike.maxPeople" min="1">
                 </div>
                 <div class="input-block">
                     <div class="input-header">
@@ -544,7 +543,6 @@
             applyFilter: function () {
 
                 var th = this;
-
                 axios({
                     url: "/HikeSearchServlet",
                     method: "post",
@@ -576,7 +574,6 @@
 
             cancelFilter: function () {
                 console.log("cancel");
-
                 this.searchedLocations = [];
                 this.startDate = "";
                 this.endDate = "";

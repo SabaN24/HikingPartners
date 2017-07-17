@@ -4,6 +4,7 @@ import Database.HikeSearchDM;
 import Database.UserInfoDM;
 import Models.Hike.HikeInfo;
 import Models.User;
+import Tests.InputCheckers;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -34,7 +35,7 @@ public class HikeSearchServlet extends HttpServlet {
             String name = (String) data.get("memberName");
             addSearchMember(name, response);
 
-        } else if (option.equals("applyFilter")) {
+        } else if (option.equals("applyFilter") && InputCheckers.checkSearchedInputs(data)) {
 
             Set<HikeInfo> searchedHikes = new HashSet();
 

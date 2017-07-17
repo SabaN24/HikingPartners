@@ -25,6 +25,10 @@ public class HikePageFeedServlet extends HttpServlet {
         int hikeId = Integer.parseInt(request.getParameter("hikeId"));
         List<Member> hikeMembers = MainDM.getInstance().getHikeMembers(hikeId);
         Integer loggedInUser = (Integer) request.getSession().getAttribute("userID");
+        if(loggedInUser == null){
+            Helper.view("Login", request, response);
+            return;
+        }
         int loggedInUserId = loggedInUser;
         boolean loggedInUserIsMember = false;
         for(int i = 0; i < hikeMembers.size(); i++){
