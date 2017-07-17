@@ -15,7 +15,7 @@
 <div class="login-wrapper">
     <div class="login-content">
         <div class="login-logo">
-            <img src="../Content/img/logo.png" alt="" class="login-logo-img">
+            <img src="../Content/img/logo-white.png" alt="" class="login-logo-img">
         </div>
         <div class="login-bar">
             <button class="login-button" class="button" onclick="login();">

@@ -87,9 +87,11 @@ public class MainDM {
      */
     public AboutModel getAboutModel(int id, int userID) {
         AboutModel aboutModel = null;
-        String hikeQuery = constructQuery("hikes", "ID", "" + id);
-        ResultSet hikeResultSet = databaseConnector.getData(hikeQuery);
+        String query = "select * from hikes where ID = ?";
+        PreparedStatement ps = databaseConnector.getPreparedStatement(query);
         try {
+            ps.setInt(1, id);
+            ResultSet hikeResultSet = databaseConnector.getDataWithPreparedStatement(ps);
             while (hikeResultSet.next()) {
                 Date startDate = (Date)hikeResultSet.getObject("start_date");
                 Date endDate = (Date)hikeResultSet.getObject("end_date");
@@ -186,8 +188,16 @@ public class MainDM {
      * @return MiniUser class built on information from database
      */
     public User getUserById(int userID) {
-        String query = constructQuery("users", "id", "" + userID);
-        ResultSet rs = databaseConnector.getData(query);
+        String query = "select * from users where id = ?";
+        PreparedStatement ps = databaseConnector.getPreparedStatement(query);
+        ResultSet rs = null;
+        try {
+            ps.setInt(1, userID);
+            rs = databaseConnector.getDataWithPreparedStatement(ps);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         User user = createUserFromResultSet(rs);
         return user;
     }
@@ -199,16 +209,20 @@ public class MainDM {
      * @return DefaultModel class built from information about given hike
      */
     public DefaultModel getDefaultModel(int hikeId) {
-        String hikeQuery = constructQuery("hikes", "ID", "" + hikeId);
-        ResultSet hikeResultSet = databaseConnector.getData(hikeQuery);
+        String query = "select * from hikes where ID = ?";
+        PreparedStatement ps = databaseConnector.getPreparedStatement(query);
         String name = null;
+
         try {
+            ps.setInt(1, hikeId);
+            ResultSet hikeResultSet = databaseConnector.getDataWithPreparedStatement(ps);
             while (hikeResultSet.next()) {
                 name = hikeResultSet.getString("hike_name");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         User creator = getCreator(hikeId);
         List<Photo> coverPhotos = getCoverPhotos(hikeId);
         DefaultModel defaultModel = new DefaultModel(hikeId, name, creator, coverPhotos);
@@ -223,9 +237,12 @@ public class MainDM {
      * @return list of posts
      */
     public List<Post> getPosts(int hikeID, int userID) {
-        ResultSet rs = databaseConnector.getData("Select * from posts where hike_ID = " + hikeID + ";");
+        String query = "select * from posts where hike_ID = ?";
+        PreparedStatement ps = databaseConnector.getPreparedStatement(query);
         List<Post> posts = new ArrayList<>();
         try {
+            ps.setInt(1, hikeID);
+            ResultSet rs = databaseConnector.getDataWithPreparedStatement(ps);
             while (rs.next()) {
                 int id = rs.getInt("ID");
                 String text = rs.getString("post_text");
@@ -394,20 +411,6 @@ public class MainDM {
             e.printStackTrace();
         }
         return coverPhotos;
-    }
-
-
-    /**
-     * Creates sql query with given parameters.
-     *
-     * @param table  table from we get information
-     * @param column column name
-     * @param id column value
-     * @return decorated query
-     */
-    private String constructQuery(String table, String column, String id) {
-        String query = "SELECT * FROM " + table + " WHERE " + column + " = " + "\"" + id + "\";";
-        return query;
     }
 
     /**
