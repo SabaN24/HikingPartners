@@ -93,17 +93,17 @@ public class HikeSearchDM {
 
     /**
      * Gets list of hikes which match member name parameter given in search.
-     * @param searchedName name of hike which user searched
+     *
      * @return list of matching hikes
      */
-    public List<HikeInfo> getSearchedHikesByMemberName(String searchedName) {
-        String query = "select hike_id FROM hike_to_user inner join users where user_ID = users.id and concat(concat(first_name, \" \"), last_name) like ?";
+    public List<HikeInfo> getSearchedHikesByMemberName(String ID) {
+        String query = "select hike_id FROM hike_to_user inner join users where user_ID = users.id and users.id = ?";
         PreparedStatement pst = databaseConnector.getPreparedStatement(query);
         Set<Integer> searchedHikeIds = new HashSet<>();
 
         List<HikeInfo> searchedHikes = new ArrayList<>();
         try {
-            pst.setString(1, "%" + searchedName + "%");
+            pst.setString(1, ID);
             ResultSet resultSet = databaseConnector.getDataWithPreparedStatement(pst);
             while (resultSet.next()) {
                 searchedHikeIds.add(resultSet.getInt(1));
@@ -139,6 +139,35 @@ public class HikeSearchDM {
             e.printStackTrace();
         }
         return searchedHikes;
+    }
+
+
+    /**
+     * gets hikes from range min and max number of members in hike
+     * @param min minimum number of going person
+     * @param max maximum number of going person
+     * @return
+     */
+    public List<HikeInfo> getSearchedHikesByMemberNumber(String min, String max){
+        List<HikeInfo> searchedHikes = new ArrayList<>();
+
+        String query = "SELECT * from hikes where max_people > ? and max_people < ?";
+        PreparedStatement pst = databaseConnector.getPreparedStatement(query);
+
+        try {
+            pst.setString(1, min + "");
+            pst.setString(2, max + "");
+            ResultSet resultSet = databaseConnector.getDataWithPreparedStatement(pst);
+            while (resultSet.next()) {
+                searchedHikes.add(hikeDM.getHikeById(resultSet.getInt(1)));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+        return searchedHikes;
+
     }
 }
 

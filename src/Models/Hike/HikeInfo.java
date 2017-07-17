@@ -84,4 +84,10 @@ public class HikeInfo extends DefaultModel {
         return false;
     }
 
+
+    @Override
+    public int hashCode() {
+        return ((Integer)this.getId()).hashCode();
+    }
+
 }

@@ -196,6 +196,32 @@ public class UserInfoDM {
         return null;
     }
 
+
+    /**
+     * Returns user object with given name.
+     * @param searchedName name of user
+     * @return user object
+     */
+    public User getUserByName(String searchedName){
+
+        String query = "select id from users where concat(concat(first_name, \" \"), last_name) like ?";
+        PreparedStatement pst = databaseConnector.getPreparedStatement(query);
+
+        try {
+            pst.setString(1, "%" + searchedName + "%");
+            ResultSet resultSet = databaseConnector.getDataWithPreparedStatement(pst);
+            if (resultSet.next()) {
+               int ID = resultSet.getInt(1);
+               return getUserByID(ID);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
     /**
      * Updates "about-me-text" of user with given id.
      * @param userId id of user

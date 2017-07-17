@@ -1386,3 +1386,36 @@ input[type="file"] {
     right: 20px;
     bottom: 40px;
 }
+
+.filter-bar{
+    display: inline-block;
+    /*vertical-align: middle;*/
+    /*height: 500px;*/
+    width: 260px;
+    margin-left: 30px;
+    background: white;
+    border: 0;
+    border-radius: 3px 3px 0 0;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .3);
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 15px;
+}
+
+
+
+
+.filter-bar-name {
+    background: indianred;
+    color: white;
+    height: 26px;
+    line-height: 26px;
+}
+
+
+
+.each-filter-name{
+    background: blueviolet;
+    color: white;
+    height: 26px;
+    line-height: 26px;
+}

@@ -9,35 +9,112 @@
 <%--<link href="https://fonts.googleapis.com/css?family=Montserrat|Quicksand" rel="stylesheet">--%>
 <script> document.querySelectorAll('title')[0].innerHTML = 'Home'; </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+      integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
 <link rel="stylesheet" href="/Content/css/bootstrap-datepicker.min.css">
 <script src="/Scripts/bootstrap-datepicker.min.js"></script>
 <link rel="stylesheet" href="/Content/css/GoogleMaps.css">
 <link rel="stylesheet" href="/Content/css/common.css">
 <link rel="stylesheet" href="/Content/css/main.css">
 
-<div class="searchItems">
-    <div class="search-bars">
-        <input id="location-search" type="text" placeholder="Search">
-        <input id="hike-name-search" type="text" placeholder="Search">
-        <input id="member-name-search" type="text" placeholder="Search">
-        <input id="date-search" type="text" placeholder="Search" class="datepicker dateSearch" v-model="searchedDate" oninput="radioButtonChecks()">
-    </div>
-    <div class="radio-buttons">
-        <form>
-            <input type="radio" name="filter" id="location" checked="checked" onclick="radioButtonChecks()">Location
-            <input type="radio" name="filter" id="hikeName" onclick="radioButtonChecks()">Hike Name
-            <input type="radio" name="filter" id="memberName" onclick="radioButtonChecks()">Member Name
-            <input type="radio" name="filter" id="date"  onclick="radioButtonChecks()">Date<p></p>
-        </form>
-    </div>
 
+<div class="searchItems">
+
+    <input id="hike-name-search" type="text" onkeyup="searchByName()" placeholder="Search Hike..">
 
 </div>
 
+
+
+<aside style="color: black;">
+    <div class="filter-bar" id="filter">
+        <div class="filter-bar-name"> Filter results</div>
+
+        <ul>
+            <li>
+                <div class="each-filter-name">
+                    <button> .</button>
+                    Locations
+                </div>
+
+                    <input id="location-search" v-model="newLocationInput" v-model="lat" v-model="lng "type="text" autocomplete="off"
+                           name="addLocation"
+                           placeholder="Search Location">
+
+                <ul>
+                    <li class="each-search-loc" v-for="loc in searchedLocations">
+                        {{loc.name}}
+                    </li>
+                </ul>
+
+
+            </li>
+            <li>
+                <div class="each-filter-name">
+                    <button> .</button>
+                    Date
+                </div>
+
+                <div class="input-block">
+                    <div class="input-header">
+                        Start Date
+                    </div>
+                    <input type="text" class="datepicker search-start-date" v-model="startDate">
+                </div>
+                <div class="input-block">
+                    <div class="input-header">
+                        End Date
+                    </div>
+                    <input type="text" class="datepicker search-end-date" v-model="endDate">
+                </div>
+
+            </li>
+            <li>
+                <div class="each-filter-name">
+                    <button> .</button>
+                    Members
+                </div>
+
+                <form action="" @submit.prevent="addSearchMember()" method="post">
+                    <input id="member-search" v-model="newMemberInput" type="text" autocomplete="off"
+                           name="searchMember"
+                           placeholder="Search Member">
+                </form>
+
+                <ul>
+                    <li class="each-search-member" v-for="member in members">
+
+                        <div class="avatar-block" :style="{ backgroundImage: 'url(' + member.profilePictureAddress + ')' }"></div>
+                        {{member.firstName}} {{member.lastName}}
+                    </li>
+                </ul>
+
+
+            </li>
+            <li>
+                <div class="each-filter-name">
+                    <button> .</button>
+                    Members Number
+                </div>
+
+                <input type="number" v-model="minMembersNum" placeholder="min">
+                <input type="number" v-model="maxMembersNum" placeholder="max">
+            </li>
+        </ul>
+
+        <button @click="applyFilter">apply</button>
+        <button @click="cancelFilter">cancel</button>
+
+    </div>
+</aside>
+
 <div id="vueapp">
+
 
     <div class="main-content hike-container">
         <ul class="hikes-list">
@@ -71,10 +148,16 @@
                     </div>
 
                     <template v-if="hike.userStatus != <%= HikeInfoExtended.MEMBER %>">
-                        <button v-if="hike.joinedPeople < hike.maxPeople && hike.userStatus == <%= HikeInfoExtended.NOT_MEMBER %>" class="mybtn submit-request"
-                                @click="sendRequest(hike.id)">Send Request</button>
-                        <div v-if="hike.joinedPeople == hike.maxPeople && hike.userStatus != <%= HikeInfoExtended.REQUEST_SENT %>" class="mybtn submit-request request-info">Hike is full</div>
-                        <div v-if="hike.userStatus == <%= HikeInfoExtended.REQUEST_SENT %>" class="mybtn submit-request request-info">Request sent</div>
+                        <button v-if="hike.joinedPeople < hike.maxPeople && hike.userStatus == <%= HikeInfoExtended.NOT_MEMBER %>"
+                                class="mybtn submit-request"
+                                @click="sendRequest(hike.id)">Send Request
+                        </button>
+                        <div v-if="hike.joinedPeople == hike.maxPeople && hike.userStatus != <%= HikeInfoExtended.REQUEST_SENT %>"
+                             class="mybtn submit-request request-info">Hike is full
+                        </div>
+                        <div v-if="hike.userStatus == <%= HikeInfoExtended.REQUEST_SENT %>"
+                             class="mybtn submit-request request-info">Request sent
+                        </div>
                     </template>
 
                 </div>
@@ -141,7 +224,8 @@
                 <span class="new-hike-added-images" v-for="(picture, index) in pictures">
                     <div class="new-post-img">
                         <img v-bind:src="picture.src" alt="">
-                        <div class="photo-remove-button" @click="removePicture(index)"><i class="fa fa-window-close"></i></div>
+                        <div class="photo-remove-button" @click="removePicture(index)"><i
+                                class="fa fa-window-close"></i></div>
                         <div class="edit-img-block" @click="openImgDescription(index)">
                             <i class="fa fa-pencil fa-2" aria-hidden="true"></i>
                         </div>
@@ -165,82 +249,29 @@
 <script src="../Scripts/axios.min.js"></script>
 <script src="../Scripts/vue.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAN41T3N0B5Tx61omm8n9ZX6quK4FvG1jk&libraries=places&callback=initAutocomplete"
-async defer></script>
-
-
-
+        async defer></script>
 
 
 <script>
-    var locationSearch = document.getElementById("location-search");
+
     var hikeNameSearch = document.getElementById("hike-name-search");
-    var memberNameSearch = document.getElementById("member-name-search");
-    var dateSearch = document.getElementById("date-search");
-    radioButtonChecks();
+
+    var searChData = JSON.stringify({hikeName: '', option: "hikeName"});//searched data. mainly for search with hike name
 
 
-    var data = ""; //searched location data.
-    hideShowSearchBars("location-search", "hike-name-search", "member-name-search", "date-search");
-    function hideShowSearchBars(block, none1, none2, none3){
-        document.getElementById(block).style.display = 'inline-block';
-        document.getElementById(none1).style.display = 'none';
-        document.getElementById(none2).style.display = 'none';
-        document.getElementById(none3).style.display = 'none';
-    }
+    function searchByName() {
 
-    function radioButtonChecks() {
-        if(document.getElementById("location").checked){
-            hideShowSearchBars("location-search", "hike-name-search", "member-name-search", "date-search");
-            locationSearch.addEventListener("input", function () {
-                if (locationSearch.value === "") {
-                    app.redisplayAllHike();
-                    return;
-                }
-                var hikeSearchBox = new google.maps.places.SearchBox(locationSearch);
-                hikeSearchBox.addListener('places_changed', function () {
+        document.getElementById("hike-name-search").addEventListener("input", function () {
 
-                    var places = hikeSearchBox.getPlaces();
-                    var locationLat = 92.0;
-                    var locationLng = 182.0;
 
-                    if (places.length != 0) {
-                        locationLat = places[Object.keys(places)[0]].geometry.location.lat();
-                        locationLng = places[Object.keys(places)[0]].geometry.location.lng();
-                    }
-                    data = JSON.stringify({lat: locationLat + '', lng: locationLng + '', option: "location"});
+            if (hikeNameSearch.value === "") {
+                app.redisplayAllHike();
+                return;
+            }
+            searchData = JSON.stringify({hikeName: hikeNameSearch.value + '', option: "hikeName"});
+            app.hikeNameSearch();
 
-                    app.locationSearch();
-
-                });
-            });
-        }else if(document.getElementById("hikeName").checked){
-            hideShowSearchBars("hike-name-search", "location-search", "member-name-search", "date-search");
-            hikeNameSearch.addEventListener("input", function () {
-                if (hikeNameSearch.value === "") {
-                    app.redisplayAllHike();
-                    return;
-                }
-                data = JSON.stringify({hikeName: hikeNameSearch.value + '', option: "hikeName"});
-
-                app.hikeNameSearch();
-
-            });
-        }else if(document.getElementById("memberName").checked){
-
-            hideShowSearchBars("member-name-search", "hike-name-search", "location-search",  "date-search");
-
-            memberNameSearch.addEventListener("input", function () {
-                if (memberNameSearch.value === "") {
-                    app.redisplayAllHike();
-                    return;
-                }
-                data = JSON.stringify({memberName: memberNameSearch.value + '', option: "memberName"});
-
-                app.memberNameSearch();
-            });
-        }else if(document.getElementById("date").checked){
-            hideShowSearchBars("date-search", "member-name-search", "hike-name-search", "location-search");
-        }
+        });
     }
 
 
@@ -263,7 +294,25 @@ async defer></script>
         var searchBox = new google.maps.places.SearchBox(input);
         map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
-        google.maps.event.addListener(map, 'click', function(event) {
+        var locationSearch = document.getElementById("location-search");
+
+        var hikeSearchBox = new google.maps.places.SearchBox(locationSearch);
+        hikeSearchBox.addListener('places_changed', function () {
+
+            var places = hikeSearchBox.getPlaces();
+            var locationLat = 92.0;
+            var locationLng = 182.0;
+
+            if (places.length != 0) {
+                locationLat = places[Object.keys(places)[0]].geometry.location.lat();
+                locationLng = places[Object.keys(places)[0]].geometry.location.lng();
+            }
+
+            filterVue.searchedLocations.push({name: filterVue.newLocationInput, lat: locationLat + '', lng: locationLng + '',});
+
+        });
+
+        google.maps.event.addListener(map, 'click', function (event) {
             placeMarker(event.latLng);
         });
 
@@ -280,27 +329,27 @@ async defer></script>
 
             var marker = new google.maps.Marker({
                 position: location,
-                draggable:true,
+                draggable: true,
                 map: map
             });
 
             var startLoc = {
                 lat: "",
                 lng: ""
-            }
+            };
 
 
-            google.maps.event.addListener(marker, 'dragstart', function(evt) {
+            google.maps.event.addListener(marker, 'dragstart', function (evt) {
                 startLoc.lat = evt.latLng.lat();
                 startLoc.lng = evt.latLng.lng();
             });
-            google.maps.event.addListener(marker, 'dragend', function(evt) {
+            google.maps.event.addListener(marker, 'dragend', function (evt) {
                 var endLoc = {
                     lat: evt.latLng.lat(),
                     lng: evt.latLng.lng()
                 }
-                for(var i=0; i<locationsArray.length; i++){
-                    if(JSON.stringify(locationsArray[i]) === JSON.stringify(startLoc)){
+                for (var i = 0; i < locationsArray.length; i++) {
+                    if (JSON.stringify(locationsArray[i]) === JSON.stringify(startLoc)) {
                         delete locationsArray[i];
                         locationsArray.splice(i, 1, endLoc);
                     }
@@ -309,7 +358,7 @@ async defer></script>
         }
 
         // Bias the SearchBox results towards current map's viewport.
-        map.addListener('bounds_changed', function() {
+        map.addListener('bounds_changed', function () {
             searchBox.setBounds(map.getBounds());
         });
 
@@ -321,14 +370,14 @@ async defer></script>
 
         // Listen for the event fired when the user selects a prediction and retrieve
         // more details for that place.
-        searchBox.addListener('places_changed', function() {
+        searchBox.addListener('places_changed', function () {
             var places = searchBox.getPlaces();
 
             if (places.length == 0) {
                 return;
             }
             // Clear out the old markers.
-            markers.forEach(function(marker) {
+            markers.forEach(function (marker) {
                 marker.setMap(null);
             });
 
@@ -336,7 +385,7 @@ async defer></script>
 
             // For each place, get the icon, name and location.
             var bounds = new google.maps.LatLngBounds();
-            places.forEach(function(place) {
+            places.forEach(function (place) {
                 if (!place.geometry) {
                     console.log("Returned place contains no geometry");
                     return;
@@ -368,7 +417,7 @@ async defer></script>
             map.fitBounds(bounds);
 
         });
-        google.maps.event.addListenerOnce(map, 'mouseover', function() {
+        google.maps.event.addListenerOnce(map, 'mouseover', function () {
             google.maps.event.trigger(map, 'resize');
             map.panTo(center);
         });
@@ -382,7 +431,7 @@ async defer></script>
         var form = document.createElement("form");
         form.setAttribute("method", method);
         form.setAttribute("action", path);
-        for(var i=0; i<params.length; i++){
+        for (var i = 0; i < params.length; i++) {
             var hiddenField = document.createElement("input");
             hiddenField.setAttribute("type", "hidden");
             hiddenField.setAttribute("name", i + "");
@@ -414,6 +463,126 @@ async defer></script>
         return value.substr(0, value.length - 6);
     });
 
+
+
+    var filterVue = new Vue({
+
+        el: '#filter',
+        data: {
+            searchedLocations: [],
+            startDate: "",
+            endDate: "",
+            minMembersNum: "",
+            maxMembersNum: "",
+            members: [],
+            newLocationInput: "",
+            newMemberInput: "",
+        },
+
+
+        mounted: function () {
+
+            var th = this;
+
+            $(".datepicker.search-start-date").datepicker({
+                weekStart: 1,
+                format: "dd/mm/yyyy",
+            }).on("changeDate", (e) => {
+                    th.startDate = e.target.value;
+                }
+            );
+            $(".datepicker.search-end-date").datepicker({
+                weekStart: 1,
+                format: "dd/mm/yyyy"
+            }).on("changeDate", (e) => {
+                    th.endDate = e.target.value;
+                }
+            );
+
+        },
+
+        methods: {
+
+            applyFilter: function () {
+
+                var th = this;
+
+                axios({
+                    url: "/HikeSearchServlet",
+                    method: "post",
+                    params: {
+                        data: JSON.stringify({
+                            option: "applyFilter",
+                            searchedLocations: th.searchedLocations,
+                            minMembersNum: th.minMembersNum,
+                            maxMembersNum: th.maxMembersNum,
+                            members: th.members,
+                            startDate: th.startDate,
+                            endDate: th.endDate,
+                            hikeName: hikeNameSearch.value,
+                        })
+                    }
+                }).then(function (response) {
+
+                    app.hikes = response.data.reverse();
+
+                    if (app.hikes.length == 0) {//if no such hike was found
+                        document.getElementById("noSearchData").innerHTML = "Such hike cant be found";
+                    } else {
+                        document.getElementById("noSearchData").innerHTML = "";
+                    }
+
+                });
+
+            },
+
+            cancelFilter: function () {
+                console.log("cancel");
+
+                this.searchedLocations = [];
+                this.startDate = "";
+                this.endDate = "";
+                this.minMembersNum = "";
+                this.maxMembersNum = "";
+                this.members = [];
+                this.newLocationInput = "";
+                this.newMemberInput = "";
+                this.lat = "";
+                this.lng = "";
+
+                app.fetchHikes();//canceling filter shows every hike
+            },
+
+
+            addSearchMember: function () {
+
+                var th = this;
+
+                axios({
+                    url: "/HikeSearchServlet",
+                    method: "post",
+                    params: {data: JSON.stringify({option: "memberName", memberName: th.newMemberInput + '',})}
+                }).then(function (response) {
+                    if (response.data !== null) {
+
+                        var member = response.data;
+                        var idx = th.members.findIndex(x => x.id === member.id);
+                        if(idx == -1){
+                            th.members.push(member);
+                        }
+
+                    }
+
+                });
+
+                th.newMemberInput = "";
+
+            }
+
+        }
+
+    });
+
     var app = new Vue({
         el: '#vueapp',
         data: {
@@ -437,12 +606,9 @@ async defer></script>
         },
 
         created: function () {
-            var th = this;
-            axios.post("/HikesListServlet", {}).then(function (response) {
-                th.hikes = response.data.reverse();
-            });
+            this.fetchHikes();
         },
-        mounted: function() {
+        mounted: function () {
             var th = this;
             $(".datepicker.startDate").datepicker({
                 weekStart: 1,
@@ -458,39 +624,14 @@ async defer></script>
                     th.newHike.endDate = e.target.value;
                 }
             );
-            $(".datepicker.dateSearch").datepicker({
-                weekStart: 1,
-                format: "dd/mm/yyyy",
-                multidate: true
-            }).on("changeDate", (e) => {
-                    var th = this;
-                    th.searchedDate = e.target.value;
-                    console.log(th.searchedDate);
-                    if(th.searchedDate.length >= 21){
-                        data = JSON.stringify({date: th.searchedDate + '', option: "date"});
-                        axios({url:"/HikeSearchServlet", method:"post", params:{data:data}}).then(function (response) {
-                            th.hikes = response.data.reverse();
-                            if(th.hikes.length == 0){
-                                document.getElementById("noSearchData").innerHTML = "No results for those dates";
-                            }else{
-                                document.getElementById("noSearchData").innerHTML = ""
-                            }
-                        });
-                    }
-                }
-            );
         },
 
         methods: {
-            locationSearch: function () {
+
+            fetchHikes: function () {
                 var th = this;
-                axios({url:"/HikeSearchServlet", method:"post", params:{data:data}}).then(function (response) {
+                axios.post("/HikesListServlet", {}).then(function (response) {
                     th.hikes = response.data.reverse();
-                    if(th.hikes.length == 0){
-                        document.getElementById("noSearchData").innerHTML = "No results for that location";
-                    }else{
-                        document.getElementById("noSearchData").innerHTML = ""
-                    }
                 });
             },
 
@@ -504,43 +645,35 @@ async defer></script>
 
             hikeNameSearch: function () {
                 var th = this;
-                axios({url:"/HikeSearchServlet", method:"post", params:{data:data}}).then(function (response) {
+                axios({
+                    url: "/HikeSearchServlet",
+                    method: "post",
+                    params: {data: searchData}
+                }).then(function (response) {
                     th.hikes = response.data.reverse();
-                    if(th.hikes.length == 0){
+                    if (th.hikes.length == 0) {
                         document.getElementById("noSearchData").innerHTML = "No results for that name";
-                    }else{
+                    } else {
                         document.getElementById("noSearchData").innerHTML = "";
                     }
                 });
             },
 
-            memberNameSearch: function () {
-                var th = this;
-                axios({url:"/HikeSearchServlet", method:"post", params:{data:data}}).then(function (response) {
-                    th.hikes = response.data.reverse();
-                    if(th.hikes.length == 0){
-                        document.getElementById("noSearchData").innerHTML = "No results for that name";
-                    }else{
-                        document.getElementById("noSearchData").innerHTML = ""
-                    }
-                });
-            },
 
-
-            showPopup: function(){
+            showPopup: function () {
                 this.submitted = false;
                 this.popupIsActive = true;
             },
-            addHike: function(){
-                if(this.submitted) return;
+            addHike: function () {
+                if (this.submitted) return;
                 this.submitted = true;
                 var th = this;
-                axios({url: "/AddHikeServlet", method: "post", params: th.newHike}).then(function(response){
+                axios({url: "/AddHikeServlet", method: "post", params: th.newHike}).then(function (response) {
                     th.addLocation(response.data.hikeID + '');
                 });
 
             },
-            closePopup: function(){
+            closePopup: function () {
                 this.newHike = {};
                 this.newHikePage = 1;
                 this.popupIsActive = false;
@@ -553,20 +686,22 @@ async defer></script>
                 reload();
             },
 
-            sendRequest: function(hikeId){
+            sendRequest: function (hikeId) {
                 axios.post("/SendRequest?hikeId=" + hikeId, {});
-                this.hikes.find(function(x){return x.id == hikeId;}).userStatus = <%= HikeInfoExtended.REQUEST_SENT %>;
+                this.hikes.find(function (x) {
+                    return x.id == hikeId;
+                }).userStatus = <%= HikeInfoExtended.REQUEST_SENT %>;
             },
 
-            addLocation: function(hikeID){
+            addLocation: function (hikeID) {
                 var self = this;
-                var data = JSON.stringify({hikeID:hikeID, locations:locationsArray});
-                axios({url:"/LocationsServlet", method:"post", params:{data:data}}).then(function(response){
+                var data = JSON.stringify({hikeID: hikeID, locations: locationsArray});
+                axios({url: "/LocationsServlet", method: "post", params: {data: data}}).then(function (response) {
                     self.uploadPictures(hikeID);
                 });
             },
 
-            addPicture: function(){
+            addPicture: function () {
                 var input = document.createElement("input");
                 var self = this;
                 input.setAttribute("name", "pictures");
@@ -580,7 +715,7 @@ async defer></script>
                 document.querySelector("#form-pictures").insertBefore(input, document.querySelector("#form-pictures").children[self.pictures.length]);
                 document.querySelector("#form-pictures").insertBefore(descriptionInput, document.querySelector("#form-pictures").children[0]);
                 input.click();
-                input.onchange = function(event){
+                input.onchange = function (event) {
                     var input = event.target;
                     if (input.files && input.files[0]) {
                         var reader = new FileReader();
@@ -595,38 +730,38 @@ async defer></script>
                 }
             },
 
-            removePicture: function(index){
+            removePicture: function (index) {
                 var length = document.querySelector("#form-pictures").children.length / 2;
                 document.querySelector("#form-pictures").removeChild(document.querySelector("#form-pictures").children[index]);
                 document.querySelector("#form-pictures").removeChild(document.querySelector("#form-pictures").children[length + index - 1]);
                 this.pictures.splice(index, 1);
             },
 
-            insertNewHike: function(hikeID){
+            insertNewHike: function (hikeID) {
                 var self = this;
-                axios.get("/HikeInfo?hikeID=" + hikeID).then(function(response){
+                axios.get("/HikeInfo?hikeID=" + hikeID).then(function (response) {
                     self.hikes.unshift(response.data);
                     self.closePopup();
                 });
             },
 
-            uploadPictures: function(hikeID){
+            uploadPictures: function (hikeID) {
                 var self = this;
-                axios.post('/UploadCover?hikeID=' + hikeID, new FormData(document.querySelector("#form-pictures"))).then(function(response){
-                    if(response.status == 200){
+                axios.post('/UploadCover?hikeID=' + hikeID, new FormData(document.querySelector("#form-pictures"))).then(function (response) {
+                    if (response.status == 200) {
                         self.insertNewHike(hikeID);
-                    }else{
+                    } else {
                         self.uploadingPicture = false;
                     }
                 });
             },
 
-            submitImgDescription: function(){
+            submitImgDescription: function () {
                 document.querySelector("#form-pictures").children[this.popupImgIndex].value = this.editImgDescription;
                 this.popupImgShow = false;
             },
 
-            openImgDescription: function(index){
+            openImgDescription: function (index) {
                 this.popupImgIndex = index;
                 this.popupImg = this.pictures[index];
                 var children = document.querySelector("#form-pictures").children;
