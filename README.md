@@ -8,6 +8,7 @@ Hiking Partners is a web application, which will be used by people who want to g
 Java codes are written using Google Java Style. (See example here: https://google.github.io/styleguide/javaguide.html).
 
 Used client-side frameworks: Vue.js (see here: https://vuejs.org/) and Bootstrap (see here: http://getbootstrap.com/).
+
 Used Libraries: LightBox (see here: http://lokeshdhakar.com/projects/lightbox2/), Normalize.css (see here: https://necolas.github.io/normalize.css/), jQuery (see here: https://jquery.com/) and Font Awesome (see here: http://fontawesome.io/).
 
 # Main features
