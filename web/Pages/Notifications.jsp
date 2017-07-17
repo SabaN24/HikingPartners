@@ -56,13 +56,14 @@
         created: function () {
             var th = this;
             axios.post("/GetNotifications", {}).then(function(response){
-                th.notifications = response.data;
+                th.notifications = response.data.reverse();
             });
         },
 
         methods: {
 
             respondToRequest: function(requestId, response, index) {
+                console.log(requestId + " " + response);
                 axios({url: "/RespondToRequest", method:"post", params:{requestId: requestId, response: response}});
                 this.notifications.splice(index, 1);
             },

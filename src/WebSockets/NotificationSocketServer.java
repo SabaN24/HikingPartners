@@ -153,7 +153,7 @@ public class NotificationSocketServer {
         String hikeName = HikeDM.getInstance().getHikeById(hikeId).getName();
         int seen = 0;
         if (follower != userId) {
-            int id = NotificationsDM.getInstance().addNotification(follower, notificationDate, 3, -1, userId, -1, hikeId, hikeName, seen);
+            int id = NotificationsDM.getInstance().addNotification(follower, notificationDate, 1, -1, userId, requestID, hikeId, hikeName, seen);
             User sender = UserInfoDM.getInstance().getUserByID(userId);
             Notification notification = new Notification(id, follower, currDate, type, null, sender, requestID, hikeId, hikeName, seen);
             sendNotification(notification, follower, userId);
