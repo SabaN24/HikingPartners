@@ -30,67 +30,79 @@
 </div>
 
 
-
 <aside style="color: black;">
     <div class="filter-bar" id="filter">
-        <div class="filter-bar-name"> Filter results</div>
+        <div class="filter-bar-name" style="padding-left: 5px;"> Filters</div>
 
         <ul>
             <li>
                 <div class="each-filter-name">
-                    <button> .</button>
+                    <button class="filter-button" :class="{ active : locationsFilterActive }"
+                            @click="toggleLocationsFilter()"><i class="fa fa-caret-down"
+                                                                aria-hidden="true"></i></button>
                     Locations
                 </div>
 
-                    <input id="location-search" v-model="newLocationInput" v-model="lat" v-model="lng "type="text" autocomplete="off"
+                <div class="search-input" :class="{ active : locationsFilterActive }">
+                    <input id="location-search" v-model="newLocationInput" v-model="lat" v-model="lng " type="text"
+                           autocomplete="off"
                            name="addLocation"
-                           placeholder="Search Location">
+                           placeholder="Enter Location"
+                           style="width: 100%; height: 30px; padding-left: 10px; margin-top: 0px">
 
-                <ul>
-                    <li class="each-search-loc" v-for="loc in searchedLocations">
-                        {{loc.name}}
-                    </li>
-                </ul>
-
-
-            </li>
-            <li>
-                <div class="each-filter-name">
-                    <button> .</button>
-                    Date
-                </div>
-
-                <div class="input-block">
-                    <div class="input-header">
-                        Start Date
-                    </div>
-                    <input type="text" class="datepicker search-start-date" v-model="startDate">
-                </div>
-                <div class="input-block">
-                    <div class="input-header">
-                        End Date
-                    </div>
-                    <input type="text" class="datepicker search-end-date" v-model="endDate">
+                    <ul class="found-locations">
+                        <li class="each-search-loc" v-for="(loc, index) in searchedLocations">
+                            {{loc.name}}
+                            <button class="remove-search-result" @click="removeSearchLocation(index)">X</button>
+                        </li>
+                    </ul>
                 </div>
 
             </li>
             <li>
                 <div class="each-filter-name">
-                    <button> .</button>
-                    Members
+                    <button class="filter-button" :class="{ active : datesFilterActive }" @click="toggleDatesFilter()">
+                        <i class="fa fa-caret-down" aria-hidden="true"></i></button>
+                    Dates
                 </div>
 
-                <form action="" @submit.prevent="addSearchMember()" method="post">
-                    <input id="member-search" v-model="newMemberInput" type="text" autocomplete="off"
-                           name="searchMember"
-                           placeholder="Search Member">
-                </form>
+                <div class="search-input" :class="{ active : datesFilterActive }">
+                    <div class="input-block">
 
-                <ul>
-                    <li class="each-search-member" v-for="member in members">
+                        <input type="text" class="datepicker search-start-date" v-model="startDate"
+                               style="border: 1px solid #ccc; margin-bottom: 10px; padding-left: 10px;"
+                               placeholder="Enter Start Date">
+                    </div>
+                    <div class="input-block">
+                        <input type="text" class="datepicker search-end-date" v-model="endDate"
+                               style="border: 1px solid #ccc; margin-bottom: 10px; padding-left: 10px;"
+                               placeholder="Enter End Date">
+                    </div>
+                </div>
 
-                        <div class="avatar-block" :style="{ backgroundImage: 'url(' + member.profilePictureAddress + ')' }"></div>
+            </li>
+            <li>
+                <div class="each-filter-name">
+                    <button class="filter-button" :class="{ active : memberNameFilterActive }"
+                            @click="toggleMembersFilter()"><i class="fa fa-caret-down" aria-hidden="true"></i></button>
+                    Members' Names
+                </div>
+
+                <div class="search-input" :class="{ active : memberNameFilterActive }">
+                    <form action="" @submit.prevent="addSearchMember()" method="post">
+                        <input id="member-search" v-model="newMemberInput" type="text" autocomplete="off"
+                               name="searchMember"
+                               placeholder="Enter Member Name">
+                    </form>
+                </div>
+
+                <ul class="found-members">
+                    <li class="each-search-member" v-for="(member, index) in members">
+
+                        <div class="avatar-block"
+                             :style="{ backgroundImage: 'url(' + member.profilePictureAddress + ')' }"></div>
                         {{member.firstName}} {{member.lastName}}
+                        <button class="remove-search-result" @click="removeSearchMember(index)">X</button>
                     </li>
                 </ul>
 
@@ -98,17 +110,20 @@
             </li>
             <li>
                 <div class="each-filter-name">
-                    <button> .</button>
-                    Members Number
+                    <button class="filter-button" :class="{ active : numberFilterActive }"
+                            @click="toggleNumberFilter()"><i class="fa fa-caret-down" aria-hidden="true"></i></button>
+                    Number of Members
                 </div>
+                <div class="search-input" :class="{ active : numberFilterActive }">
 
-                <input type="number" v-model="minMembersNum" placeholder="min">
-                <input type="number" v-model="maxMembersNum" placeholder="max">
+                    <input type="number" v-model="minMembersNum" placeholder="Least" class="number-of-people">
+                    <input type="number" v-model="maxMembersNum" placeholder="Most" class="number-of-people">
+                </div>
             </li>
         </ul>
 
-        <button @click="applyFilter">apply</button>
-        <button @click="cancelFilter">cancel</button>
+        <button class="mybtn" @click="applyFilter">Search</button>
+        <button class="mybtn" @click="cancelFilter">Remove Filters</button>
 
     </div>
 </aside>
@@ -308,7 +323,11 @@
                 locationLng = places[Object.keys(places)[0]].geometry.location.lng();
             }
 
-            filterVue.searchedLocations.push({name: filterVue.newLocationInput, lat: locationLat + '', lng: locationLng + '',});
+            filterVue.searchedLocations.push({
+                name: filterVue.newLocationInput,
+                lat: locationLat + '',
+                lng: locationLng + '',
+            });
 
         });
 
@@ -464,7 +483,6 @@
     });
 
 
-
     var filterVue = new Vue({
 
         el: '#filter',
@@ -477,6 +495,10 @@
             members: [],
             newLocationInput: "",
             newMemberInput: "",
+            locationsFilterActive: false,
+            datesFilterActive: false,
+            memberNameFilterActive: false,
+            numberFilterActive: false,
         },
 
 
@@ -502,6 +524,22 @@
         },
 
         methods: {
+
+            toggleLocationsFilter: function () {
+                this.locationsFilterActive = !this.locationsFilterActive;
+            },
+
+            toggleDatesFilter: function () {
+                this.datesFilterActive = !this.datesFilterActive;
+            },
+
+            toggleMembersFilter: function () {
+                this.memberNameFilterActive = !this.memberNameFilterActive;
+            },
+
+            toggleNumberFilter: function () {
+                this.numberFilterActive = !this.numberFilterActive;
+            },
 
             applyFilter: function () {
 
@@ -567,7 +605,7 @@
 
                         var member = response.data;
                         var idx = th.members.findIndex(x => x.id === member.id);
-                        if(idx == -1){
+                        if (idx == -1) {
                             th.members.push(member);
                         }
 
@@ -576,6 +614,14 @@
                 });
 
                 th.newMemberInput = "";
+            },
+
+            removeSearchLocation: function (index) {
+                this.searchedLocations.splice(index,1);
+            },
+
+            removeSearchMember: function (index) {
+                this.members.splice(index,1);
 
             }
 
