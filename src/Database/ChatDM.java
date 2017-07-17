@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by Nodo on 6/29/2017.
@@ -27,11 +28,14 @@ public class ChatDM {
 
     private static ChatDM chm = null;
 
+    private ReentrantLock lockMessages;
+
     /**
      * Private constructor of ChatDM object (Singletone pattern)
      */
     private ChatDM() {
         databaseConnector = DatabaseConnector.getInstance();
+        lockMessages = new ReentrantLock();
     }
 
 
@@ -109,17 +113,18 @@ public class ChatDM {
             newMessage.setInt(1, fromUserId);
             newMessage.setInt(2, toUserId);
             newMessage.setString(3, messageText);
-            newMessage.setDate(4,  new java.sql.Date(date.getTime()));
+            newMessage.setDate(4, new java.sql.Date(date.getTime()));
+            lockMessages.lock();
             databaseConnector.updateDataWithPreparedStatement(newMessage);
-            ResultSet resultSet = databaseConnector.getData("select ID from messages order by ID desc limit 1");
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            }
-        } catch (SQLException e) {
+            int recentlyAdded = DatabaseHelper.getRecentlyAdded("messages");
+            return recentlyAdded;
+        } catch (SQLException e){
             e.printStackTrace();
+            return -1;
         }
-        return -1;
-
+        finally {
+            lockMessages.unlock();
+        }
     }
 
 

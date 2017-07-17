@@ -2,11 +2,13 @@ package Database;
 
 import Models.Notification;
 
+import javax.xml.crypto.Data;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.*;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by Saba on 7/16/2017.
@@ -20,10 +22,13 @@ public class NotificationsDM {
 
     private static NotificationsDM notificationsDM = null;
 
+    private ReentrantLock notificationLock;
+
     /**
      * Private constructor which calls getInstance method.
      */
     private NotificationsDM() {
+        notificationLock = new ReentrantLock();
         databaseConnector = DatabaseConnector.getInstance();
     }
 
@@ -147,16 +152,17 @@ public class NotificationsDM {
             preparedStatement.setInt(7, hikeId);
             preparedStatement.setString(8, hikeName);
             preparedStatement.setInt(9, seen);
+            notificationLock.lock();
             databaseConnector.updateDataWithPreparedStatement(preparedStatement);
-            ResultSet resultSet = databaseConnector.getData("select ID from notifications order by ID desc limit 1");
-            if (resultSet.next()) {
-                int id = resultSet.getInt(1);
-                return id;
-            }
+            int recentlyAdded = DatabaseHelper.getRecentlyAdded("notifications");
+            return recentlyAdded;
         } catch (Exception e) {
             e.printStackTrace();
+            return -1;
         }
-        return -1;
+        finally {
+            notificationLock.unlock();
+        }
     }
 
 }

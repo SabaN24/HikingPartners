@@ -6,6 +6,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by vache on 6/23/2017.
@@ -13,11 +14,15 @@ import java.sql.SQLException;
 public class UserInfoDM {
     private DatabaseConnector databaseConnector;
     private static UserInfoDM userInfoDM = null;
+    private ReentrantLock userLock;
 
     /**
      * Private constructor of HikeSearchDM object (Singletone pattern)
      */
-    private UserInfoDM(){databaseConnector = DatabaseConnector.getInstance();}
+    private UserInfoDM(){
+        userLock = new ReentrantLock();
+        databaseConnector = DatabaseConnector.getInstance();
+    }
 
     /**
      * getInstance method so that class is singletone.
@@ -58,16 +63,17 @@ public class UserInfoDM {
             registerUser.setString(8, "Hello! I am new Hiker!");
             registerUser.setString(9, coverPicURL);
             registerUser.setString(10, facebookLink);
+            userLock.lock();
             databaseConnector.updateDataWithPreparedStatement(registerUser);
-            ResultSet resultSet = databaseConnector.getData("select ID from users order by ID desc limit 1");
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            }
+            int recentlyAdded = DatabaseHelper.getRecentlyAdded("users");
+            return recentlyAdded;
         } catch (SQLException e) {
             e.printStackTrace();
+            return -1;
         }
-
-        return -1;
+        finally {
+            userLock.unlock();
+        }
     }
 
     /**

@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by vache on 6/15/2017.
@@ -17,11 +18,23 @@ public class HikeFeedDM {
 
     private static HikeFeedDM socketDM = null;
 
+    private ReentrantLock likePostLock;
+
+    private ReentrantLock likeCommentLock;
+
+    private ReentrantLock writePostLock;
+
+    private ReentrantLock writeCommentLock;
+
 
     /**
      * Private constructor of HikeFeedDM object (Singletone pattern)
      */
     private HikeFeedDM() {
+        writeCommentLock = new ReentrantLock();
+        writePostLock = new ReentrantLock();
+        likePostLock = new ReentrantLock();
+        likeCommentLock = new ReentrantLock();
         databaseConnector = DatabaseConnector.getInstance();
     }
 
@@ -59,20 +72,21 @@ public class HikeFeedDM {
             preparedStatement.setInt(3, hikeID);
             preparedStatement.setInt(4, userID);
             preparedStatement.setString(5, time);
-            if(photoID == -1){
-                preparedStatement.setNull(6,  java.sql.Types.INTEGER);
-            }else {
-                preparedStatement.setInt(6,  photoID);
+            if (photoID == -1) {
+                preparedStatement.setNull(6, java.sql.Types.INTEGER);
+            } else {
+                preparedStatement.setInt(6, photoID);
             }
+            writePostLock.lock();
             databaseConnector.updateDataWithPreparedStatement(preparedStatement);
-            ResultSet resultSet = databaseConnector.getData("select ID from posts order by ID desc limit 1");
-            if (resultSet.next()) {
-                return resultSet.getInt("ID");
-            }
+            int recentlyAdded = DatabaseHelper.getRecentlyAdded("posts");
+            return recentlyAdded;
         } catch (SQLException e) {
             e.printStackTrace();
+            return -1;
+        } finally {
+            writePostLock.unlock();
         }
-        return -1;
     }
 
     /**
@@ -99,15 +113,16 @@ public class HikeFeedDM {
             } else if (privacyType == 2) {
                 preparedStatement.setInt(6, postID);
             }
+            writeCommentLock.lock();
             databaseConnector.updateDataWithPreparedStatement(preparedStatement);
-            ResultSet resultSet = databaseConnector.getData("select ID from comments order by ID desc limit 1");
-            if (resultSet.next()) {
-                return resultSet.getInt("ID");
-            }
+            int recentlyAdded = DatabaseHelper.getRecentlyAdded("comments");
+            return recentlyAdded;
         } catch (SQLException e) {
             e.printStackTrace();
+            return -1;
+        } finally {
+            writeCommentLock.unlock();
         }
-        return -1;
     }
 
     /**
@@ -138,16 +153,18 @@ public class HikeFeedDM {
             }
             return -1;
         }
+        likeCommentLock.lock();
         databaseConnector.updateDataWithPreparedStatement(preparedStatement);
-        ResultSet resultSet = databaseConnector.getData("select ID from post_likes order by ID desc limit 1");
+        int recentlyAdded = -1;
         try {
-            if (resultSet.next()) {
-                return resultSet.getInt("ID");
-            }
+            recentlyAdded = DatabaseHelper.getRecentlyAdded("post_likes");
+            return recentlyAdded;
         } catch (SQLException e) {
             e.printStackTrace();
+            return recentlyAdded;
+        } finally {
+            likeCommentLock.unlock();
         }
-        return -1;
     }
 
 
@@ -179,16 +196,18 @@ public class HikeFeedDM {
             }
             return -1;
         }
+        likeCommentLock.lock();
         databaseConnector.updateDataWithPreparedStatement(preparedStatement);
-        ResultSet resultSet = databaseConnector.getData("select ID from comment_likes order by ID desc limit 1");
+        int recentlyAdded = -1;
         try {
-            if (resultSet.next()) {
-                return resultSet.getInt("ID");
-            }
+            recentlyAdded = DatabaseHelper.getRecentlyAdded("comment_likes");
+            return recentlyAdded;
         } catch (SQLException e) {
             e.printStackTrace();
+            return recentlyAdded;
+        } finally {
+            likeCommentLock.unlock();
         }
-        return -1;
     }
 
     /**
@@ -241,16 +260,17 @@ public class HikeFeedDM {
 
     /**
      * Retunrs id of creator of given post.
+     *
      * @param postId id of desired post
      * @return id of creator
      */
-    public int getPostCreator(int postId){
+    public int getPostCreator(int postId) {
         String query = "Select user_Id from posts where id = ?;";
         PreparedStatement preparedStatement = databaseConnector.getPreparedStatement(query);
         try {
             preparedStatement.setInt(1, postId);
             ResultSet resultSet = databaseConnector.getDataWithPreparedStatement(preparedStatement);
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 int creator = resultSet.getInt("user_ID");
                 return creator;
             }

@@ -5,11 +5,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
 import Models.Hike.DefaultModel;
 import Models.Hike.HikeInfo;
 import Models.Request;
 import Models.User;
+
+import javax.xml.crypto.Data;
 
 /**
  * Created by Nodo on 6/27/2017.
@@ -22,6 +25,10 @@ public class HikeDM {
     public static final String ATTR = "HikeDM";
 
     private static HikeDM hikeDM = null;
+
+    private ReentrantLock hikeLock;
+
+    private ReentrantLock requestLock;
 
     /**
      * getInstance method to make this class Signletone.
@@ -39,6 +46,8 @@ public class HikeDM {
      * Private constructor which calls getInstance method.
      */
     private HikeDM() {
+        hikeLock = new ReentrantLock();
+        requestLock = new ReentrantLock();
         databaseConnector = DatabaseConnector.getInstance();
     }
 
@@ -63,7 +72,7 @@ public class HikeDM {
             registerHike.setDate(3, new java.sql.Date(endDate.getTime()));
             registerHike.setString(4, description);
             registerHike.setInt(5, maxPeople);
-
+            hikeLock.lock();
             databaseConnector.updateDataWithPreparedStatement(registerHike);
             ResultSet resultSet = databaseConnector.getData("select ID from hikes order by ID desc limit 1");
             if (resultSet.next()) {
@@ -74,10 +83,12 @@ public class HikeDM {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            return -1;
         }
-
+        finally {
+            hikeLock.unlock();
+        }
         return -1;
-
     }
 
     /**
@@ -156,16 +167,17 @@ public class HikeDM {
             addRequest.setInt(1, senderId);
             addRequest.setInt(2, receiverId);
             addRequest.setInt(3, hikeId);
+            requestLock.lock();
             databaseConnector.updateDataWithPreparedStatement(addRequest);
-            ResultSet resultSet = databaseConnector.getData("select ID from requests order by ID desc limit 1");
-            if (resultSet.next()) {
-                int requestId = resultSet.getInt("ID");
-                return requestId;
-            }
+            int recentlyAdded = DatabaseHelper.getRecentlyAdded("requests");
+            return recentlyAdded;
         } catch (SQLException e) {
             e.printStackTrace();
+            return -1;
         }
-        return -1;
+        finally {
+            requestLock.unlock();
+        }
     }
 
     /**
@@ -248,10 +260,8 @@ public class HikeDM {
             coverPhotoStatement.setInt(2, hikeID);
             coverPhotoStatement.setString(3, newFilePath);
             databaseConnector.updateDataWithPreparedStatement(coverPhotoStatement);
-            ResultSet resultSet = databaseConnector.getData("select ID from cover_photos order by ID desc limit 1");
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            }
+            int recentlyAdded = DatabaseHelper.getRecentlyAdded("cover_photos");
+            return recentlyAdded;
         } catch (SQLException e) {
             e.printStackTrace();
         }

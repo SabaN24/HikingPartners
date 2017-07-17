@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by Levani on 01.07.2017.
@@ -17,6 +18,7 @@ public class GalleryDM {
     //Private variables
     private static GalleryDM ourInstance = null;
     private final DatabaseConnector databaseConnector;
+    private ReentrantLock galleryLock;
 
     /**
      * getInstance method to make this class Signletone.
@@ -33,6 +35,7 @@ public class GalleryDM {
      * Private constructor which calls getInstance method.
      */
     private GalleryDM() {
+        galleryLock = new ReentrantLock();
         databaseConnector = DatabaseConnector.getInstance();
     }
 
@@ -51,15 +54,17 @@ public class GalleryDM {
             preparedStatement.setInt(1, hikeID);
             preparedStatement.setInt(3, userID);
             preparedStatement.setString(2, newPhoto);
+            galleryLock.lock();
             databaseConnector.updateDataWithPreparedStatement(preparedStatement);
-            ResultSet resultSet = databaseConnector.getData("select ID from gallery_photos order by ID desc limit 1");
-            if (resultSet.next()) {
-                return resultSet.getInt("ID");
-            }
+            int recentlyAdded = DatabaseHelper.getRecentlyAdded("gallery_photos");
+            return  recentlyAdded;
         } catch (SQLException e) {
             e.printStackTrace();
+            return -1;
         }
-        return -1;
+        finally {
+            galleryLock.unlock();
+        }
     }
 
     /**

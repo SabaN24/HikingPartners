@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by vache on 6/27/2017.
@@ -13,11 +14,15 @@ import java.util.ArrayList;
 public class LocationsDM {
     private DatabaseConnector databaseConnector;
     private static LocationsDM locationsDM = null;
+    private ReentrantLock locationsLock;
 
     /**
      * Private constructor which calls getInstance method.
      */
-    private LocationsDM(){databaseConnector = DatabaseConnector.getInstance();}
+    private LocationsDM(){
+        locationsLock = new ReentrantLock();
+        databaseConnector = DatabaseConnector.getInstance();
+    }
 
     /**
      * getInstance method so that class is singletone
@@ -46,15 +51,17 @@ public class LocationsDM {
             connectHikeAndLoaction.setString(2, location_lat);
             connectHikeAndLoaction.setString(3, location_lng);
             connectHikeAndLoaction.setInt(4, location_type_ID);
+            locationsLock.lock();
             databaseConnector.updateDataWithPreparedStatement(connectHikeAndLoaction);
-            ResultSet resultSet = databaseConnector.getData("select ID from users order by ID desc limit 1");
-            if (resultSet.next()) {
-                return resultSet.getInt(1);
-            }
+            int recentlyAdded = DatabaseHelper.getRecentlyAdded("hike_to_location");
+            return recentlyAdded;
         } catch (SQLException e) {
             e.printStackTrace();
+            return -1;
         }
-        return -1;
+        finally {
+            locationsLock.unlock();
+        }
     }
 
     /**
