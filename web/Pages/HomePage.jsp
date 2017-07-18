@@ -132,9 +132,10 @@
         <ul class="hikes-list">
             <div v-if="!hikes.length" style="text-align: center;font-size: 18px;">No hikes.</div>
             <li class="hike-item" v-for="hike in hikes">
-                <div class="slider-block" v-bind:style="{'backgroundImage':'url(' + hike.coverPhotos[0].src + ')'}">
+                <div class="slider-block"  v-bind:style="{'backgroundImage': hike.coverPhotos.length ? 'url(' + hike.coverPhotos[0].src + ')' : 'none' }">
                     <div class="caption">
-                        {{hike.coverPhotos[0].description}}
+                        <template v-if="hike.coverPhotos.length">{{hike.coverPhotos[0].description}}</template>
+
                     </div>
                 </div>
                 <div class="hike-info">

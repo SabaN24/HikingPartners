@@ -136,8 +136,18 @@
     <main>
         <div class="main-content slider-container" id="coverVue">
             <div class="slick">
-                <% int i = 0;
+                <%
+                    int i = 0;
+                    if (defaultModel.getCoverPhotos().size() == 0) {%>
+
+                <div class="slider-block">
+                    <div class="caption">
+                    </div>
+                </div>
+
+                <% } else {
                     for (Photo photo : defaultModel.getCoverPhotos()) {%>
+
                 <div class="slider-block" style="background-image: url(<%=photo.getSrc()%>)">
                     <div class="caption">
                         <span>
@@ -151,6 +161,7 @@
                     </div>
                 </div>
                 <%
+                        }
                         i++;
                     }
                 %>
@@ -173,12 +184,12 @@
             {{#each data}}
             <div class="slider-block" style="background-image: url({{src}})">
                 <%--<div class="caption">--%>
-                    <%--{{description}}--%>
-                    <%--<% if (defaultModel.getCreator().getId() == loggedInUserId) {%>--%>
-                    <%--<button class="edit-button edit-cover-button"--%>
-                            <%--onclick="coverVue.openImgDescription('{{escape description}}', {{ID}}, {{@index}})"><i--%>
-                            <%--class="fa fa-pencil-square-o" aria-hidden="true"></i></button>--%>
-                    <%--<%}%>--%>
+                <%--{{description}}--%>
+                <%--<% if (defaultModel.getCreator().getId() == loggedInUserId) {%>--%>
+                <%--<button class="edit-button edit-cover-button"--%>
+                <%--onclick="coverVue.openImgDescription('{{escape description}}', {{ID}}, {{@index}})"><i--%>
+                <%--class="fa fa-pencil-square-o" aria-hidden="true"></i></button>--%>
+                <%--<%}%>--%>
                 <%--</div>--%>
                 <div class="caption">
                         <span>
