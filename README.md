@@ -7,6 +7,10 @@ Hiking Partners is a web application, which will be used by people who want to g
 
 Java codes are written using Google Java Style. (See example here: https://google.github.io/styleguide/javaguide.html).
 
+Used client-side frameworks: Vue.js (see here: https://vuejs.org/) and Bootstrap (see here: http://getbootstrap.com/).
+
+Used Libraries: LightBox (see here: http://lokeshdhakar.com/projects/lightbox2/), Normalize.css (see here: https://necolas.github.io/normalize.css/), jQuery (see here: https://jquery.com/) and Font Awesome (see here: http://fontawesome.io/).
+
 # Main features
 ## Sign Up/Log in
 ### User, who enters this webpage will sign up through Facebook account and all public information from their Facebook account will be fetched and stored in database, so that it can be used later. In case user already has an account, they will log in with their unique username and password.
@@ -24,3 +28,5 @@ Java codes are written using Google Java Style. (See example here: https://googl
 ### Sprint 2: https://github.com/SabaN24/HikingPartners/wiki/Sprint2 
 ### Sprint 3: https://github.com/SabaN24/HikingPartners/wiki/Sprint3
 ### Sprint 4: https://github.com/SabaN24/HikingPartners/wiki/Sprint4
+### Sprint 5: https://github.com/SabaN24/HikingPartners/wiki/Sprint5
+### Sprint 6: https://github.com/SabaN24/HikingPartners/wiki/Sprint6
