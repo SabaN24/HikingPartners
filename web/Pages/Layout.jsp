@@ -62,7 +62,7 @@
 
                 <a href="/Profile?userID=<%=loggedInUser.getId()%>" class="profile-link">
                     <div class="avatar-block" style="background-image: url(<%= loggedInUser.getProfilePictureAddress() %>) ">
-                    <div class="notifications-count" v-if="newNotificationsCount">{{newNotificationsCount}}</div>
+                    <div class="notifications-count" v-if="newNotificationsCount">{{newNotificationsCount}}<span v-if="newNotificationsCount == 8">+</span> </div>
                     </div>
                     <div class="hidden logged-user-id"><%=loggedInUser.getId()%></div>
                     <div class="profile-name">
@@ -161,7 +161,7 @@
                 fetchNotifications: function(){
                     var th = this;
                     axios.post("/GetNotifications", {}).then(function(response){
-                        th.notifications = response.data.reverse().slice(0, 8);
+                        th.notifications = response.data.reverse().splice(0, 8);
                     });
                 },
                 toggleNotifications: function(){
@@ -185,7 +185,8 @@
                     this.notifications.find(function(x){return x.ID == notID}).seen = 1;
                 },
                 getSocketMessage: function(message){
-                    this.notifications.splice(this.notifications.length - 1, 1);
+                    if(this.notifications.length >= 8)
+                        this.notifications.splice(this.notifications.length - 1, 1);
                     this.notifications.unshift(JSON.parse(message.data));
                 }
             },
