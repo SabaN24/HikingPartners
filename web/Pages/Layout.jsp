@@ -81,8 +81,12 @@
                             <div>
                                 <span class="notification-name">{{notification.fromUser.firstName}} {{notification.fromUser.lastName}}</span>
                                 <span v-if="notification.typeID == <%= Notification.REQUEST %>" > wants to join {{notification.hikeName}}.</span>
-                                <span v-if="notification.typeID == <%= Notification.COMMENT %>" > commented on the post you are following.</span>
-                                <span v-if="notification.typeID == <%= Notification.LIKE %>" > liked your comment.</span>
+                                <span v-if="notification.typeID == <%= Notification.COMMENT %>" >
+                                    <span v-if="notification.postID != null">commented on the post you are following.</span>
+                                    <span v-else>commented on the hike you are following.</span>
+                                </span>
+                                <span v-if="notification.typeID == <%= Notification.COMMENTLIKE %>" > liked your comment.</span>
+                                <span v-if="notification.typeID == <%= Notification.POSTLIKE %>"> liked your post</span>
                             </div>
                             <div class="notification-time">{{notification.time | cutTime}}</div>
                         </div>

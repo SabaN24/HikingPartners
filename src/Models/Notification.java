@@ -9,7 +9,8 @@ public class Notification {
     /* Constants */
     public static final int REQUEST = 1;
     public static final int COMMENT = 2;
-    public static final int LIKE = 3;
+    public static final int COMMENTLIKE = 3;
+    public static final int POSTLIKE = 4;
 
     /* Private instance variables. */
     private Integer ID;

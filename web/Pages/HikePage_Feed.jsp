@@ -68,7 +68,7 @@
         </div>
         <div class="post-like-block">
             <i class="fa fa-thumbs-up" v-bind:class="{ liked: post.isLiked }"
-               v-on:click="postLike(post.id)" aria-hidden="true"></i>
+               v-on:click="postLike(post.id, post.user.id)" aria-hidden="true"></i>
             {{post.likes}}
         </div>
         <div class="comments-count">
@@ -285,11 +285,12 @@
                 this.uploadingPicture = false;
             },
 
-            postLike: function (postID) {
+            postLike: function (postID, poster) {
                 ws.send(JSON.stringify({
                     action: "getPostLike",
                     data: {
                         postID: "" + postID,
+                        posterID: "" + poster,
                     }
                 }));
             }

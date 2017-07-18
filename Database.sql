@@ -362,7 +362,7 @@ INSERT INTO REQUESTS (sender_id, receiver_id, hike_id) values
   (4, 3, 1);
 
 
-insert into notification_types (name) values ("Request"), ("Comment"), ("Like");
+insert into notification_types (name) values ("Request"), ("Comment"), ("CommentLike"), ("PostLike");
 
 insert into notifications values(1, 3, NOW(), 1, NULL, 2, NULL, 1, "ტაშისკარი", 0), (2, 3, now(), 2, 1, 3, null, 1, "ტაშისკარი", 0), (3, 3, now(), 3, 2, 4, null, 1, "ტაშისკარი", 1);
 

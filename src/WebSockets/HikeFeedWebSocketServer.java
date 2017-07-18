@@ -131,10 +131,13 @@ public class HikeFeedWebSocketServer{
         int postID = Integer.parseInt((String)data.get("postID"));
         int returnedID = HikeFeedDM.getInstance().likeComment(userID, commentID);
         Like like;
-        like = new Like(postID, commentID, userID, returnedID != -1);
+        boolean liked = (returnedID != -1);
+        like = new Like(postID, commentID, userID, liked);
         data.put("hikeID", "" + hikeId);
         webSocketHelper.sendToAllConnectedSessions(like, action, hikeId, connectedSessions.get(hikeId).keySet());
-        notificationSocketServer.handleNotification(jsonMessage, userID);
+        if(liked) {
+            notificationSocketServer.handleNotification(jsonMessage, userID);
+        }
     }
 
     /**
@@ -176,10 +179,16 @@ public class HikeFeedWebSocketServer{
         HttpSession httpSession = connectedSessions.get(hikeId).get(session);
         Integer userID = (Integer) httpSession.getAttribute("userID");
         Integer postID = Integer.parseInt((String)data.get("postID"));
+        Integer posterID = Integer.parseInt((String)data.get("posterID"));
+        //Integer
         int returnedID = HikeFeedDM.getInstance().likePost(userID, postID);
         Like like;
-        like = new Like(postID, -1, userID, returnedID != -1);
+        boolean liked = (returnedID != -1);
+        like = new Like(postID, -1, userID,liked) ;
         data.put("hikeID", "" + hikeId);
         webSocketHelper.sendToAllConnectedSessions(like, action, hikeId, connectedSessions.get(hikeId).keySet());
+        if(liked) {
+            notificationSocketServer.handleNotification(jsonMessage, userID);
+        }
     }
 }
