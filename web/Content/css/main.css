@@ -910,15 +910,26 @@ input[type="file"] {
 }
 
 .edit-img-popup {
-    left: 50%;
-    transform: translateX(-50%);
-    margin: 0 auto;
-    z-index: 10000;
+    display: inline-block;
+    top: 177px;
+    left: 10px;
     position: absolute;
-    background-color: white;
-    width: 400px;
-    padding: 20px;
-    box-shadow: rgb(204, 204, 204) 0px 0px 1px 1px;
+}
+
+.edit-img-popup input {
+    background: rgba(34, 34, 34, .6);
+    outline: none;
+    border: none;
+    color: white;
+    font-size: 14px;
+    font-family: alk-rounded-mtav;
+    padding: 5px 15px;
+    padding-right: 28px;
+    margin-right: -28px;
+}
+
+.caption button {
+    vertical-align: inherit;
 }
 
 .popup-img {
