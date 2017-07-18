@@ -118,7 +118,8 @@ public class MessagesWebSocketServer {
         Integer fromUserId = userId;
         Integer toUserId = Integer.parseInt((String) data.get("toUserId"));
         Date currDate = calendar.getTime();
-        int returnId = ChatDM.getInstance().addMessage(fromUserId, toUserId, message, currDate);
+        String time = dateFormat.format(currDate);
+        int returnId = ChatDM.getInstance().addMessage(fromUserId, toUserId, message, time);
         User userFrom = MainDM.getInstance().getUserById(fromUserId);
         User userTo = MainDM.getInstance().getUserById(toUserId);
         Message mes = new Message(returnId, userFrom, userTo, message, currDate);

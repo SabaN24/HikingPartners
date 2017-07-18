@@ -70,7 +70,7 @@ public class ChatDM {
             while(rs.next()){
                 int id = rs.getInt("ID");
                 String messageText = rs.getString("message");
-                Date date = rs.getDate("message_date");
+                Date date = (Date)rs.getObject("message_date");
                 messages.add(new Message(id, userFrom, userTo, messageText, date));
             }
         } catch (SQLException e) {
@@ -87,7 +87,7 @@ public class ChatDM {
             while(rs.next()){
                 int id = rs.getInt("ID");
                 String messageText = rs.getString("message");
-                Date date = rs.getDate("message_date");
+                Date date = (Date)rs.getObject("message_date");
                 messages.add(new Message(id, userFrom, userTo, messageText, date));
             }
         } catch (SQLException e) {
@@ -106,14 +106,14 @@ public class ChatDM {
      * @param date date when the message was sent
      * @return newly added message index
      */
-    public int addMessage(int fromUserId, int toUserId, String messageText, Date date){
+    public int addMessage(int fromUserId, int toUserId, String messageText, String date){
         String query = "insert into messages (from_user_id, to_user_id, message, message_date) values (?,?,?,?)";
         PreparedStatement newMessage = databaseConnector.getPreparedStatement(query);
         try {
             newMessage.setInt(1, fromUserId);
             newMessage.setInt(2, toUserId);
             newMessage.setString(3, messageText);
-            newMessage.setDate(4, new java.sql.Date(date.getTime()));
+            newMessage.setString(4, date);
             lockMessages.lock();
             databaseConnector.updateDataWithPreparedStatement(newMessage);
             int recentlyAdded = DatabaseHelper.getRecentlyAdded("messages");

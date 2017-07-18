@@ -3,11 +3,7 @@ package Tests;
 import Database.ChatDM;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Date;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
  * Created by Saba on 7/16/2017.
@@ -21,7 +17,7 @@ public class TestChatDM {
         int user2 = 2;
         ChatDM chatDM = ChatDM.getInstance();
         chatDM.openChat(1, 2);
-        chatDM.addMessage(1, 2, "hi", new Date());
+        chatDM.addMessage(1, 2, "hi", "01/29/99");
         assertEquals(1, chatDM.getChats(1).size());
         assertEquals(1, chatDM.getChatMessages(1, 2).size());
         chatDM.openChat(1, 3);
