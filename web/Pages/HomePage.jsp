@@ -164,13 +164,13 @@
                     <template v-if="hike.userStatus != <%= HikeInfoExtended.MEMBER %>">
                         <button v-if="hike.joinedPeople < hike.maxPeople && hike.userStatus == <%= HikeInfoExtended.NOT_MEMBER %>"
                                 class="mybtn submit-request"
-                                @click="sendRequest(hike.id)">Send Request
+                                @click="sendRequest(hike.id)" style="margin-top: 20px;">Send Request
                         </button>
                         <div v-if="hike.joinedPeople == hike.maxPeople && hike.userStatus != <%= HikeInfoExtended.REQUEST_SENT %>"
-                             class="mybtn submit-request request-info">Hike is full
+                             class="mybtn submit-request request-info" style="margin-top: 20px;">Hike is full
                         </div>
                         <div v-if="hike.userStatus == <%= HikeInfoExtended.REQUEST_SENT %>"
-                             class="mybtn submit-request request-info">Request sent
+                             class="mybtn submit-request request-info" style="margin-top: 20px;">Request sent
                         </div>
                     </template>
 
