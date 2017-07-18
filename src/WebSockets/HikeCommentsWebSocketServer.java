@@ -122,11 +122,14 @@ public class HikeCommentsWebSocketServer {
         Integer commentID = Integer.parseInt((String)data.get("commentID"));
         int returnedID = HikeFeedDM.getInstance().likeComment(userID, commentID);
         Like like;
-        like = new Like(commentID, userID, returnedID != -1);
+        boolean liked = (returnedID != -1);
+        like = new Like(commentID, userID, liked);
         data.put("postID", "-1");
         data.put("hikeID", "" + hikeId);
         webSocketHelper.sendToAllConnectedSessions(like, action, hikeId, connectedSessions.get(hikeId).keySet());
-        notificationSocketServer.handleNotification(jsonMessage, userID);
+        if(liked) {
+            notificationSocketServer.handleNotification(jsonMessage, userID);
+        }
     }
 
 }

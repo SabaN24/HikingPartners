@@ -1,13 +1,11 @@
 package Database;
 
-import Models.Notification;
-
-import javax.xml.crypto.Data;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -82,15 +80,31 @@ public class NotificationsDM {
 
     /**
      * Returns list of people who follow public posts of given hike.
+     * in followers will be creator of current hike
      *
      * @param hikeId id of hike
      * @return list of followers
      */
     public Set<Integer> getHikeFollowers(int hikeId) {
         Set<Integer> followers = new HashSet<>();
+        String posterQuery = "Select * from hike_to_user where hike_id = ? and role_ID = 1";
+        PreparedStatement ps = databaseConnector.getPreparedStatement(posterQuery);
+
+        try {
+            ps.setInt(1, hikeId);
+            ResultSet resultSet = databaseConnector.getDataWithPreparedStatement(ps);
+            if (resultSet.next()) {
+                int creator = resultSet.getInt("user_ID");
+                followers.add(creator);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
         String query = "Select * from comments where hike_id = ? and privacy_type = 1;";
         PreparedStatement preparedStatement = databaseConnector.getPreparedStatement(query);
-        followers = getFollowers(preparedStatement, hikeId);
+        followers.addAll(getFollowers(preparedStatement, hikeId));
         return followers;
     }
 

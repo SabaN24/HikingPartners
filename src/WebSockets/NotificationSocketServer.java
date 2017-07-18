@@ -79,7 +79,31 @@ public class NotificationSocketServer {
             getCommentLike((Map) message.get("data"), userId);
         } else if (action.equals("getRequest")) {
             getRequest((Map) message.get("data"), userId);
+        }else if(action.equals("getPostLike")){
+            getPostLike((Map) message.get("data"), userId);
         }
+    }
+
+    /**
+     * sends notification of likes of post to poster
+     * @param data date means post like message
+     * @param userId user who liked that post
+     */
+    private void getPostLike(Map<String, Object> data, int userId) {
+        int posterID = Integer.parseInt((String)data.get("posterID"));
+        if(posterID == userId)return;
+        int postId = Integer.parseInt((String) data.get("postID"));
+        int type = 4;
+        int hikeId = Integer.parseInt((String)data.get("hikeID"));
+        String hikeName = HikeDM.getInstance().getHikeById(hikeId).getName();
+        Date currDate = calendar.getTime();
+        String notificationDate = dateFormat.format(currDate);
+        int seen = 0;
+        int id = NotificationsDM.getInstance().addNotification(posterID, notificationDate, type, postId, userId, -1, hikeId, hikeName, seen);
+        User sender = UserInfoDM.getInstance().getUserByID(userId);
+        Notification notification = new Notification(id, posterID, currDate, type, postId, sender, null, hikeId, hikeName, seen);
+        sendNotification(notification, posterID, userId);
+
     }
 
     /**
