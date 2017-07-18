@@ -492,6 +492,11 @@ main {
     color: #555;
 }
 
+.add-cover-photo {
+    font-size: 40px;
+    margin-left: 20px;
+}
+
 .new-post-input:focus {
     outline: 1px solid #ccc;
     border-color: transparent;
@@ -577,6 +582,7 @@ main {
     padding: 20px 30px;
     font-family: 'Montserrat', myriad-regular, Helvetica, Arial, sans-serif;
     display: none;
+    z-index: 100;
 }
 
 .new-hike-popup.active {
@@ -649,7 +655,7 @@ main {
 .show-popup-btn {
     position: absolute;
     top: 109px;
-    right: 14px;
+    right: 49px;
 }
 
 .add-video-button {
@@ -1162,7 +1168,6 @@ input[type="file"] {
 }
 
 .searchItems {
-    text-align: center;
     font-family: bpg-arial, Arial, sans-serif;
 }
 
@@ -1171,7 +1176,7 @@ input[type="file"] {
 }
 
 #location-search, #hike-name-search, #member-name-search, #date-search {
-    width: 50%;
+    width: 70%;
     padding: 12px 20px;
     margin: 8px 0;
     border: 1px solid #ccc;

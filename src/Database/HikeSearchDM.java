@@ -151,7 +151,7 @@ public class HikeSearchDM {
     public List<HikeInfo> getSearchedHikesByMemberNumber(String min, String max){
         List<HikeInfo> searchedHikes = new ArrayList<>();
 
-        String query = "SELECT * from hikes where max_people > ? and max_people < ?";
+        String query = "SELECT * from hikes where max_people >= ? and max_people <= ?";
         PreparedStatement pst = databaseConnector.getPreparedStatement(query);
 
         try {

@@ -23,14 +23,8 @@
 <link rel="stylesheet" href="/Content/css/main.css">
 
 
-<div class="searchItems">
 
-    <input id="hike-name-search" type="text" onkeyup="searchByName()" placeholder="Search Hike..">
-
-</div>
-
-
-<aside style="color: black;">
+<aside style="color: black;padding-top: 10px;">
     <div class="filter-bar" id="filter">
         <div class="filter-bar-name" style="padding-left: 5px;"> Filters</div>
 
@@ -53,7 +47,7 @@
                     <ul class="found-locations">
                         <li class="each-search-loc" v-for="(loc, index) in searchedLocations">
                             {{loc.name}}
-                            <button class="remove-search-result" @click="removeSearchLocation(index)">X</button>
+                            <button class="icon-btn dark" @click="removeSearchLocation(index)"><i class="fa fa-times" aria-hidden="true"></i></button>
                         </li>
                     </ul>
                 </div>
@@ -102,7 +96,7 @@
                         <div class="avatar-block"
                              :style="{ backgroundImage: 'url(' + member.profilePictureAddress + ')' }"></div>
                         {{member.firstName}} {{member.lastName}}
-                        <button class="remove-search-result" @click="removeSearchMember(index)">X</button>
+                        <button class="icon-btn dark" @click="removeSearchMember(index)"><i class="fa fa-times" aria-hidden="true"></i></button>
                     </li>
                 </ul>
 
@@ -122,16 +116,21 @@
         </ul>
 
         <button class="mybtn" @click="applyFilter">Search</button>
-        <button class="mybtn" @click="cancelFilter">Remove Filters</button>
+        <button class="mybtn" style="float: right;" @click="cancelFilter">Remove Filters</button>
 
     </div>
 </aside>
 
-<div id="vueapp">
 
 
-    <div class="main-content hike-container">
+<div id="vueapp" style="float: right; width: 70%;">
+
+    <div class="searchItems">
+        <input id="hike-name-search" type="text" onkeyup="searchByName()" placeholder="Search Hike..">
+    </div>
+    <div class="main-content">
         <ul class="hikes-list">
+            <div v-if="!hikes.length" style="text-align: center;font-size: 18px;">No hikes.</div>
             <li class="hike-item" v-for="hike in hikes">
                 <div class="slider-block" v-bind:style="{'backgroundImage':'url(' + hike.coverPhotos[0].src + ')'}">
                     <div class="caption">
@@ -232,8 +231,8 @@
                     Cover photos
                 </div>
                 <form action="" onsubmit="return false;" id="form-pictures"></form>
-                <div class="new-post-img">
-                    <img src="/Content/img/uploadPicture.png" @click="addPicture()" alt="">
+                <div class="add-cover-photo icon-btn dark" @click="addPicture()">
+                    <i class="fa fa-camera" aria-hidden="true"></i>
                 </div>
                 <span class="new-hike-added-images" v-for="(picture, index) in pictures">
                     <div class="new-post-img">
@@ -258,7 +257,6 @@
     </div>
 </div>
 
-<p id="noSearchData"></p>
 
 <script src="../Scripts/axios.min.js"></script>
 <script src="../Scripts/vue.min.js"></script>
@@ -268,25 +266,8 @@
 
 <script>
 
-    var hikeNameSearch = document.getElementById("hike-name-search");
-
     var searChData = JSON.stringify({hikeName: '', option: "hikeName"});//searched data. mainly for search with hike name
 
-
-    function searchByName() {
-
-        document.getElementById("hike-name-search").addEventListener("input", function () {
-
-
-            if (hikeNameSearch.value === "") {
-                app.redisplayAllHike();
-                return;
-            }
-            searchData = JSON.stringify({hikeName: hikeNameSearch.value + '', option: "hikeName"});
-            app.hikeNameSearch();
-
-        });
-    }
 
 
     var locationsArray = [];
@@ -555,18 +536,12 @@
                             members: th.members,
                             startDate: th.startDate,
                             endDate: th.endDate,
-                            hikeName: hikeNameSearch.value,
+                            hikeName: document.getElementById("hike-name-search").value,
                         })
                     }
                 }).then(function (response) {
 
                     app.hikes = response.data.reverse();
-
-                    if (app.hikes.length == 0) {//if no such hike was found
-                        document.getElementById("noSearchData").innerHTML = "Such hike cant be found";
-                    } else {
-                        document.getElementById("noSearchData").innerHTML = "";
-                    }
 
                 });
 
@@ -592,6 +567,9 @@
             addSearchMember: function () {
 
                 var th = this;
+
+                if(th.newMemberInput === '')
+                    return;
 
                 axios({
                     url: "/HikeSearchServlet",
@@ -682,7 +660,6 @@
                 var th = this;
                 axios.post("/HikesListServlet", {}).then(function (response) {
                     th.hikes = response.data.reverse();
-                    document.getElementById("noSearchData").innerHTML = ""
                 });
             },
 
@@ -694,11 +671,6 @@
                     params: {data: searchData}
                 }).then(function (response) {
                     th.hikes = response.data.reverse();
-                    if (th.hikes.length == 0) {
-                        document.getElementById("noSearchData").innerHTML = "No results for that name";
-                    } else {
-                        document.getElementById("noSearchData").innerHTML = "";
-                    }
                 });
             },
 
@@ -815,4 +787,19 @@
         }
 
     });
+    function searchByName() {
+        var hikeNameSearch = document.getElementById("hike-name-search");
+        document.getElementById("hike-name-search").addEventListener("input", function () {
+            if (hikeNameSearch.value === "") {
+                console.log("if mevida");
+                app.redisplayAllHike();
+                return;
+            }
+            console.log("mevida");
+
+            searchData = JSON.stringify({hikeName: hikeNameSearch.value + '', option: "hikeName"});
+            app.hikeNameSearch();
+
+        });
+    }
 </script>
