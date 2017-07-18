@@ -91,7 +91,7 @@
                             <div class="notification-time">{{notification.time | cutTime}}</div>
                         </div>
                     </li>
-
+                    <div class="see-all-block"><a href="/Notifications">See All</a></div>
                 </ul>
             </div>
         </div>
@@ -161,7 +161,7 @@
                 fetchNotifications: function(){
                     var th = this;
                     axios.post("/GetNotifications", {}).then(function(response){
-                        th.notifications = response.data.reverse();
+                        th.notifications = response.data.reverse().slice(0, 8);
                     });
                 },
                 toggleNotifications: function(){
@@ -185,6 +185,7 @@
                     this.notifications.find(function(x){return x.ID == notID}).seen = 1;
                 },
                 getSocketMessage: function(message){
+                    this.notifications.splice(this.notifications.length - 1, 1);
                     this.notifications.unshift(JSON.parse(message.data));
                 }
             },

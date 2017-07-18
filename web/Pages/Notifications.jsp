@@ -10,6 +10,7 @@
 <div id="vueapp">
 
 <div class="main-content notifications-container">
+    <div class="no-notifications" v-if="!notifications.length">No notifications.</div>
     <ul class="notifications-list__page">
         <li class="notifications-item__page" v-for="(notification, index) in notifications" :class="{notSeen : !notification.seen}" @click="clickNotification(notification)">
             <div class="avatar-block"

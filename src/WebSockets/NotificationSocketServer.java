@@ -26,7 +26,7 @@ public class NotificationSocketServer {
     /* Private instance variables. */
     private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     ;
-    private Calendar calendar = Calendar.getInstance();
+    private Calendar calendar;
     private Gson frontGson = new GsonBuilder().serializeNulls().create();
     ;
     private Gson gson = new Gson();
@@ -43,6 +43,7 @@ public class NotificationSocketServer {
         if (!connectedSessions.containsKey(userId)) {
             connectedSessions.put(userId, session);
         }
+        calendar = Calendar.getInstance();
         HttpSession httpsession = (HttpSession) config.getUserProperties().get(HttpSession.class.getName());
     }
 
@@ -71,8 +72,8 @@ public class NotificationSocketServer {
      * @param userId id of user who calls action
      */
     public void handleNotification(Map<String, Object> message, int userId) {
-        String action = (String) message.get("action");
         calendar = Calendar.getInstance();
+        String action = (String) message.get("action");
         if (action.equals("getComment")) {
             getComment((Map) message.get("data"), userId);
         } else if (action.equals("getCommentLike")) {

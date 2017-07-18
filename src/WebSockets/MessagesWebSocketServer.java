@@ -79,7 +79,7 @@ public class MessagesWebSocketServer {
      */
     @OnMessage
     public void handleMessage(String message, @PathParam("userId") int userId, Session session) {
-
+        calendar = Calendar.getInstance();
         Map<String, Object> jsonMessage = frontGson.fromJson(message, Map.class);
 
         if ("getMessage".equals(jsonMessage.get("action"))) {
