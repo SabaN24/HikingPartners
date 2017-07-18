@@ -246,12 +246,12 @@
                     </div>
                 </span>
             </div>
-            <button class="mybtn" style="padding: 10px 100px;" @click="newHikePage++">Next</button>
+            <button class="mybtn" style="padding: 10px 100px;" @click="goToLocations()">Next</button>
         </div>
         <div class="map-container" v-show="newHikePage == 2">
             <h3>Choose hiking locations</h3>
             <div id="map"></div>
-            <button class="mybtn" style="padding: 10px 100px;" @click="addHike" v-disabled="submitted">Add Hike</button>
+            <button class="mybtn" style="padding: 10px 100px;margin-top:20px;" @click="addHike" v-disabled="submitted">Add Hike</button>
 
         </div>
         <div class="close-block" @click="closePopup()"><i class="fa fa-times" aria-hidden="true"></i></div>
@@ -684,9 +684,30 @@
                 if (this.submitted) return;
                 this.submitted = true;
                 var th = this;
+                if(!th.newHike.name || !th.newHike.maxPeople || !th.newHike.startDate || !th.newHike.endDate || !th.newHike.description) {
+                    var elem = document.querySelector('.new-hike-popup');
+                    elem.classList.add("error");
+                    setTimeout(function(){
+                        elem.classList.remove("error");
+                    }, 1000);
+                    return;
+                }
                 axios({url: "/AddHikeServlet", method: "post", params: th.newHike}).then(function (response) {
                     th.addLocation(response.data.hikeID + '');
                 });
+
+            },
+            goToLocations: function(){
+                var th = this;
+                if(!th.newHike.name || !th.newHike.maxPeople || !th.newHike.startDate || !th.newHike.endDate || !th.newHike.description) {
+                    var elem = document.querySelector('.new-hike-popup');
+                    elem.classList.add("error");
+                    setTimeout(function(){
+                        elem.classList.remove("error");
+                    }, 2000);
+                    return;
+                }
+                th.newHikePage++;
 
             },
             closePopup: function () {

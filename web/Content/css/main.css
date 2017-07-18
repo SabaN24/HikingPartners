@@ -579,15 +579,21 @@ main {
     left: 50%;
     transform: translate(-50%, -50%);
     background: white;
-    box-shadow: 0 0 1px 1px #ccc;
     padding: 20px 30px;
     font-family: 'Montserrat', myriad-regular, Helvetica, Arial, sans-serif;
     display: none;
     z-index: 100;
+    transition: box-shadow .5s;
 }
+
+
 
 .new-hike-popup.active {
     display: block;
+}
+
+.error {
+    box-shadow: inset 0 0 8px 1px red;
 }
 
 .new-hike-title {
@@ -672,21 +678,31 @@ main {
 }
 
 .post-popup {
-    width: 300px;
-    height: 100px;
-    position: absolute;
-    top: 35%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     background: white;
-    box-shadow: 0 0 1px 1px #ccc;
-    padding: 20px 30px;
     font-family: 'Montserrat', myriad-regular, Helvetica, Arial, sans-serif;
-    display: none;
+    margin-left: 16px;
+    display: inline-block;
+    visibility: hidden;
+    opacity: 0;
+    transition: .2s visibility, .2s opacity;
+
+}
+
+.post-popup input {
+    background: none;
+    outline: none;
+    border: 1px solid #ccc;
+    color: #222;
+    font-size: 14px;
+    font-family: inherit;
+    padding: 5px 15px;
+    padding-right: 45px;
+    margin-right: -47px;
 }
 
 .post-popup.active {
-    display: block;
+    visibility: visible;
+    opacity: 1;
 }
 
 .youtube-video {
@@ -1379,6 +1395,11 @@ input[type="file"] {
     position: absolute;
     right: 20px;
     bottom: 17px;
+    color: #aaa !important;
+}
+
+.cover-image-button:hover {
+    color: white !important;
 }
 
 .filter-bar {

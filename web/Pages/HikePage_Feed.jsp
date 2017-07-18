@@ -24,17 +24,27 @@
             </form>
             <button type="button" class="upload-image-button icon-btn" @click="document.querySelectorAll('.image-chooser')[0].click()"><i class="fa fa-picture-o" aria-hidden="true"></i></button>
             <button type="button" class="add-video-button icon-btn" @click="showLinkPopup()"><i class="fa fa-youtube-play" aria-hidden="true"></i></button>
+            <div class="post-popup" :class="{active : videoPopupIsActive}">
+                <input type="text" v-model="youtubeLink">
+                <button class="icon-btn dark" @click="addYoutubeLink()">
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                </button>
+                <button class="icon-btn dark" @click="closeLinkPopup()">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <%--<div class="edit-img-popup" v-show="popupImgShow">--%>
+                <%--<input v-model="popupImg.description" spellcheck="false">--%>
+                <%--<button class="icon-btn light" @click="submitImgDescription"><i class="fa fa-check"--%>
+                                                                                <%--aria-hidden="true"></i>--%>
+                <%--</button>--%>
+            <%--</div>--%>
         </div>
         <div class="post-popup" :class="{active : imagePopupIsActive }">
             <form v-on:submit.prevent="choosePicture" method="post"
                   enctype="multipart/form-data" class="img-form">
                 <input type="file" name="pic" accept="image/*" v-on:change="choosePicture" class="image-chooser">
             </form>
-        </div>
-        <div class="post-popup" :class="{active : videoPopupIsActive}">
-            <input type="text" style="margin-bottom: 10px;" v-model="youtubeLink">
-            <button class="mybtn" @click="addYoutubeLink()">Add Link</button>
-            <div class="close-block" @click="closeLinkPopup()"><i class="fa fa-times" aria-hidden="true"></i></div>
         </div>
     </div>
     <div class="post-block main-content" v-for="(post, index) in posts" :id="post.id">
