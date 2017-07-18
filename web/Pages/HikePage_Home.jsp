@@ -20,8 +20,19 @@
                         boolean IdMatch = (loggedInUserId == defaultModel.getCreator().getId());
                         String hikeName = defaultModel.getName();
                     %>
-                    {{name}}
-                    <button class="edit-button" v-if="creatorLoggedIn" @click="openEditName()"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                    <div v-if="editModesOn.name">
+                        <div class="darker-background"></div>
+                        <form @submit.prevent="saveInfo('name')" action="">
+                            <input type="text" v-model="name" class="edit-input edit-input-name" :style="{ width: '300px' }"
+                                   @keydown="resizeEditInput(event, 'name')"
+                                   @blur="saveInfo('name')"
+                            >
+                        </form>
+                    </div>
+                    <template v-else>
+                        {{name}}
+                        <button class="icon-btn dark" v-if="creatorLoggedIn" @click="editInfo('edit-input-name', 'name')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                    </template>
                 </div>
                 <div class="description-header__right">
                             <span title="ადამიანების მაქსიმალური რაოდენობა" style="margin-right: 30px;"><i
@@ -33,21 +44,22 @@
             </div>
             <div class="description-body">
                 <div style="margin-bottom: 10px;font-weight:bold; display: inline-block;">Description:</div>
-                <button class="edit-button" v-if="creatorLoggedIn" @click="openEditDescription"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-                <br>
-                {{aboutModel.description}}
-            </div>
-            <div class="edit-popup name" :class="{active : editNamePopupIsActive }">
-                <textarea class="text-area name" v-model="newName"></textarea>
-                <br>
-                <button class="mybtn" @click="editName()" onsubmit="return false;">Edit Name</button>
-                <div class="close-block" @click="closeEditName()">x</div>
-            </div>
-            <div class="edit-popup description" :class="{active : editDescriptionPopupIsActive }">
-                <textarea class="text-area description" v-model="newDescription"></textarea>
-                <br>
-                <button class="mybtn" @click="editDescription()" onsubmit="return false;">Edit Description</button>
-                <div class="close-block" @click="closeEditDescription()"><i class="fa fa-times" aria-hidden="true"></i></div>
+                <div v-if="editModesOn.description">
+                    <div class="darker-background"></div>
+                    <form @submit.prevent="saveInfo('description')" action="" style="width: 100%;">
+                        <textarea type="text"  v-model="aboutModel.description" class="edit-input edit-input-description" :style="{ width: '100%', height: '120px' }"
+                               @keydown="resizeEditInput(event, 'description')"
+                               @blur="saveInfo('description')">
+                        </textarea>
+
+                    </form>
+                </div>
+                <template v-else>
+                    <button class="icon-btn dark" v-if="creatorLoggedIn" @click="editInfo('edit-input-description', 'description')"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                    <br>
+                    {{aboutModel.description}}
+                </template>
+
             </div>
         </div>
         <div class="comments-count">{{aboutModel.comments.length}} comment<span v-show="aboutModel.comments.length != 1">s</span></div>
@@ -101,6 +113,16 @@
 <script>
 
     var ws = new WebSocket("ws://localhost:8080/HikeCommentsSocket/" + hikeId);
+
+    function css( element, property ) {
+        return window.getComputedStyle( element, null ).getPropertyValue( property );
+    }
+
+    function textAreaAdjust(o) {
+        o.style.height = "1px";
+        o.style.height = (15 + o.scrollHeight)+"px";
+    }
+
     var app = new Vue({
         el: '#vueapp',
         //These are stored instance variables for vue,
@@ -112,10 +134,11 @@
             profilePopupVue: profilePopupVue,
             editDescriptionPopupIsActive: false,
             editNamePopupIsActive: false,
-            newDescription: "",
             creatorLoggedIn: <%= IdMatch %>,
-            name: "<%= hikeName %>",
-            newName: "",
+            name: "<%= hikeName.trim() %>",
+            nameOld: "",
+            descriptionOld: "",
+            editModesOn: {}
         },
         //These functions will be called when page loads.
         created: function () {
@@ -176,38 +199,71 @@
                 }));
             },
 
-            openEditDescription: function () {
-                this.newDescription = this.aboutModel.description;
-                this.editDescriptionPopupIsActive = true;
-            },
-
             closeEditDescription: function () {
                 this.editDescriptionPopupIsActive = false;
             },
 
             editDescription: function(){
-                var th = this;
-                axios({url: "/EditHikeDescription", method:"post", params:{hikeId: hikeId, description: this.newDescription}});
-                this.aboutModel.description = this.newDescription;
-                this.newDescription = "";
-                this.closeEditDescription();
+//                var th = this;
+//                axios({url: "/EditHikeDescription", method:"post", params:{hikeId: hikeId, description: this.newDescription}});
+//                this.aboutModel.description = this.newDescription;
+//                this.newDescription = "";
+//                this.closeEditDescription();
             },
 
-            openEditName: function () {
-                this.newName = this.name;
-                this.editNamePopupIsActive = true;
+            editInfo: function (inputClassNm, varName) {
+                Vue.set(this.editModesOn, varName, true);
+                setTimeout(function(){
+                    document.querySelector('.' + inputClassNm).focus();
+                }, 1);
             },
 
             closeEditName: function () {
                 this.editNamePopupIsActive = false;
             },
 
-            editName: function(){
+            saveInfo: function(varName){
                 var th = this;
-                axios({url: "/EditHikeName", method:"post", params:{hikeId: hikeId, name: this.newName}});
-                this.name = this.newName;
-                this.newName = "";
-                this.closeEditName();
+                var value = varName == 'name' ? th[varName] : th.aboutModel[varName];
+                if(varName == 'name'){
+                    axios({url: "/EditHikeName", method:"post", params:{hikeId: hikeId, name: value.trim()}});
+                }else {
+                   axios({url: "/EditHikeDescription", method:"post", params:{hikeId: hikeId, description: value.trim()}});
+
+                }
+                th.cancelEdit(varName);
+
+            },
+
+            editName: function(){
+
+            },
+            resizeEditInput: function(e, varName){
+                if(varName != 'name'){
+                    textAreaAdjust(e.target);
+                    if(e.keyCode == 13) {
+                        this.saveInfo(varName);
+                        return;
+                    }
+                }
+                e.target.style.width =  this.getWidth(varName, e) + 20 + 'px';
+            },
+            getWidth: function (varName, e) {
+                var div = document.createElement('div');
+                div.style.display = 'inline-block;';
+                div.style.position = 'absolute';
+                var elem = e.target;
+                div.style.fontSize = css(elem, 'font-size');
+                div.style.fontFamily = css(elem, 'font-family');
+                document.body.appendChild(div);
+                div.innerHTML = varName == 'name' ? this[varName] : this.aboutModel[varName];;
+                var rect = div.getBoundingClientRect();
+                var res = rect.width;
+                div.parentNode.removeChild(div);
+                return res;
+            },
+            cancelEdit: function(varName){
+                Vue.set(this.editModesOn, varName, false);
             }
         }
     });

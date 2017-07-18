@@ -22,8 +22,8 @@
                            v-model="newPostText">
                 </div>
             </form>
-            <button type="button" class="upload-image-button" @click="document.querySelectorAll('.image-chooser')[0].click()"></button>
-            <button type="button" class="add-video-button" @click="showLinkPopup()"></button>
+            <button type="button" class="upload-image-button icon-btn" @click="document.querySelectorAll('.image-chooser')[0].click()"><i class="fa fa-picture-o" aria-hidden="true"></i></button>
+            <button type="button" class="add-video-button icon-btn" @click="showLinkPopup()"><i class="fa fa-youtube-play" aria-hidden="true"></i></button>
         </div>
         <div class="post-popup" :class="{active : imagePopupIsActive }">
             <form v-on:submit.prevent="choosePicture" method="post"
@@ -65,11 +65,6 @@
             <iframe width="420" height="315" v-if="post.link != ''"
                     :src="post.link">
             </iframe>
-        </div>
-        <div class="post-like-block">
-            <i class="fa fa-thumbs-up" v-bind:class="{ liked: post.isLiked }"
-               v-on:click="postLike(post.id)" aria-hidden="true"></i>
-            {{post.likes}}
         </div>
         <div class="comments-count">
             {{post.comments.length}} comment<span v-show="post.comments.length != 1">s</span>
@@ -232,19 +227,6 @@
                     }
                 } else if (action == "getPost") {
                     this.posts.unshift(data);
-                } else if (action == "getPostLike"){
-                    console.log(data);
-                    if (data.liked) {
-                        this.posts.find(x => x.id == data.postID).likes++;
-                        if (data.userID == user.id) {
-                            this.posts.find(x => x.id == data.postID).isLiked = true;
-                        }
-                    } else if (this.posts.find(x => x.id == data.postID).likes > 0) {
-                        this.posts.find(x => x.id == data.postID).likes--;
-                        if (data.userID == user.id) {
-                            this.posts.find(x => x.id == data.postID).isLiked = false;
-                        }
-                    }
                 }
             },
 
@@ -285,15 +267,7 @@
                 this.uploadingPicture = false;
             },
 
-            postLike: function (postID) {
-                ws.send(JSON.stringify({
-                    action: "getPostLike",
-                    data: {
-                        postID: "" + postID,
-                    }
-                }));
-            }
-            ,
+
             //This function is called when like button is clicked.
             like: function (postID, commentID) {
                 ws.send(JSON.stringify({

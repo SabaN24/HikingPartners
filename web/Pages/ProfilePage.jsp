@@ -27,9 +27,8 @@
         </div>
         <div class="user-info">
             <div style="font-size: 18px; margin-bottom: 10px">ABOUT</div>
-            <button class="edit-button" v-if="userLoggedIn" @click="openEditAbout()"><i class="fa fa-pencil-square-o"
-                                                                                        aria-hidden="true"></i></button>
             <div class="profile-status">{{ profileUser.aboutMe }}</div>
+            <button class="icon-btn dark" v-if="userLoggedIn" @click="openEditAbout()"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
             <a :href="profileUser.facebookLink" target="_blank" class="facebook-page-btn mybtn">
                 Go To Facebook Profile
             </a>

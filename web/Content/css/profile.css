@@ -50,6 +50,7 @@
 
 .profile-status {
     margin-bottom: 20px;
+    display: inline-block;
 }
 
 .facebook-page-btn.facebook-page-btn {

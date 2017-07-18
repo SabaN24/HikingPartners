@@ -4,11 +4,11 @@ header {
     height: 80px;
     line-height: 80px;
     padding: 0 20px;
-    color: #1d1d21;
+    color: white;
     position: relative;
     margin-bottom: 20px;
     z-index: 1;
-    background-color: white;
+    background-color: rgba(0, 0, 0, .4);
 }
 
 .wrapper {
@@ -93,7 +93,6 @@ footer {
     display: inline-block;
     vertical-align: super;
     line-height: normal;
-    color: #1d1d21;
 }
 
 .logout-block {
@@ -197,7 +196,6 @@ main {
     background-position: center center;
     background-repeat: no-repeat;
     position: relative;
-    margin-bottom: 20px;
 }
 
 .slick-slide {
@@ -249,17 +247,8 @@ main {
 .description-header__left {
     display: inline-block;
     vertical-align: middle;
+    max-width: 100%;
 }
-
-/*.description-header__left:after {*/
-/*content: "";*/
-/*width: 2px;*/
-/*height: 16px;*/
-/*background: black;*/
-/*display: inline-block;*/
-/*margin-bottom: -2px;*/
-/*margin-left: 10px;*/
-/*}*/
 
 .description-header__right {
     display: inline-block;
@@ -500,7 +489,7 @@ main {
 }
 
 .photo-remove-button:hover .fa {
-    color: #ccc;
+    color: #555;
 }
 
 .new-post-input:focus {
@@ -519,8 +508,12 @@ main {
     margin-bottom: 40px;
 }
 
+.hike-item:last-child {
+    margin-bottom: 0;
+}
+
 .hike-info {
-    padding: 0 15px;
+    padding: 15px 15px;
     position: relative;
 }
 
@@ -660,15 +653,11 @@ main {
 }
 
 .add-video-button {
-    cursor: pointer;
-    background: none;
-    background-image: url("../img/youtube-logo.png");
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    width: 20px;
-    height: 20px;
-    border: none;
+    font-size: 18px;
+}
+
+.add-video-button:hover {
+    color: #CC181E;
 }
 
 .add-video-button:focus {
@@ -698,17 +687,12 @@ main {
 }
 
 .upload-image-button {
-    color: #888;
-    cursor: pointer;
-    width: 20px;
-    height: 20px;
-    border: none;
-    opacity: 0.6;
-    transition: .1s color;
+    font-size: 16px;
+    margin-right: 5px;
 }
 
 .upload-image-button:hover {
-    color: white;
+    color: royalblue;
 }
 
 .upload-image-button:focus {
@@ -870,29 +854,20 @@ input[type="file"] {
 }
 
 .member-block {
-    width: 287px;
-    padding: 15px 30px;
-    border-radius: 2px;
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, .1), 0 1px 10px rgba(0, 0, 0, .35);
+    width: 250px;
     display: inline-block;
     vertical-align: middle;
     margin-right: 10px;
     margin-bottom: 10px;
 }
 
-.member-block:nth-child(3n) {
-    margin-right: 0;
-}
-
 .member-block .avatar-block {
-    height: 70px;
-    width: 70px;
+    height: 50px;
+    width: 50px;
 }
 
 .member-block.creator {
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
+
 }
 
 .member-name {
@@ -906,6 +881,12 @@ input[type="file"] {
 .member-name:hover {
     color: #444;
     cursor: pointer;
+}
+
+.locations-block#map {
+    width: 70%;
+    height: 400px;
+    margin-top: 20px;
 }
 
 .new-hike-pictures {
@@ -1083,16 +1064,6 @@ input[type="file"] {
     color: white;
 }
 
-/*.chat-add-message {*/
-/*position: relative;*/
-/*}*/
-
-/*.chat-add-message textarea {*/
-/*resize: none;*/
-/*position: absolute;*/
-/*bottom:0;*/
-/*}*/
-
 .mynav {
     display: inline-block;
     vertical-align: middle;
@@ -1100,7 +1071,7 @@ input[type="file"] {
 }
 
 .mynav-link.mynav-link {
-    color: #1d1d21;
+    color: white;
     font-family: 'Montserrat', myriad-regular, Helvetica, Arial, sans-serif;
     font-size: 16px;
     transition: .2s color;
@@ -1238,8 +1209,6 @@ input[type="file"] {
     cursor: pointer;
     user-select: none;
     transition: .2s transform;
-    color: #1d1d21;
-
 }
 
 .notifications-toggle.active {
@@ -1247,7 +1216,7 @@ input[type="file"] {
 }
 
 .notifications-toggle:hover {
-    color: #1d1d21;
+    color: #ccc;
 }
 
 .notifications-count {
@@ -1267,7 +1236,6 @@ input[type="file"] {
 .notifications {
     background: white;
     border-radius: 10px;
-    min-height: 100px;
     min-width: 200px;
     position: absolute;
     right: 20px;
@@ -1301,9 +1269,9 @@ input[type="file"] {
 .no-notifications {
     display: inline-block;
     position: relative;
-    margin-top: 25%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translateX(-50%);
+    line-height: 100px;
 }
 
 .notification-avatar {
@@ -1393,7 +1361,7 @@ input[type="file"] {
 .cover-image-button {
     position: absolute;
     right: 20px;
-    bottom: 40px;
+    bottom: 17px;
 }
 
 .filter-bar {

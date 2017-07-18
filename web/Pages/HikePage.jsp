@@ -139,14 +139,14 @@
                     <div class="caption">
                         <%=  photo.getDescription() %>
                         <% if(defaultModel.getCreator().getId() == loggedInUserId){%>
-                        <button class="edit-button edit-cover-button" onclick="coverVue.openImgDescription('<%= StringEscapeUtils.escapeEcmaScript(photo.getDescription())%>', <%= photo.getID() %>, <%=i%>)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                        <button class="icon-btn light" onclick="coverVue.openImgDescription('<%= StringEscapeUtils.escapeEcmaScript(photo.getDescription())%>', <%= photo.getID() %>, <%=i%>)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                         <%}%>
                     </div>
                 </div>
                 <%i++;}%>
             </div>
             <% if(defaultModel.getCreator().getId() == loggedInUserId){%>
-            <div v-if="!uploadingCover" class="upload-image-button cover-image-button" @click="chooseCover()" >
+            <div v-if="!uploadingCover" class="icon-btn light cover-image-button" @click="chooseCover()" >
                 <i class="fa fa-picture-o" aria-hidden="true"></i>
             </div>
             <%}%>
@@ -159,7 +159,7 @@
                 <div class="caption">
                     {{description}}
                     <% if(defaultModel.getCreator().getId() == loggedInUserId){%>
-                    <button class="edit-button edit-cover-button" onclick="coverVue.openImgDescription('{{escape description}}', {{ID}}, {{@index}})"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                    <button class="icon-btn light" onclick="coverVue.openImgDescription('{{escape description}}', {{ID}}, {{@index}})"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
                     <%}%>
                 </div>
             </div>

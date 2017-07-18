@@ -8,29 +8,15 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <div class="main-content members-block">
-    <div class="title title-medium">
-        Creator:
-    </div>
-    <div class="member-block creator">
-        <div class="avatar-block" @mouseenter="profilePopupVue.hoverUser(creator, event)" @mouseleave="profilePopupVue.hoverOutUser(event)"
-             @click="window.location = '/Profile?userID=' +  creator.id"
-             :style="{ backgroundImage: 'url(' + creator.profilePictureAddress + ')' }">
-        </div>
-        <div class="member-name" @mouseenter="profilePopupVue.hoverUser(creator, event)" @mouseleave="profilePopupVue.hoverOutUser(event)"
-             @click="window.location = '/Profile?userID=' +  creator.id">
-            {{creator.firstName}} {{creator.lastName}}
-        </div>
-    </div>
-    <div class="title title-medium">
-        Members:
-    </div>
-    <div class="member-block"  v-for="member in members">
-        <div class="avatar-block" @mouseenter="profilePopupVue.hoverUser(member, event)" @mouseleave="profilePopupVue.hoverOutUser(event)"
-             @click="window.location = '/Profile?userID=' +  member.id"
-             :style="{ backgroundImage: 'url(' + member.profilePictureAddress + ')' }"></div>
-        <div class="member-name" @mouseenter="profilePopupVue.hoverUser(member, event)" @mouseleave="profilePopupVue.hoverOutUser(event)"
-             @click="window.location = '/Profile?userID=' +  member.id">
-            {{member.firstName}} {{member.lastName}}
+    <div class="members-block-inner">
+        <div class="member-block"  v-for="member in members">
+            <div class="avatar-block" @mouseenter="profilePopupVue.hoverUser(member, event)" @mouseleave="profilePopupVue.hoverOutUser(event)"
+                 @click="window.location = '/Profile?userID=' +  member.id"
+                 :style="{ backgroundImage: 'url(' + member.profilePictureAddress + ')' }"></div>
+            <div class="member-name" @mouseenter="profilePopupVue.hoverUser(member, event)" @mouseleave="profilePopupVue.hoverOutUser(event)"
+                 @click="window.location = '/Profile?userID=' +  member.id">
+                {{member.firstName}} {{member.lastName}}
+            </div>
         </div>
     </div>
 </div>
@@ -42,7 +28,7 @@
         data: {
             test: "sandro",
             members: [],
-            creator: {},
+            creatorID: {},
             profilePopupVue: profilePopupVue
         },
         created: function () {
@@ -50,9 +36,7 @@
             axios({url: "/GetHikeMembers", method:"post", params:{hikeID: hikeId}}).then(function (response) {
                 th.members = response.data;
                 var creator = th.members.find(function(el){return el.roleID == 1});
-                th.creator = creator;
-                var idx = th.members.indexOf(creator);
-                th.members.splice(idx, 1);
+                th.creatorID = creator.ID;
             });
         },
         methods: {

@@ -103,25 +103,53 @@ a, a:visited, a:hover, a:active {
     font-size: 22px;
     margin: 20px 0;
 }
-.edit-button {
+
+.icon-btn {
     cursor: pointer;
     display: inline-block;
+    vertical-align: middle;
     outline: none;
     background: none;
     border: none;
+    padding: 0;
     font-size: 18px;
-    color: #666;
     transition: .1s color;
 }
 
-.edit-button:hover {
-    color: black;
+.icon-btn.dark {
+    color: #666;
 }
 
-.edit-cover-button{
+.icon-btn.dark:hover {
+    color: black;
+
+}
+
+.icon-btn.light {
     color: #888;
 }
 
-.edit-cover-button:hover{
+.icon-btn.light:hover {
     color: white;
+}
+
+.edit-input {
+    font-size: inherit;
+    font-family: inherit;
+    display: inline-block;
+    position: relative;
+    width: auto;
+    z-index: 2;
+    max-width: 100%;
+    resize: none;
+}
+
+.darker-background {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, .40);
+    z-index: 1;
 }

@@ -50,7 +50,7 @@
         <div class="header-left">
             <div class="logo-block">
                 <a class="logo-link" href="/Home">
-                    <img src="../Content/img/logo.png" alt="" class="logo-img">
+                    <img src="../Content/img/logo-white.png" alt="" class="logo-img">
                 </a>
             </div>
         </div>
@@ -167,7 +167,7 @@
                     this.toggleNotifications();
                     this.seeNotification(not.ID);
                     if(not.typeID != '<%= Notification.REQUEST %>') {
-                        if(not.postID)
+                        if(not.postID && not.postID != -1)
                             window.location = '/HikePage/Feed?hikeId=' + not.hikeID + '#' + not.postID;
                         else
                             window.location = '/HikePage/Home?hikeId=' + not.hikeID;
