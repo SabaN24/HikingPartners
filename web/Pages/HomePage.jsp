@@ -241,7 +241,7 @@
                     Cover photos
                 </div>
                 <form action="" onsubmit="return false;" id="form-pictures"></form>
-                <div class="add-cover-photo icon-btn light" @click="addPicture()">
+                <div class="add-cover-photo icon-btn dark" @click="addPicture()">
                     <i class="fa fa-camera" aria-hidden="true"></i>
                 </div>
                 <span class="new-hike-added-images" v-for="(picture, index) in pictures">
