@@ -17,7 +17,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Levani on 04.07.2017.
@@ -34,7 +36,22 @@ public class UploadCoverServlet extends HttpServlet {
         ServletFileUpload servletFileUpload = new ServletFileUpload(new DiskFileItemFactory());
         HikeDM hikeDM = HikeDM.getInstance();
         try {
-            List<FileItem> files = servletFileUpload.parseRequest(request);
+            List<FileItem> tmp = servletFileUpload.parseRequest(request);
+            List<Integer> indices = new ArrayList<>();
+            for(int i = 0; i < tmp.size() / 2; i++){
+                if(!tmp.get(tmp.size() / 2 + i).getContentType().equals("application/octet-stream")){
+                    indices.add(i);
+                }
+            }
+            List<FileItem> files = new ArrayList<>();
+            for(int i = 0; i < indices.size() * 2; i++){
+                if(i < indices.size()) {
+                    files.add(tmp.get(indices.get(i)));
+                }
+                else {
+                    files.add(tmp.get(indices.get(i - indices.size()) + tmp.size() / 2));
+                }
+            }
             UUID newFileName;
             List<String> descriptions = new ArrayList<>();
             String newFilePath;

@@ -118,7 +118,7 @@
                 </li>
                 <%}%>
                 <li class="nav-item<%=isActive(subPage, "Locations") %>">
-                    <a href="<%= "/LocationsServlet?hikeId=" + hikeId%>" class="nav-link">
+                    <a href="<%= "/HikePage/Locations?hikeId=" + hikeId%>" class="nav-link">
                         <i class="fa fa-map-marker fa-pages"></i> Locations
                     </a>
                 </li>
@@ -152,12 +152,12 @@
                     <div class="caption">
                         <span>
                             <%=  photo.getDescription() %>
-                            <% if (defaultModel.getCreator().getId() == loggedInUserId) {%>
-                            <button class="icon-btn light"
-                                    onclick="coverVue.openImgDescription('<%= StringEscapeUtils.escapeEcmaScript(photo.getDescription())%>', <%= photo.getID() %>, <%=i%>)"><i
-                                    class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-                            <%}%>
                         </span>
+                        <% if (defaultModel.getCreator().getId() == loggedInUserId) {%>
+                        <button class="icon-btn light"
+                                onclick="coverVue.openImgDescription('<%= StringEscapeUtils.escapeEcmaScript(photo.getDescription())%>', <%= photo.getID() %>, <%=i%>)"><i
+                                class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                        <%}%>
                     </div>
                 </div>
                 <%
@@ -166,8 +166,8 @@
                     }
                 %>
             </div>
-            <div class="edit-img-popup" v-show="popupImgShow">
-                <input v-model="popupImg.description" spellcheck="false">
+            <div class="cover-desc-popup" v-show="popupImgShow">
+                <input v-model="popupImg.description" spellcheck="false" @keydown.enter="submitImgDescription">
                 <button class="icon-btn light" @click="submitImgDescription"><i class="fa fa-check"
                                                                                 aria-hidden="true"></i>
                 </button>
@@ -183,23 +183,13 @@
         <script id="slider-display" type="text/x-handlebars-template">
             {{#each data}}
             <div class="slider-block" style="background-image: url({{src}})">
-                <%--<div class="caption">--%>
-                <%--{{description}}--%>
-                <%--<% if (defaultModel.getCreator().getId() == loggedInUserId) {%>--%>
-                <%--<button class="edit-button edit-cover-button"--%>
-                <%--onclick="coverVue.openImgDescription('{{escape description}}', {{ID}}, {{@index}})"><i--%>
-                <%--class="fa fa-pencil-square-o" aria-hidden="true"></i></button>--%>
-                <%--<%}%>--%>
-                <%--</div>--%>
                 <div class="caption">
-                        <span>
-                            {{description}}
-                            <% if (defaultModel.getCreator().getId() == loggedInUserId) {%>
-                            <button class="icon-btn light"
-                                    onclick="coverVue.openImgDescription('{{escape description}}', {{ID}}, {{@index}})"><i
-                                    class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-                            <%}%>
-                        </span>
+                        <span>{{description}}</span>
+                        <% if (defaultModel.getCreator().getId() == loggedInUserId) {%>
+                        <button class="icon-btn light"
+                                onclick="coverVue.openImgDescription('{{escape description}}', {{ID}}, {{@index}})"><i
+                                class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+                        <%}%>
                 </div>
             </div>
             {{/each}}
@@ -283,6 +273,7 @@
                         }
                         this.updatingDescription = true;
                         var self = this;
+                        self.popupImg.description = self.popupImg.description.trim();
                         axios({
                             url: "/UpdateImg?imgID=" + self.popupImg.ID,
                             method: "post",

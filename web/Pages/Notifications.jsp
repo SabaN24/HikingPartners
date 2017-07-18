@@ -74,10 +74,21 @@
                 this.notifications.splice(index, 1);
             },
             clickNotification: function(not){
-                if(not.typeID != '<%= Notification.REQUEST %>')
-                    window.location = '/HikePage/Feed?hikeId=' + not.hikeID + '#' + not.postID;
+                this.seeNotification(not.ID);
+                if(not.typeID != '<%= Notification.REQUEST %>') {
+                    if(not.postID && not.postID != -1)
+                        window.location = '/HikePage/Feed?hikeId=' + not.hikeID + '#' + not.postID;
+                    else
+                        window.location = '/HikePage/Home?hikeId=' + not.hikeID;
+                }
+                else
+                    window.location = '/Notifications#' + not.ID;
 
-            }
+            },
+            seeNotification: function(notID){
+                axios({method: "post", url:"/SeeNotification", params:{ notificationID: notID }});
+                this.notifications.find(function(x){return x.ID == notID}).seen = 1;
+            },
         }
     });
 

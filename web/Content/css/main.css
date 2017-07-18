@@ -227,6 +227,15 @@ main {
     bottom: 0px;
 }
 
+.caption > span {
+    display: inline-block;
+    vertical-align: middle;
+    max-width: 80%;
+    height: 20px;
+    overflow: hidden;
+    line-height: normal;
+}
+
 .description-block {
     padding: 5px;
     background: white;
@@ -583,7 +592,7 @@ main {
     font-family: 'Montserrat', myriad-regular, Helvetica, Arial, sans-serif;
     display: none;
     z-index: 100;
-    transition: box-shadow .5s;
+    transition: box-shadow .6s;
 }
 
 
@@ -593,7 +602,8 @@ main {
 }
 
 .error {
-    box-shadow: inset 0 0 8px 1px red;
+    transition: .15fs box-shadow;
+    box-shadow: inset 0 0 10px 2px red;
 }
 
 .new-hike-title {
@@ -935,8 +945,14 @@ input[type="file"] {
 .edit-img-popup {
     display: inline-block;
     top: 177px;
-    left: 10px;
     position: absolute;
+    z-index: 100000;
+    width: 700px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 20px;
+    box-shadow: 0 0 10px 1px rgba(0, 0, 0, .3);
 }
 
 .edit-img-popup input {
@@ -952,7 +968,26 @@ input[type="file"] {
 }
 
 .caption button {
-    vertical-align: inherit;
+
+}
+
+.cover-desc-popup {
+    display: inline-block;
+    top: 177px;
+    left: 10px;
+    position: absolute;
+}
+
+.cover-desc-popup input {
+    background: rgba(34, 34, 34, .6);
+    outline: none;
+    border: none;
+    color: white;
+    font-size: 14px;
+    font-family: alk-rounded-mtav;
+    padding: 5px 15px;
+    padding-right: 28px;
+    margin-right: -28px;
 }
 
 .popup-img {
@@ -963,6 +998,7 @@ input[type="file"] {
 .popup-img img {
     width: 100%;
     height: 100%;
+    object-fit: cover;
 }
 
 .description-area-block {
@@ -1222,15 +1258,6 @@ input[type="file"] {
 }
 
 .edit-popup {
-    width: 60%;
-    height: 40%;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    box-shadow: 0 0 1px 1px #ccc;
-    padding: 20px 30px;
     font-family: 'Montserrat', myriad-regular, Helvetica, Arial, sans-serif;
     display: none;
 }
@@ -1352,7 +1379,7 @@ input[type="file"] {
     border-top-left-radius: 10px;
 }
 
-.notifications-list-item.notSeen {
+.notifications-list-item.notSeen, .notifications-item__page.notSeen {
     background: #EEEEFd;
 }
 
@@ -1417,7 +1444,7 @@ input[type="file"] {
     width: 80%;
     margin-left: auto;
     margin-right: auto;
-    background: white;
+    background: rgba(255,255,255,.1);
     border: 0;
     border-radius: 3px 3px 0 0;
     box-shadow: 0 1px 4px rgba(0, 0, 0, .3);
@@ -1426,9 +1453,20 @@ input[type="file"] {
     padding: 10px 10px;
 }
 
+#filter #location-search {
+    width: 100%;
+    padding: 5px 7px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 1px;
+    box-sizing: border-box;
+    color: white;
+    background: rgba(255, 255, 255, 0.2);
+}
+
 .filter-bar-name {
     background: none;
-    color: teal;
+    color: white;
     height: 26px;
     line-height: 26px;
     margin-bottom: 10px;
@@ -1439,11 +1477,12 @@ input[type="file"] {
 }
 
 .each-filter-name {
-    background: teal;
+    background: rgba(150,150,150,.1);
     color: white;
     height: 26px;
     line-height: 26px;
     margin-bottom: 10px;
+    cursor: pointer;
 }
 
 .filter-button {
@@ -1451,6 +1490,25 @@ input[type="file"] {
     background: none;
     border: none;
     outline: none;
+}
+
+.filter-input {
+    width: 100%;
+    padding: 5px 7px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 1px;
+    box-sizing: border-box;
+    color: white;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.filter-input:focus {
+    outline: none;
+}
+
+.filter-input::placeholder {
+    color: rgba(255, 255, 255, .6);
 }
 
 #member-search {
@@ -1507,6 +1565,8 @@ input[type="file"] {
 
 .found-locations {
     margin-bottom: 10px;
+    color: white;
+    padding: 0 6px;
 }
 
 /*.each-search-loc {*/

@@ -29,6 +29,13 @@
             <div style="font-size: 18px; margin-bottom: 10px">ABOUT</div>
             <div class="profile-status">{{ profileUser.aboutMe }}</div>
             <button class="icon-btn dark" v-if="userLoggedIn" @click="openEditAbout()"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
+            <div class="edit-popup about" :class="{active : editAboutPopupIsActive }">
+                <div class="darker-background"></div>
+                <textarea type="text"  v-model="newAbout" class="edit-input edit-input-description" :style="{ width: '100%', height: '80px' }"
+                          @keydown="resizeEditInput(event)"
+                          @blur="editAboutPopupIsActive = false;">
+                </textarea>
+            </div>
             <a :href="profileUser.facebookLink" target="_blank" class="facebook-page-btn mybtn">
                 Go To Facebook Profile
             </a>
@@ -40,12 +47,6 @@
             <div class="info-item">Birth date: {{ !profileUser.birthDate ? "Hidden" : profileUser.birthDate }}</div>
             <div class="info-item">Email: {{ profileUser.email }}</div>
         </div>
-        <div class="edit-popup about" :class="{active : editAboutPopupIsActive }">
-            <textarea class="text-area about" v-model="newAbout"></textarea>
-            <br>
-            <button class="mybtn" @click="editAbout()" onsubmit="return false;">Edit About Info</button>
-            <div class="close-block" @click="closeEditAbout()">x</div>
-        </div>
     </div>
     <div class="created-hikes-block">
         <div class="created-hikes-block-inner">
@@ -53,7 +54,7 @@
             <ul class="created-hikes-list">
                 <li class="created-hike bg" v-for="hike in createdHikes"
                     @click="window.location = '/HikePage/Home?hikeId=' + hike.id"
-                    :style="{'backgroundImage':'url(' + hike.coverPhotos[hike.coverPhotos.length-1].src + ')'}">
+                    :style="{'backgroundImage': hike.coverPhotos.length ? 'url(' + hike.coverPhotos[hike.coverPhotos.length-1].src + ')' : 'none'}">
                     {{ hike.name }}
                 </li>
             </ul>
@@ -63,7 +64,14 @@
 <script src="../Scripts/axios.min.js"></script>
 <script src="../Scripts/vue.min.js"></script>
 <script>
+    function css( element, property ) {
+        return window.getComputedStyle( element, null ).getPropertyValue( property );
+    }
 
+    function textAreaAdjust(o) {
+        o.style.height = "1px";
+        o.style.height = (15 + o.scrollHeight)+"px";
+    }
     var app = new Vue({
         el: '#vueapp',
         data: {
@@ -90,7 +98,7 @@
                     console.log(response);
                     th.profileUser = response.data;
                     if (!th.profileUser.coverPictureAddress)
-                        th.profileUser.coverPictureAddress = "https://unsplash.it/1920/1080?image=997";
+                        th.profileUser.coverPictureAddress = "/Content/img/default-cover.jpg";
                 });
 
 
@@ -125,6 +133,14 @@
                 this.profileUser.aboutMe = this.newAbout;
                 this.newAbout = "";
                 this.closeEditAbout();
+            },
+            resizeEditInput: function(e){
+                var th = this;
+                textAreaAdjust(e.target);
+                if(e.keyCode == 13) {
+                    console.log("fsdaasdf");
+                    th.editAbout();
+                }
             }
         }
     });

@@ -55,9 +55,6 @@
             </div>
         </div>
         <div class="header-right">
-            <div class="mynav">
-                <div class="mynav-item"><a href="/Notifications" class="mynav-link">Notifications</a></div>
-            </div>
             <div class="profile-block">
 
                 <a href="/Profile?userID=<%=loggedInUser.getId()%>" class="profile-link">
@@ -115,7 +112,7 @@
                     <div class="chat-user-name" @click="window.location = '/Profile?userID=' + chat.userTo.id">{{chat.userTo.firstName}} {{chat.userTo.lastName}}</div>
                     <div class="chat-close-btn" @click="closeChat(chat.toUserId)"><i class="fa fa-times" aria-hidden="true"></i></div>
                 </div>
-                <div class="messages-block">
+                <div class="messages-block" onclick="event.target.parentElement.querySelector('.chat-add-message input').focus()">
                     <ul class="messages-list">
                         <li v-for="(message, index) in chat.messages" class="message">
                             <div class="avatar-block" @click="window.location = '/Profile?userID=' + message.userFrom.id" v-if="loggedInUser.id != message.userFrom.id" :style="{ backgroundImage: 'url(' + message.userFrom.profilePictureAddress + ')' }"></div>

@@ -1,11 +1,15 @@
 package Servlets;
 
+import Database.MainDM;
+import Models.Member;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by Levani on 11.07.2017.
@@ -18,6 +22,25 @@ public class HikeGalleryServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Helper.view("HikePage", "Gallery", request, response);
+
+        int hikeId = Integer.parseInt(request.getParameter("hikeId"));
+        List<Member> hikeMembers = MainDM.getInstance().getHikeMembers(hikeId);
+        Integer loggedInUser = (Integer) request.getSession().getAttribute("userID");
+        if(loggedInUser == null){
+            Helper.view("Login", request, response);
+            return;
+        }
+        int loggedInUserId = loggedInUser;
+        boolean loggedInUserIsMember = false;
+        for(int i = 0; i < hikeMembers.size(); i++){
+            if(hikeMembers.get(i).getId() == loggedInUserId) {
+                loggedInUserIsMember = true;
+            }
+        }
+        if(loggedInUserIsMember){
+            Helper.view("HikePage", "Gallery", request, response);
+        } else {
+            Helper.view("HikePage", "Home", request, response);
+        }
     }
 }

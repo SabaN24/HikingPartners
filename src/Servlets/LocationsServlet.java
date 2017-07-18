@@ -3,7 +3,6 @@ package Servlets;
 import Database.LocationsDM;
 import com.google.gson.Gson;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,7 +16,7 @@ import java.util.Map;
  * Created by vache on 6/29/2017.
  * Returns locations for given hike when called from front-end.
  */
-@WebServlet("/LocationsServlet")
+@WebServlet("/HikePage/Locations")
 public class LocationsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Gson gson = new Gson();

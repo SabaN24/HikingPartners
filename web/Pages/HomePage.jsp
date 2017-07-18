@@ -23,39 +23,40 @@
 <link rel="stylesheet" href="/Content/css/main.css">
 
 
-
 <aside style="color: black;padding-top: 10px;">
     <div class="filter-bar" id="filter">
         <div class="filter-bar-name" style="padding-left: 5px;"> Filters</div>
 
         <ul>
             <li>
-                <div class="each-filter-name">
-                    <button class="filter-button" :class="{ active : locationsFilterActive }"
-                            @click="toggleLocationsFilter()"><i class="fa fa-caret-down"
-                                                                aria-hidden="true"></i></button>
+                <div class="each-filter-name" @click="toggleLocationsFilter()">
+                    <button class="filter-button" :class="{ active : locationsFilterActive }">
+                        <i class="fa fa-caret-down" aria-hidden="true"></i></button>
                     Locations
                 </div>
 
                 <div class="search-input" :class="{ active : locationsFilterActive }">
-                    <input id="location-search" v-model="newLocationInput" v-model="lat" v-model="lng " type="text"
+                    <input id="location-search" class="filter-input" v-model="newLocationInput"  v-model="lat" v-model="lng " type="text"
                            autocomplete="off"
                            name="addLocation"
                            placeholder="Enter Location"
-                           style="width: 100%; height: 30px; padding-left: 10px; margin-top: 0px">
+                           <%--style="width: 100%; height: 30px; padding-left: 10px; margin-top: 0px"--%>
+                    >
 
                     <ul class="found-locations">
                         <li class="each-search-loc" v-for="(loc, index) in searchedLocations">
                             {{loc.name}}
-                            <button class="icon-btn dark" @click="removeSearchLocation(index)"><i class="fa fa-times" aria-hidden="true"></i></button>
+                            <button class="icon-btn light" @click="removeSearchLocation(index)"><i class="fa fa-times"
+                                                                                                  aria-hidden="true"></i>
+                            </button>
                         </li>
                     </ul>
                 </div>
 
             </li>
             <li>
-                <div class="each-filter-name">
-                    <button class="filter-button" :class="{ active : datesFilterActive }" @click="toggleDatesFilter()">
+                <div class="each-filter-name" @click="toggleDatesFilter()">
+                    <button class="filter-button" :class="{ active : datesFilterActive }">
                         <i class="fa fa-caret-down" aria-hidden="true"></i></button>
                     Dates
                 </div>
@@ -63,28 +64,28 @@
                 <div class="search-input" :class="{ active : datesFilterActive }">
                     <div class="input-block">
 
-                        <input type="text" class="datepicker search-start-date" v-model="startDate"
-                               style="border: 1px solid #ccc; margin-bottom: 10px; padding-left: 10px;"
+                        <input type="text" class="datepicker search-start-date filter-input" v-model="startDate"
+                               <%--style="border: 1px solid #ccc; margin-bottom: 10px; padding-left: 10px;"--%>
                                placeholder="Enter Start Date">
                     </div>
                     <div class="input-block">
-                        <input type="text" class="datepicker search-end-date" v-model="endDate"
-                               style="border: 1px solid #ccc; margin-bottom: 10px; padding-left: 10px;"
+                        <input type="text" class="datepicker search-end-date filter-input" v-model="endDate"
+                               <%--style="border: 1px solid #ccc; margin-bottom: 10px; padding-left: 10px;"--%>
                                placeholder="Enter End Date">
                     </div>
                 </div>
 
             </li>
             <li>
-                <div class="each-filter-name">
-                    <button class="filter-button" :class="{ active : memberNameFilterActive }"
-                            @click="toggleMembersFilter()"><i class="fa fa-caret-down" aria-hidden="true"></i></button>
+                <div class="each-filter-name" @click="toggleMembersFilter()">
+                    <button class="filter-button" :class="{ active : memberNameFilterActive }">
+                        <i class="fa fa-caret-down" aria-hidden="true"></i></button>
                     Members' Names
                 </div>
 
                 <div class="search-input" :class="{ active : memberNameFilterActive }">
                     <form action="" @submit.prevent="addSearchMember()" method="post">
-                        <input id="member-search" v-model="newMemberInput" type="text" autocomplete="off"
+                        <input class="filter-input" v-model="newMemberInput" type="text" autocomplete="off"
                                name="searchMember"
                                placeholder="Enter Member Name">
                     </form>
@@ -96,31 +97,38 @@
                         <div class="avatar-block"
                              :style="{ backgroundImage: 'url(' + member.profilePictureAddress + ')' }"></div>
                         {{member.firstName}} {{member.lastName}}
-                        <button class="icon-btn dark" @click="removeSearchMember(index)"><i class="fa fa-times" aria-hidden="true"></i></button>
+                        <button class="icon-btn light" @click="removeSearchMember(index)">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </button>
                     </li>
                 </ul>
 
 
             </li>
             <li>
-                <div class="each-filter-name">
-                    <button class="filter-button" :class="{ active : numberFilterActive }"
-                            @click="toggleNumberFilter()"><i class="fa fa-caret-down" aria-hidden="true"></i></button>
+                <div class="each-filter-name" @click="toggleNumberFilter()">
+                    <button class="filter-button" :class="{ active:numberFilterActive }">
+                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                    </button>
                     Number of Members
                 </div>
                 <div class="search-input" :class="{ active : numberFilterActive }">
-                    <input type="number" v-model="minMembersNum" placeholder="Least" class="number-of-people" min="1">
-                    <input type="number" v-model="maxMembersNum" placeholder="Most" class="number-of-people" min="1">
+                    <input type="number" v-model="minMembersNum" placeholder="Least" class="filter-input" min="1">
+                    <input type="number" v-model="maxMembersNum" placeholder="Most" class="filter-input" min="1">
                 </div>
             </li>
         </ul>
 
-        <button class="mybtn" @click="applyFilter">Search</button>
-        <button class="mybtn" style="float: right;" @click="cancelFilter">Remove Filters</button>
+        <button class="icon-btn light" style="left: 3px;position: relative;" @click="cancelFilter">
+            <i class="fa fa-repeat" aria-hidden="true"></i> Reset
+        </button>
+        <button class="icon-btn light" style="position: absolute;right: 11px;" @click="applyFilter">
+            <i class="fa fa-search" aria-hidden="true"></i> Search
+        </button>
+
 
     </div>
 </aside>
-
 
 
 <div id="vueapp" style="float: right; width: 70%;">
@@ -132,7 +140,8 @@
         <ul class="hikes-list">
             <div v-if="!hikes.length" style="text-align: center;font-size: 18px;">No hikes.</div>
             <li class="hike-item" v-for="hike in hikes">
-                <div class="slider-block"  v-bind:style="{'backgroundImage': hike.coverPhotos.length ? 'url(' + hike.coverPhotos[0].src + ')' : 'none' }">
+                <div class="slider-block"
+                     v-bind:style="{'backgroundImage': hike.coverPhotos.length ? 'url(' + hike.coverPhotos[0].src + ')' : 'none' }">
                     <div class="caption">
                         <template v-if="hike.coverPhotos.length">{{hike.coverPhotos[0].description}}</template>
 
@@ -232,7 +241,7 @@
                     Cover photos
                 </div>
                 <form action="" onsubmit="return false;" id="form-pictures"></form>
-                <div class="add-cover-photo icon-btn dark" @click="addPicture()">
+                <div class="add-cover-photo icon-btn light" @click="addPicture()">
                     <i class="fa fa-camera" aria-hidden="true"></i>
                 </div>
                 <span class="new-hike-added-images" v-for="(picture, index) in pictures">
@@ -251,7 +260,9 @@
         <div class="map-container" v-show="newHikePage == 2">
             <h3>Choose hiking locations</h3>
             <div id="map"></div>
-            <button class="mybtn" style="padding: 10px 100px;margin-top:20px;" @click="addHike" v-disabled="submitted">Add Hike</button>
+            <button class="mybtn" style="padding: 10px 100px;margin-top:20px;" @click="addHike" v-disabled="submitted">
+                Add Hike
+            </button>
 
         </div>
         <div class="close-block" @click="closePopup()"><i class="fa fa-times" aria-hidden="true"></i></div>
@@ -268,7 +279,6 @@
 <script>
 
     var searChData = JSON.stringify({hikeName: '', option: "hikeName"});//searched data. mainly for search with hike name
-
 
 
     var locationsArray = [];
@@ -569,7 +579,7 @@
 
                 var th = this;
 
-                if(th.newMemberInput === '')
+                if (th.newMemberInput === '')
                     return;
 
                 axios({
@@ -593,11 +603,11 @@
             },
 
             removeSearchLocation: function (index) {
-                this.searchedLocations.splice(index,1);
+                this.searchedLocations.splice(index, 1);
             },
 
             removeSearchMember: function (index) {
-                this.members.splice(index,1);
+                this.members.splice(index, 1);
 
             }
 
@@ -684,10 +694,10 @@
                 if (this.submitted) return;
                 this.submitted = true;
                 var th = this;
-                if(!th.newHike.name || !th.newHike.maxPeople || !th.newHike.startDate || !th.newHike.endDate || !th.newHike.description) {
+                if (!th.newHike.name || !th.newHike.maxPeople || !th.newHike.startDate || !th.newHike.endDate || !th.newHike.description) {
                     var elem = document.querySelector('.new-hike-popup');
                     elem.classList.add("error");
-                    setTimeout(function(){
+                    setTimeout(function () {
                         elem.classList.remove("error");
                     }, 1000);
                     return;
@@ -697,12 +707,12 @@
                 });
 
             },
-            goToLocations: function(){
+            goToLocations: function () {
                 var th = this;
-                if(!th.newHike.name || !th.newHike.maxPeople || !th.newHike.startDate || !th.newHike.endDate || !th.newHike.description) {
+                if (!th.newHike.name || !th.newHike.maxPeople || !th.newHike.startDate || !th.newHike.endDate || !th.newHike.description) {
                     var elem = document.querySelector('.new-hike-popup');
                     elem.classList.add("error");
-                    setTimeout(function(){
+                    setTimeout(function () {
                         elem.classList.remove("error");
                     }, 2000);
                     return;
