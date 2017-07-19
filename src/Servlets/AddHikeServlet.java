@@ -33,7 +33,7 @@ public class AddHikeServlet extends HttpServlet {
         Integer creatorId = (Integer) session.getAttribute("userID");
 
 
-        DateFormat dt = new SimpleDateFormat("dd/mm/yyyy");
+        DateFormat dt = new SimpleDateFormat("dd/MM/yyyy");
         Date startDate = null, endDate = null;
         try {
             startDate = dt.parse(startDateStr);

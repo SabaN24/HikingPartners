@@ -743,7 +743,7 @@
             addLocation: function (hikeID) {
                 var self = this;
                 var data = JSON.stringify({hikeID: hikeID, locations: locationsArray});
-                axios({url: "/LocationsServlet", method: "post", params: {data: data}}).then(function (response) {
+                axios({url: "/HikePage/Locations", method: "post", params: {data: data}}).then(function (response) {
                     self.uploadPictures(hikeID);
                 });
             },
